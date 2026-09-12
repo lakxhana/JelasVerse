@@ -283,17 +283,14 @@ function showStory(){state='intro';dialogIndex=0;const d=dialogues[0];$('speaker
 window.addEventListener('message',event=>{
   if(event.origin!==location.origin||event.source!==$('mathsLab')?.contentWindow)return;
   if(event.data?.type==='orbit-runner-home'){window.requestOrbitHome?.();return;}
-  if(event.data?.type==='jelasverse-quiz-complete'&&state==='mathsLab'){
-    const lab=$('mathsLab');lab.src='';document.body.classList.remove('maths-lab-active');
-    departPlanet();
-  }
+  if(event.data?.type==='jelasverse-quiz-complete'&&state==='mathsLab')setTimeout(()=>window.offerNextPlanet?.(),0);
 });
 document.addEventListener('orbit-home-confirmed',showNav);
 function launch(){sound(150,.7,'triangle',.09);state='flight';document.body.classList.add('flight-active');health=100;boost=100;leg=0;totalPassed=0;invulnerable=1;shake=0;boostArmed=true;boostViewOffset=0;bridge.visible=false;flightWorld.visible=true;blueLight.visible=false;$('nav').style.display='none';$('brand').style.display='none';$('bridgeStatus').style.display='none';$('flight').style.display='block';$('mobile').classList.add('visible');$('result').style.display='none';$('pause').style.display='none';for(const k in keys)keys[k]=false;makeLeg();if(modules[selected].worlds[0]==='earth')requestOceanWaves(oceanLanding);camera.position.set(0,5,17);camera.lookAt(0,1,-55);}
 function notify(text,seconds=2){$('notice').textContent=text;noticeTime=seconds;$('notice').style.opacity=1;}
 const rewardStorageKey='jelasverse-reward-stars';
 let flightPoints=(()=>{try{const saved=Number.parseInt(localStorage.getItem(rewardStorageKey)||'0',10);return Number.isFinite(saved)&&saved>=0?saved:0;}catch{return 0;}})();
-function updateFlightPoints(){const value=$('pointsValue');if(value)value.textContent=String(flightPoints);try{const points=String(flightPoints);sessionStorage.setItem('orbit-flight-points',points);localStorage.setItem(rewardStorageKey,points);}catch{}}
+function updateFlightPoints(){const value=$('pointsValue');if(value)value.textContent=String(flightPoints);try{const points=String(flightPoints);sessionStorage.setItem('orbit-flight-points',points);localStorage.setItem(rewardStorageKey,points);window.dispatchEvent(new Event('jelasverse-rewards-changed'));}catch{}}
 document.addEventListener('DOMContentLoaded',updateFlightPoints,{once:true});
 function showGateConfirmation(){
   if(reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -517,6 +514,72 @@ updateSurface(dt);
 if(!surface.visible&&scene.background!==deepSpaceBackground)scene.background=deepSpaceBackground;
 if(state!=='mathsLab')renderer.render(scene,camera);}
 requestAnimationFrame(frame);window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+</script>
+<script id="live-language-and-connect-code">
+/* Keep the settings language label and phone pairing card in sync without a reload. */
+window.addEventListener('DOMContentLoaded',()=>{
+  const language=document.getElementById('languageToggle');
+  const box=document.getElementById('connectCode');
+  const value=document.getElementById('connectCodeValue');
+  const label=document.getElementById('connectCodeLabel');
+  const hint=document.getElementById('connectCodeHint');
+  const settingsTitle=document.getElementById('settingsTitle');
+  const settingsTrigger=document.getElementById('focusToggle');
+  const languageLabel=document.getElementById('languageLabel');
+  const speechLabel=document.getElementById('speechLabel');
+  const soundLabel=document.getElementById('soundLabel');
+  const focusLabel=document.getElementById('focusLabel');
+  const speech=document.getElementById('speechToggle');
+  const sound=document.getElementById('soundToggle');
+  const calm=document.getElementById('calmToggle');
+  const textSize=document.getElementById('textToggle');
+  const read=document.getElementById('readScreen');
+  let rememberedCode='';
+
+  const getCode=()=>{
+    const live=window.JelasVerseData?.getStudentCode?.();
+    if(live)return String(live);
+    try{return sessionStorage.getItem('jelasverse-anonymous-session-id')||'';}catch{return'';}
+  };
+  const sync=()=>{
+    const visible=value?.textContent?.trim();
+    if(/^\d{4}$/.test(visible))rememberedCode=visible;
+    const code=getCode();
+    if(/^\d{4}$/.test(code))rememberedCode=code;
+    const isMalay=document.documentElement.lang==='ms';
+    const words=isMalay
+      ? {settings:'TETAPAN',language:'BAHASA',english:'ENGLISH',malay:'MALAY',read:'BACA KUAT',sound:'BUNYI',focus:'FOKUS',on:'HIDUP',off:'MATI',readScreen:'BACA SKRIN INI',calm:'LAPISAN TENANG: ',text:'TEKS BESAR: '}
+      : {settings:'SETTINGS',language:'LANGUAGE',english:'ENGLISH',malay:'MALAY',read:'READ ALOUD',sound:'SOUND',focus:'FOCUS',on:'ON',off:'OFF',readScreen:'READ THIS SCREEN',calm:'CALM OVERLAY: ',text:'LARGER TEXT: '};
+    const replace=(element,content)=>{if(element&&element.textContent!==content)element.textContent=content;};
+    replace(settingsTitle,words.settings);
+    replace(settingsTrigger,words.settings);
+    replace(languageLabel,words.language);
+    replace(speechLabel,words.read);
+    replace(soundLabel,words.sound);
+    replace(focusLabel,words.focus);
+    replace(speech,speech?.getAttribute('aria-pressed')==='false'?words.off:words.on);
+    replace(sound,sound?.getAttribute('aria-pressed')==='false'?words.off:words.on);
+    replace(calm,words.calm+(calm?.getAttribute('aria-pressed')==='true'?words.on:words.off));
+    replace(textSize,words.text+(textSize?.getAttribute('aria-pressed')==='true'?words.on:words.off));
+    replace(read,words.readScreen);
+    const nextLanguage=isMalay?words.english:words.malay;
+    if(language&&language.textContent!==nextLanguage)language.textContent=nextLanguage;
+    if(!box||!rememberedCode)return;
+    if(box.hidden)box.hidden=false;
+    if(value.textContent!==rememberedCode)value.textContent=rememberedCode;
+    const nextLabel=isMalay?'KOD SAMBUNGAN':'CONNECT CODE';
+    const nextHint=isMalay?'Masukkan kod ini pada telefon anda untuk pautkan pengawal.':'Enter this on your phone to link the controller.';
+    if(label.textContent!==nextLabel)label.textContent=nextLabel;
+    if(hint.textContent!==nextHint)hint.textContent=nextHint;
+  };
+
+  language?.addEventListener('click',()=>window.setTimeout(sync,0));
+  new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  if(box)new MutationObserver(sync).observe(box,{attributes:true,childList:true,characterData:true,subtree:true});
+  window.addEventListener('jelasverse-data-ready',sync);
+  window.addEventListener('jelasverse-student-ready',sync);
+  sync();
+});
 </script>
 <script id="settings-behaviour">
 /* Settings are independent: muting game audio never disables read-aloud. */
@@ -901,27 +964,101 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script type="module" src="jelasverse-data.js"></script>
+<script src="translation-system.js" defer></script>
 <style id="student-gate-style">#studentGate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 50% 24%,rgba(23,82,106,.98),rgba(4,15,27,.99) 64%)}.student-gate-card{display:grid;gap:13px;width:min(410px,100%);padding:35px;border:1px solid rgba(153,235,240,.8);border-radius:17px;background:linear-gradient(145deg,#0c3042,#061925);box-shadow:0 22px 55px rgba(0,0,0,.55);color:#f5ffff}.student-gate-card p{margin:0;color:#9eecef;font-size:11px;letter-spacing:.18em}.student-gate-card h1{margin:0;font-size:32px}.student-gate-card label{display:grid;gap:8px;font-size:16px}.student-gate-card input{padding:14px;border:1px solid #9beaf0;border-radius:9px;background:#061823;color:#fff;font:700 24px/1 "OpenDyslexic",Arial,sans-serif;letter-spacing:.18em;text-align:center}.student-gate-card button{min-height:50px;border:0;border-radius:9px;background:linear-gradient(135deg,#c4f8f3,#73d5e1);color:#06202b;font:700 16px "OpenDyslexic",Arial,sans-serif;cursor:pointer}.student-gate-card output{min-height:22px;color:#ffe3a3}</style>
 <script src="student-gate.js"></script>
+<style id="next-planet-prompt-style">#nextPlanetPrompt{position:fixed;z-index:90;inset:0;display:grid;place-items:center;padding:22px;background:rgba(1,8,16,.72);backdrop-filter:blur(8px)}#nextPlanetPrompt[hidden]{display:none}.next-planet-card{width:min(510px,100%);padding:32px;border:1px solid rgba(156,236,241,.58);border-radius:16px;background:linear-gradient(145deg,#123b4f,#061a29);box-shadow:0 22px 62px rgba(0,0,0,.52);text-align:center}.next-planet-card p{margin:0 0 12px;color:#a6f3f5;font-size:11px;font-weight:700;letter-spacing:.13em}.next-planet-card h2{margin:0;color:#fff;font-size:clamp(27px,5vw,39px);font-weight:500}.next-planet-card .next-copy{margin:14px auto 24px;max-width:40ch;color:#d3e9ed;line-height:1.65}.next-planet-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}.next-planet-actions button{min-height:48px;padding:12px 18px;border-radius:8px;font-weight:700}.next-planet-actions .fly-next{border:0;background:#a8edf0;color:#08212c}.next-planet-actions .stay-here{border:1px solid rgba(156,236,241,.5);background:transparent;color:#effcff}</style>
+<script id="next-planet-prompt">
+(() => {
+  const hasCompletedScienceLab = () => {
+    try {
+      const progress = JSON.parse(localStorage.getItem('jelasverse-science-learning-progress-v1') || '{"events":[]}');
+      const events = Array.isArray(progress.events) ? progress.events : [];
+      const complete = id => events.some(event => event?.type === 'completed' && event.activityId === id);
+      return complete('sense-tap-explorer') && complete('quiz-find-organ');
+    } catch { return false; }
+  };
+  window.offerNextPlanet = () => {
+    if (state !== 'mathsLab' || !hasCompletedScienceLab() || document.getElementById('nextPlanetPrompt')) return;
+    const next = modules[selected].worlds[leg + 1];
+    const prompt = document.createElement('section');
+    prompt.id = 'nextPlanetPrompt';
+    prompt.setAttribute('role', 'dialog');
+    prompt.setAttribute('aria-modal', 'true');
+    prompt.setAttribute('aria-labelledby', 'nextPlanetTitle');
+    prompt.innerHTML = `<div class="next-planet-card"><p>LESSON AND QUIZ COMPLETE</p><h2 id="nextPlanetTitle">${next ? 'Continue to the next pattern?' : 'Complete the expedition?'}</h2><div class="next-copy">${next ? `You finished this lesson and quiz. Keep playing the same expedition by flying to ${next.charAt(0).toUpperCase() + next.slice(1)}.` : 'You finished both learning activities. Would you like to return to the expedition finale?'}</div><div class="next-planet-actions"><button class="fly-next" type="button">${next ? 'Fly to next planet' : 'Finish expedition'}</button><button class="stay-here" type="button">Stay here</button></div></div>`;
+    document.body.append(prompt);
+    const close = () => prompt.remove();
+    prompt.querySelector('.stay-here').addEventListener('click', close);
+    prompt.querySelector('.fly-next').addEventListener('click', () => { close(); const lab = $('mathsLab'); if (lab) lab.src = ''; document.body.classList.remove('maths-lab-active'); departPlanet(); });
+    prompt.querySelector('.fly-next').focus();
+  };
+  window.addEventListener('storage', event => { if (event.key === 'jelasverse-science-learning-progress-v1') setTimeout(() => window.offerNextPlanet?.(), 0); });
+})();
+</script>
 <script id="student-progress-bridge">
-/* A student code links flight stars and classroom completion to one dashboard row. */
-window.addEventListener('jelasverse-data-ready',()=>{
-  const sync=()=>{
-    const api=window.JelasVerseData;if(!api?.getStudentCode())return;
-    let classroom={events:[]};try{classroom=JSON.parse(localStorage.getItem('jelasverse-science-learning-progress-v1')||'{"events":[]}')}catch{}
-    const events=Array.isArray(classroom.events)?classroom.events:[];
-    api.saveStudentProgress({
-      stars:Number(localStorage.getItem('jelasverse-reward-stars')||0),
-      lessonComplete:events.some(event=>event?.type==='completed'&&event.activityId==='sense-tap-explorer'),
-      quizComplete:events.some(event=>event?.type==='completed'&&event.activityId==='quiz-find-organ')
-    });
+/* Quiz and reward progress is always written to this browser first. Firebase,
+   when available, receives the same snapshot afterward. */
+(() => {
+  const learnerKey='jelasverse-anonymous-session-id';
+  const classRosterKey='jelasverse-dashboard-students-v1';
+  const read = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) || ''); } catch { return fallback; } };
+  // A browser refresh represents a different learner in the demo.
+  try { sessionStorage.removeItem(learnerKey); } catch {}
+  const localLearnerId = () => { try { return sessionStorage.getItem(learnerKey) || ''; } catch { return ''; } };
+  const ensureLocalLearnerId = () => {
+    let code = localLearnerId();
+    if (!code) {
+      try { code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 10000).padStart(4, '0'); } catch { code = String(Math.floor(Math.random() * 10000)).padStart(4, '0'); }
+      try {
+        sessionStorage.setItem(learnerKey, code);
+        sessionStorage.removeItem('orbit-flight-points');
+        localStorage.removeItem('jelasverse-reward-stars');
+        localStorage.removeItem('jelasverse-science-quiz-stars');
+        localStorage.removeItem('jelasverse-science-learning-progress-v1');
+      } catch {}
+    }
+    return code;
+  };
+  const saveLocalProgress = record => {
+    try {
+      const roster = read(classRosterKey, []);
+      const next = [...(Array.isArray(roster) ? roster : []).filter(item => item.code !== record.code), record]
+        .sort((a,b) => Number(b.lastSeenAt || 0) - Number(a.lastSeenAt || 0));
+      localStorage.setItem(`jelasverse-progress-${record.code}`, JSON.stringify(record));
+      localStorage.setItem(classRosterKey, JSON.stringify(next));
+      window.dispatchEvent(new Event('jelasverse-dashboard-progress-changed'));
+    } catch {}
+  };
+  const sync = async () => {
+    const api = window.JelasVerseData;
+    let code = api?.getStudentCode?.() || localLearnerId();
+    if (!code && !api) code = ensureLocalLearnerId();
+    if (!code) return;
+    const classroom = read('jelasverse-science-learning-progress-v1', {events:[]});
+    const events = Array.isArray(classroom.events) ? classroom.events : [];
+    const progress = {
+      stars: Math.max(0, Number(localStorage.getItem('jelasverse-reward-stars') || 0)),
+      lessonComplete: events.some(event => event?.type === 'completed' && event.activityId === 'sense-tap-explorer'),
+      quizComplete: events.some(event => event?.type === 'completed' && event.activityId === 'quiz-find-organ')
+    };
+    const record = {
+      code, learnerId: code,
+      className: api?.getStudentClass?.(code) || 'Prototype class', anonymous: true,
+      ...progress, lastSeenAt: Date.now(), updatedAt: Date.now()
+    };
+    saveLocalProgress(record);
+    try { await api?.saveStudentProgress?.(progress); } catch {}
+    window.offerNextPlanet?.();
   };
   sync();
-  window.addEventListener('jelasverse-rewards-changed',sync);
-  window.addEventListener('storage',event=>{if(['jelasverse-reward-stars','jelasverse-science-learning-progress-v1'].includes(event.key))sync();});
-  window.addEventListener('message',event=>{if(event.origin===location.origin&&event.data?.type==='jelasverse-quiz-complete')setTimeout(sync,0);});
-});
+  window.addEventListener('jelasverse-rewards-changed', sync);
+  window.addEventListener('jelasverse-student-ready', sync);
+  window.addEventListener('storage', event => { if (['jelasverse-reward-stars','jelasverse-science-learning-progress-v1'].includes(event.key)) sync(); });
+  window.addEventListener('message', event => { if (event.origin === location.origin && event.data?.type === 'jelasverse-quiz-complete') setTimeout(sync, 0); });
+})();
 </script>
+<script>window.addEventListener('jelasverse-student-ready',()=>{flightPoints=0;updateFlightPoints();syncConnectCode();});</script>
 <script id="classroom-settings-bridge">
 /* Keep the classroom responsive to the single shared larger-text setting. */
 window.addEventListener('DOMContentLoaded', () => {

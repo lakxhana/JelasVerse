@@ -485,6 +485,18 @@ html.jv-large-text .plant-learning-dialog h1 {
   line-height: 1.25 !important;
 }
 
+/* The setting comes from the parent game through postMessage. It also needs
+   to affect the classroom HUD and the dynamically rendered activity copy. */
+html.jv-large-text .caption { font-size: 17px !important; line-height: 1.7 !important; }
+html.jv-large-text .activity-dialog,
+html.jv-large-text .sense-explorer-dialog,
+html.jv-large-text .tap-quiz-dialog,
+html.jv-large-text .plant-learning-dialog { max-height: min(86dvh, 760px); overflow: auto; }
+html.jv-large-text .sense-info-panel,
+html.jv-large-text .organ-picture,
+html.jv-large-text .narrator-line,
+html.jv-large-text .sense-progress { font-size: 1.18em !important; line-height: 1.72 !important; }
+
 /* One word at a time: a calm visual anchor for reading quiz prompts. */
 .activity-dialog .word-hover { color: var(--jv-text); }
 .activity-dialog .word-hover:hover { color: #fff !important; background: #246a7a; box-shadow: 0 3px 11px rgba(82,210,216,.27); }

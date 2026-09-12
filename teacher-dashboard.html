@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#071b2b">
+  <meta name="theme-color" content="#143d4f">
   <title>JelasVerse · Teacher dashboard</title>
   <link rel="stylesheet" href="teacher-dashboard.css">
 </head>
@@ -15,8 +15,8 @@
         <span>JelasVerse<small>TEACHER SPACE</small></span>
       </a>
       <nav class="navigation" aria-label="Dashboard sections">
-        <button class="nav-item active" type="button" data-view="overview" aria-current="page"><span aria-hidden="true">▦</span> Overview</button>
-        <button class="nav-item" type="button" data-view="students"><span aria-hidden="true">◌</span> Students</button>
+        <button class="nav-item active" type="button" data-view="overview" aria-current="page"><span aria-hidden="true">⌂</span> Overview</button>
+        <button class="nav-item" type="button" data-view="students"><span aria-hidden="true">◎</span> Learners</button>
       </nav>
       <div class="teacher-account" id="teacherAccount" hidden>
         <span class="account-avatar" id="accountAvatar" aria-hidden="true">T</span>
@@ -28,35 +28,67 @@
     <section class="dashboard-shell">
       <header class="page-header">
         <div>
-          <p class="eyebrow">MATHS LAB · TEACHER VIEW</p>
-          <h1 id="dashboard-title">Class overview</h1>
-          <p class="subheading">A calm view of learner progress and support.</p>
+          <p class="eyebrow" id="todayLabel">TEACHER OVERVIEW</p>
+          <h1 id="dashboard-title">Good morning, Teacher <span aria-hidden="true">✦</span></h1>
+          <p class="subheading">A calm view of learner activity, with patterns you can review together.</p>
         </div>
-        <a class="return-game" href="index.html">← Game</a>
+        <a class="return-game" href="index.html">← Return to game</a>
       </header>
 
       <section id="overviewView" class="dashboard-view" aria-labelledby="dashboard-title">
+        <form id="dashboardFilters" class="filter-bar" aria-label="Filter learning evidence">
+          <label>Class
+            <select id="classFilter"><option value="all">All classes</option></select>
+          </label>
+          <label>Topic
+            <select id="topicFilter"><option value="all">All topics</option></select>
+          </label>
+          <label>Time range
+            <select id="timeFilter"><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="all">All time</option></select>
+          </label>
+          <label>Support view
+            <select id="supportFilter"><option value="all">All activity</option><option value="used">Used a support</option><option value="continued">Continued after support</option></select>
+          </label>
+        </form>
         <div class="summary-grid" aria-label="Class summary">
-          <article class="summary-card"><span>Reward stars</span><strong id="classStars">0</strong><p>Class total.</p></article>
-          <article class="summary-card"><span>Lesson complete</span><strong id="classLessons">0 / 0</strong><p>Sense Tap Explorer.</p></article>
-          <article class="summary-card"><span>Quiz complete</span><strong id="classChallenges">0 / 0</strong><p>Independent challenge.</p></article>
+          <article class="summary-card active-learners"><span>Active learners</span><strong id="activeLearnerTotal">0</strong><p>With activity in this selection.</p></article>
+          <article class="summary-card attempts-card"><span>Learning attempts</span><strong id="attemptTotal">0</strong><p>Across the selected activities.</p></article>
+          <article class="summary-card quizzes-card"><span>Quizzes complete</span><strong id="quizCompleteTotal">0</strong><p>Science Lab quiz completions.</p></article>
+          <article class="summary-card rewards-card"><span>Reward stars</span><strong id="rewardTotal">0</strong><p>Earned in the game.</p></article>
+          <article class="summary-card supports-card"><span>Supports used</span><strong id="supportTypesTotal">0</strong><p>Distinct accessibility choices.</p></article>
         </div>
 
-        <div class="two-column">
-          <section class="panel" aria-labelledby="follow-title">
-            <div class="panel-heading"><div><h2 id="follow-title">Student progress</h2><p>Updates from student codes appear here.</p></div></div>
-            <div class="empty-row"><span aria-hidden="true">•</span><p>Use the Students view for each learner.</p></div>
+        <div class="priority-layout">
+          <section class="panel checkin-panel" aria-labelledby="checkin-title">
+            <div class="panel-heading"><div><p class="panel-kicker">SUPPORT SIGNALS</p><h2 id="checkin-title">Students to check in with</h2><p>Clear, reviewable patterns — never automated decisions.</p></div><button class="quiet-action" type="button" data-view="students">View all learners →</button></div>
+            <div id="checkInList" class="checkin-list" aria-live="polite"></div>
           </section>
-          <section class="panel" aria-labelledby="support-title">
-            <div class="panel-heading"><div><h2 id="support-title">Learning supports</h2><p>Language, read aloud, sound, and focus stay learner-controlled.</p></div></div>
-            <p class="support-note">Support use is information, not a measure of ability.</p>
-          </section>
+          <div class="insight-column">
+            <section class="panel barrier-panel" aria-labelledby="barriers-title">
+              <div class="panel-heading"><div><p class="panel-kicker">ACROSS THE CLASS</p><h2 id="barriers-title">Common learning barriers</h2><p>Activities revisited most often, for a quick whole-class recap.</p></div></div>
+              <div id="barriersList" class="barrier-list" aria-live="polite"></div>
+            </section>
+            <section class="panel actions-panel" aria-labelledby="actions-title">
+              <div class="panel-heading"><div><p class="panel-kicker">LOW-EFFORT NEXT STEPS</p><h2 id="actions-title">What you can do next</h2></div></div>
+              <div id="teachingActions" class="teaching-actions" aria-live="polite"></div>
+            </section>
+          </div>
         </div>
+
+        <section class="panel chart-panel" aria-labelledby="chart-title">
+          <div class="panel-heading"><div><p class="panel-kicker">GAME PROGRESS</p><h2 id="chart-title">Progress over time</h2><p id="chartDescription">Reward stars and completed quizzes from the game, by day.</p></div><div class="chart-key" aria-hidden="true"><span class="key-complete" id="chartSecondaryKey">Quizzes complete</span><span class="key-attempt" id="chartPrimaryKey">Reward stars</span></div></div>
+          <div id="activityChart" class="activity-chart" role="img" aria-label="Daily attempts compared with completions"></div>
+        </section>
+
+        <section class="panel support-panel" aria-labelledby="support-title">
+          <div class="panel-heading"><div><p class="panel-kicker">ACCESSIBILITY CHOICES</p><h2 id="support-title">Learning supports in use</h2><p>Supports are learner-controlled; continuation shows what happened next, not ability.</p></div></div>
+          <div id="supportUsage" class="support-usage" aria-live="polite"></div>
+        </section>
 
         <section class="panel progress-panel" aria-labelledby="progress-title">
-          <div class="panel-heading"><div><h2 id="progress-title">Recent progress</h2><p>Live student-code activity.</p></div></div>
+          <div class="panel-heading"><div><h2 id="progress-title">Learner progress</h2><p>Tap a learner code for their event-by-event journey.</p></div></div>
           <div class="progress-table" role="table" aria-label="Learner progress">
-            <div class="progress-row progress-head" role="row"><span role="columnheader">Learner</span><span role="columnheader">Lesson</span><span role="columnheader">Quiz</span><span role="columnheader">Stars</span></div>
+            <div class="progress-row progress-head" role="row"><span role="columnheader">Learner code &amp; evidence</span><span role="columnheader">Lesson</span><span role="columnheader">Challenge</span><span role="columnheader">Stars</span><span role="columnheader">Repeats</span><span role="columnheader">Last active</span><span role="columnheader">Supports</span></div>
             <div id="progressRows"></div>
           </div>
         </section>
@@ -64,7 +96,7 @@
 
       <section id="studentsView" class="dashboard-view" hidden aria-labelledby="students-title">
         <section class="panel student-panel">
-          <div class="panel-heading"><div><h2 id="students-title">Students</h2><p>Student-code learning activity.</p></div></div>
+          <div class="panel-heading"><div><h2 id="students-title">Learner codes</h2><p>Anonymous learning activity by four-digit code.</p></div></div>
           <div id="studentList" class="student-list" aria-label="Students"></div>
           </div>
         </section>
@@ -76,13 +108,28 @@
     <div class="auth-card">
       <span class="planet-mark large" aria-hidden="true">◌</span>
       <p class="eyebrow">JELASVERSE</p>
-      <h1 id="sign-in-title">Teacher space</h1>
-      <p>Sign in with the authorised teacher Google account.</p>
-      <button id="signInButton" class="sign-in" type="button">Continue with Google</button>
-      <p id="authStatus" class="auth-status" role="status" aria-live="polite">Teacher access only.</p>
+      <h1 id="sign-in-title">Teacher dashboard</h1>
+      <p>Prototype mode is ready to use. No Google sign-in or Firebase connection is needed.</p>
+      <button id="signInButton" class="sign-in" type="button">Open prototype dashboard</button>
+      <p id="authStatus" class="auth-status" role="status" aria-live="polite">Dashboard data will stay on this device when cloud sync is unavailable.</p>
       <a href="index.html" class="quiet-link">Return to game</a>
     </div>
   </section>
+
+  <aside id="learnerDrawer" class="learner-drawer" aria-labelledby="drawerTitle" aria-modal="true" role="dialog" hidden>
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <section class="drawer-panel">
+      <button id="closeDrawer" class="drawer-close" type="button" aria-label="Close learner detail">×</button>
+      <p class="eyebrow">LEARNER EVENT JOURNEY</p>
+      <h2 id="drawerTitle">Learner detail</h2>
+      <p id="drawerEvidence" class="drawer-evidence"></p>
+      <div class="drawer-grid">
+        <section><h3>Attempts</h3><p id="drawerAttempts"></p></section>
+        <section><h3>Supports used</h3><p id="drawerSupports"></p></section>
+      </div>
+      <section><h3>Step-by-step journey</h3><ol id="drawerTimeline" class="event-timeline"></ol></section>
+    </section>
+  </aside>
 
   <script type="module" src="teacher-dashboard.js"></script>
 </body>
