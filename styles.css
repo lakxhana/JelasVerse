@@ -1,0 +1,348 @@
+:root {
+  --ice: #9cf4ff;
+  --ink: #06121f;
+  --panel: #071b2be8;
+  --muted: #8fabbc;
+  --gold: #ffce77;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { width: 100%; height: 100%; }
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #030913;
+  color: #ecfaff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+button { font: inherit; }
+
+button:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.brand, .flight-hud, .surface-hud, .toast, .touch-controls { position: fixed; z-index: 2; }
+
+.brand {
+  top: clamp(20px, 4vw, 44px);
+  left: clamp(20px, 4vw, 50px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #a5f4ff;
+  border-radius: 50%;
+  color: var(--ice);
+  font-size: 37px;
+  transform: rotate(-25deg);
+}
+
+.brand p, .eyebrow {
+  margin: 0;
+  color: #a7c8d6;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: .24em;
+}
+
+.brand h1 { margin: 3px 0 0; font-size: clamp(21px, 3vw, 32px); font-weight: 500; letter-spacing: .18em; }
+.brand em { color: var(--ice); font-style: normal; }
+
+.flight-hud, .surface-hud { inset: 0; pointer-events: none; }
+.flight-hud { display: none; }
+.flight-hud.visible, .surface-hud.visible { display: block; }
+
+.target-card {
+  position: absolute;
+  top: clamp(105px, 16vh, 145px);
+  left: clamp(20px, 4vw, 50px);
+  min-width: 230px;
+  text-shadow: 0 2px 15px #000;
+}
+
+.target-card strong { display: block; margin: 8px 0 3px; color: #fff; font-size: clamp(24px, 4vw, 36px); font-weight: 500; letter-spacing: .16em; }
+.target-card small { color: var(--gold); font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; }
+
+.integrity { position: absolute; top: clamp(28px, 5vw, 50px); right: clamp(20px, 4vw, 50px); width: 170px; color: #bedbe8; font: 10px ui-monospace, monospace; letter-spacing: .16em; }
+.meter, .progress { overflow: hidden; height: 4px; margin-top: 9px; background: #a3eff633; }
+.meter i, .progress i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, var(--ice), #fff); box-shadow: 0 0 12px var(--ice); transition: width .2s ease; }
+
+.flight-bottom { position: absolute; bottom: 7%; left: 50%; width: min(480px, 58vw); transform: translateX(-50%); color: #a9c3d1; font: 10px ui-monospace, monospace; letter-spacing: .13em; }
+.flight-bottom > div:first-child, .flight-bottom > div:last-child { display: flex; justify-content: space-between; }
+.flight-bottom b { color: #f2fcff; font-weight: 500; }
+.flight-bottom .progress { margin: 11px 0; }
+.flight-help { position: absolute; bottom: 6%; left: clamp(20px, 4vw, 50px); margin: 0; color: #9db7c5; font: 10px ui-monospace, monospace; letter-spacing: .08em; }
+
+.surface-hud { display: none; }
+.surface-hud > div:first-child { position: absolute; top: clamp(104px, 16vh, 145px); left: clamp(20px, 4vw, 50px); max-width: 470px; text-shadow: 0 2px 16px #001018; }
+.surface-hud h2 { margin: 9px 0 8px; font-size: clamp(24px, 4vw, 35px); font-weight: 500; letter-spacing: .06em; }
+.surface-hud p { margin: 0; color: #e0f5f8; font-size: 14px; line-height: 1.5; }
+
+.surface-message {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  width: min(700px, 84vw);
+  transform: translateX(-50%);
+  padding: 16px 21px;
+  border: 1px solid #9beefa55;
+  background: #061826df;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.surface-message small { display: block; margin-top: 7px; color: #a4c4ce; font: 10px ui-monospace, monospace; letter-spacing: .14em; }
+
+.toast {
+  top: 27%;
+  left: 50%;
+  max-width: 78vw;
+  transform: translate(-50%, -10px);
+  padding: 10px 15px;
+  border: 1px solid #a7f8ff65;
+  background: #07192bdb;
+  color: var(--ice);
+  font: 11px ui-monospace, monospace;
+  letter-spacing: .12em;
+  opacity: 0;
+  transition: .22s ease;
+  pointer-events: none;
+  text-align: center;
+}
+.toast.visible { opacity: 1; transform: translate(-50%, 0); }
+
+.overlay {
+  position: fixed;
+  z-index: 4;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at center, #12325866, #01060ee8 80%);
+  transition: opacity .3s ease;
+}
+.overlay.visible { display: grid; }
+
+.briefing-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; background: linear-gradient(#071b31b3, #020714cc); }
+.window-planet { position: absolute; top: -21vw; right: -9vw; width: min(65vw, 780px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 33% 28%, #f7e1a8, #b68a56 43%, #061629 72%); box-shadow: inset -90px -70px 80px #03101c, 0 0 70px #86e5ff44; }
+.window-planet::after { content: ""; position: absolute; inset: 38% -20%; border: 14px solid #dbc58caa; border-radius: 50%; transform: rotate(-22deg); }
+.briefing-astronaut { position: absolute; bottom: 15%; width: 68px; height: 155px; border-radius: 40px 40px 18px 18px; background: linear-gradient(90deg, #dbeef4, #fff, #abc7d0); box-shadow: inset -12px 0 13px #74929c, 0 13px 32px #0009; }
+.briefing-astronaut::before { content: ""; position: absolute; top: -35px; left: 9px; width: 50px; height: 48px; border-radius: 50%; background: radial-gradient(circle at 65% 35%, #4ad6e5, #0c2230 55%, #fff 57%); }
+.briefing-astronaut::after { content: ""; position: absolute; inset: 35px -25px 20px; background: linear-gradient(90deg, transparent 0 10%, #d8edf3 10% 22%, transparent 22% 78%, #d8edf3 78% 90%, transparent 90%); }
+.briefing-astronaut.left { left: 23%; transform: rotate(8deg); }.briefing-astronaut.right { right: 23%; transform: rotate(-8deg); }
+
+.dialogue-card, .route-panel, .result-card {
+  position: relative;
+  width: min(820px, 91vw);
+  border: 1px solid #99eaf866;
+  background: linear-gradient(120deg, #061927f3, #0b2636ed);
+  box-shadow: 0 25px 80px #0008;
+  backdrop-filter: blur(15px);
+}
+
+.dialogue-card { align-self: end; margin-bottom: 5vh; padding: 23px 28px 20px; cursor: pointer; }
+.dialogue-heading { display: flex; align-items: center; gap: 13px; color: var(--ice); font: 700 11px ui-monospace, monospace; letter-spacing: .16em; }
+.dialogue-heading small { color: #8aa9b6; font-weight: 400; }.dialogue-heading b { margin-left: auto; color: #8aa9b6; font-weight: 400; }
+.dialogue-card p { min-height: 57px; margin: 14px 0 19px; font-size: clamp(18px, 2.2vw, 25px); line-height: 1.4; }.dialogue-card footer { display: flex; justify-content: space-between; gap: 15px; color: #94b4c0; font: 10px ui-monospace, monospace; letter-spacing: .1em; }
+kbd { border: 1px solid #b9ddea88; border-radius: 3px; padding: 3px 6px; color: white; }
+
+.route-panel, .result-card { padding: clamp(26px, 5vw, 52px); }.route-panel h2, .result-card h2 { margin: 12px 0 7px; font-size: clamp(33px, 5vw, 52px); font-weight: 500; letter-spacing: -.055em; }.route-panel > p, .result-card > p { margin: 0 0 27px; color: #b5cfda; }
+.route-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }.route { min-height: 185px; padding: 18px; border: 1px solid #769eae55; background: linear-gradient(145deg, #12334a99, #06121e99); color: #fff; text-align: left; cursor: pointer; }.route.selected { border-color: var(--ice); box-shadow: 0 0 28px #77f5ff22; }.route span { color: var(--ice); font: 10px ui-monospace, monospace; letter-spacing: .14em; }.route h3 { margin: 34px 0 8px; font-size: 21px; font-weight: 500; }.route p { margin: 0; color: #b6ccd4; font-size: 12px; line-height: 1.65; }.route-footer { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 24px; color: #9cbac5; font: 10px ui-monospace, monospace; letter-spacing: .08em; }
+
+.primary { border: 0; padding: 15px 21px; background: linear-gradient(110deg, #a9f4fa, #f4d89c); color: #061925; font-weight: 800; letter-spacing: .08em; cursor: pointer; }.primary:hover { filter: brightness(1.1); }.result-card { max-width: 600px; text-align: center; }.result-card .primary { margin-top: 5px; }
+
+.touch-controls { display: none; }
+
+@media (max-width: 700px) {
+  .brand { top: 15px; left: 17px; }.brand-mark { width: 32px; height: 32px; font-size: 27px; }.brand p { font-size: 7px; }.brand h1 { font-size: 17px; }
+  .target-card { top: 84px; left: 17px; }.target-card strong { font-size: 20px; }.integrity { top: 19px; right: 17px; width: 110px; font-size: 7px; }.flight-bottom { bottom: 95px; width: 65vw; font-size: 8px; }.flight-help { display: none; }
+  .surface-hud > div:first-child { top: 82px; left: 17px; max-width: 310px; }.surface-hud h2 { font-size: 21px; }.surface-hud p { font-size: 11px; }.surface-message { bottom: 83px; padding: 11px; }.surface-message p { font-size: 11px; }
+  .dialogue-card { margin-bottom: 76px; padding: 18px; }.dialogue-card p { min-height: 66px; font-size: 17px; }.dialogue-card footer { font-size: 7px; }.briefing-astronaut { bottom: 27%; transform: scale(.75)!important; }.briefing-astronaut.left { left: 14%; }.briefing-astronaut.right { right: 14%; }
+  .route-options { grid-template-columns: 1fr; max-height: 43vh; overflow-y: auto; }.route { min-height: 110px; }.route h3 { margin: 13px 0 5px; font-size: 17px; }.route-footer { align-items: flex-end; font-size: 8px; }.route-footer span { max-width: 40%; }.route-panel { max-height: 94vh; overflow-y: auto; }
+  .touch-controls { position: fixed; z-index: 3; right: 16px; bottom: 17px; display: grid; grid-template-columns: repeat(2, 45px); gap: 6px; }.touch-controls button { min-height: 43px; border: 1px solid #a4ecf777; border-radius: 7px; background: #09243ade; color: white; }.touch-controls button:last-child { grid-column: span 2; color: #08202b; background: #a7f3f4; font-size: 10px; }
+}
+
+/* Command-bridge presentation: adapted from the supplied reference UI while
+   keeping the current semantic markup and responsive controls. */
+.brand {
+  top: 5%;
+  left: 4.5%;
+  gap: 15px;
+}
+
+.brand .emblem {
+  position: relative;
+  width: 43px;
+  height: 43px;
+  border: 1px solid #b2f9ff88;
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+
+.brand .emblem::after {
+  position: absolute;
+  content: '';
+  inset: 12px -10px;
+  border: 2px solid var(--ice);
+  border-radius: 50%;
+}
+
+.brand h1 {
+  margin: 0;
+  color: #eefaff;
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: 8px;
+}
+
+.brand small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font: 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 3.5px;
+}
+
+.topright {
+  position: fixed;
+  z-index: 2;
+  top: 5.5%;
+  right: 4.5%;
+  color: var(--muted);
+  font: 10px/1.9 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 2px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.live { color: var(--ice); }
+.live::before { margin-right: 8px; content: '●'; font-size: 7px; }
+
+.scene-tag {
+  position: fixed;
+  z-index: 2;
+  top: 24%;
+  left: 4.5%;
+  color: #bdd7dc;
+  font: 10px/2.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+.scene-tag::before {
+  display: block;
+  width: 25px;
+  height: 1px;
+  margin-bottom: 14px;
+  background: var(--gold);
+  content: '';
+}
+
+.scene-tag strong { color: #fff; font-size: 13px; font-weight: 400; letter-spacing: 4px; }
+
+.briefing-scene { background: linear-gradient(180deg, #02071333 0 13%, #02071318 13% 15%, #02071322 15% 100%); }
+.briefing-scene::after { position: absolute; inset: 16% 12% auto; height: 1px; background: #a9f6ff77; box-shadow: 0 70px 0 #b2faff22; content: ''; }
+.briefing-scene .window-planet, .briefing-scene .briefing-astronaut { display: none; }
+#briefing { background: linear-gradient(180deg, #01050d33, #01050d66 82%, #01050daa); }
+
+.dialogue-card {
+  width: min(760px, 89%);
+  margin-bottom: 6%;
+  padding: 23px 30px 20px;
+  border-color: #8fe6f333;
+  border-left: 2px solid var(--ice);
+  border-radius: 0;
+  background: linear-gradient(110deg, #06131eea, #0b2029da);
+  box-shadow: none;
+}
+
+.dialogue-heading { font-size: 10px; letter-spacing: 2px; }
+.dialogue-card p { min-height: 58px; margin: 13px 0 19px; font-size: 19px; line-height: 1.65; }
+.dialogue-card footer { font-size: 9px; letter-spacing: 2px; }
+
+.overlay#routes { background: radial-gradient(ellipse at center, #04121ec9, #030a15a0); backdrop-filter: blur(5px); }
+.route-panel { width: min(1040px, 90%); margin-top: 30px; padding: 0; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+.route-panel h2 { margin: 14px 0 9px; font-size: 37px; font-weight: 400; letter-spacing: 1px; }
+.route-panel > p { margin-bottom: 32px; color: #8daab7; font-size: 13px; }
+.route-options { gap: 16px; }
+.route { position: relative; min-height: 255px; padding: 25px; border-color: #58748166; background: linear-gradient(145deg, #112c3980, #06101fcc); transition: .2s; }
+.route:hover, .route.selected { border-color: var(--ice); background: linear-gradient(145deg, #214856a0, #091728); }
+.route::before {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  width: 74px;
+  height: 74px;
+  border: 1px solid #bbf9ff88;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #e0fbff, #67b8ca 32%, #17384b 69%);
+  box-shadow: 0 0 25px #75eefd33;
+  content: '';
+  transform: translateX(-50%);
+}
+.route:nth-child(2)::before { background: radial-gradient(circle at 34% 28%, #ffe6a2, #d98952 37%, #3a1c36 72%); }
+.route:nth-child(3)::before { background: radial-gradient(circle at 32% 27%, #f4b9ff, #826bc5 37%, #18143f 72%); }
+.route:nth-child(2)::after {
+  position: absolute;
+  top: 78px;
+  left: calc(50% - 50px);
+  width: 100px;
+  height: 24px;
+  border: 1px solid #f7daa799;
+  border-radius: 50%;
+  content: '';
+  transform: rotate(-17deg);
+}
+.route span { color: #829ba8; font-size: 10px; letter-spacing: 3px; }
+.route h3 { margin: 99px 0 10px; font-size: 20px; font-weight: 400; }
+.route p { color: #8dabb9; font-size: 11px; line-height: 1.8; }
+.route-footer { margin-top: 25px; color: #87a5b2; font-size: 10px; line-height: 2; letter-spacing: .7px; }
+.primary { padding: 17px 31px; border-radius: 0; background: #a8edf0; color: #09202b; font-size: 11px; letter-spacing: 2px; }
+
+.flight-hud .target-card { top: 5%; left: 4%; }
+.target-card strong { margin-top: 8px; font-size: 22px; font-weight: 400; letter-spacing: 5px; }
+.target-card small { margin-top: 9px; font-size: 9px; letter-spacing: 2px; }
+.integrity { top: 5%; right: 4%; width: auto; color: #9dc3d1; font-size: 10px; letter-spacing: 2px; }
+.meter { display: flex; width: 145px; height: 3px; margin-top: 11px; background: #29404d; }
+.flight-bottom { bottom: 5%; width: min(460px, 70%); font-size: 9px; letter-spacing: 2px; }
+.flight-help { bottom: 5%; left: 4%; font-size: 9px; line-height: 2; letter-spacing: 1px; }
+
+.surface-hud > div:first-child { top: 5%; left: 4%; }
+.surface-hud h2 { margin: 10px 0; font-size: 26px; font-weight: 400; letter-spacing: 4px; }
+.surface-hud p { color: #d0e4e9; font-size: 12px; line-height: 1.8; }
+.surface-message { bottom: 5%; width: min(650px, 78%); padding: 15px 20px; border-color: #83dfe344; border-radius: 4px; background: #061724de; }
+.surface-message p { color: #e6f6ff; font-size: 13px; line-height: 1.7; }.surface-message small { color: #96b7c4; font-size: 10px; letter-spacing: 1px; }
+
+body[data-game-state="flight"] .brand,
+body[data-game-state="flight"] .topright,
+body[data-game-state="flight"] .scene-tag,
+body[data-game-state="landing"] .brand,
+body[data-game-state="landing"] .topright,
+body[data-game-state="landing"] .scene-tag,
+body[data-game-state="explore"] .brand,
+body[data-game-state="explore"] .topright,
+body[data-game-state="explore"] .scene-tag,
+body[data-game-state="interior"] .brand,
+body[data-game-state="interior"] .topright,
+body[data-game-state="interior"] .scene-tag { display: none; }
+
+@media (max-width: 700px) {
+  .brand { top: 4%; left: 4%; }.brand .emblem { width: 30px; height: 30px; }.brand h1 { font-size: 15px; letter-spacing: 5px; }.brand small { font-size: 7px; letter-spacing: 2px; }.topright { font-size: 8px; }.scene-tag { top: 20%; font-size: 8px; }
+  .dialogue-card { margin-bottom: 5%; padding: 17px 20px; }.dialogue-card p { font-size: 15px; }.dialogue-card footer { font-size: 7px; }
+  .route-panel { margin-top: 55px; }.route-options { gap: 7px; }.route { min-height: 220px; padding: 12px; }.route h3 { margin-top: 77px; font-size: 15px; }.route p { font-size: 9px; }.route-footer { font-size: 8px; }
+  .flight-hud .target-card { top: 5%; }.surface-hud > div:first-child { top: 5%; }.surface-hud h2 { font-size: 18px; }.surface-hud p { font-size: 11px; }.surface-message { bottom: 3%; width: 88%; padding: 9px 12px; }.surface-message p { font-size: 11px; }.surface-message small { font-size: 8px; }
+}

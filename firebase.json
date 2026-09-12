@@ -1,0 +1,12 @@
+{
+  "auth": {
+    "authorizedDomains": ["localhost", "127.0.0.1"],
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "JelasVerse",
+        "supportEmail": "lakxhanaselvarajah@gmail.com"
+      }
+    }
+  },
+  "firestore": { "rules": "firestore.rules" }
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no,shrink-to-fit=no">
+  <meta name="theme-color" content="#07141d">
+  <title>Controller</title>
+  <style>
+    :root{color-scheme:dark;font-family:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif;background:#06121c;color:#effcff;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+    html,body{position:fixed;inset:0;width:100%;height:100%;min-height:100%;max-height:100svh;overflow:hidden;touch-action:none;overscroll-behavior:none}
+    body{margin:0;padding:max(10px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));background:radial-gradient(ellipse at 50% 42%,#164e62 0%,#0a2636 36%,#030a12 82%)}
+    .controller{position:relative;display:grid;grid-template-columns:1fr;grid-template-rows:58px minmax(0,1fr) 64px;gap:8px;width:100%;height:calc(100svh - max(10px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)));min-height:0}
+    header{grid-row:1;position:relative;display:flex;align-items:center;justify-content:space-between;min-width:0}
+    h1{margin:0;font-size:clamp(17px,2.5vw,22px);letter-spacing:.14em;line-height:1;color:#effcff}.phone-brand p{display:none}
+    button{border:1px solid rgb(151 229 235 / 56%);border-radius:18px;background:linear-gradient(145deg,rgb(32 100 120 / 96%),rgb(8 30 44 / 98%));box-shadow:0 8px 18px rgb(0 4 10 / 26%),inset 0 1px rgb(235 255 255 / 11%);color:#effcff;font:700 17px/1.15 inherit;letter-spacing:.04em;touch-action:none;-webkit-user-drag:none;user-select:none;transition:transform .12s ease,background .12s ease,border-color .12s ease}
+    button:active,button.active{transform:translateY(2px) scale(.98);background:linear-gradient(145deg,#58bec8,#176077);border-color:#dcffff;box-shadow:0 3px 10px rgb(0 4 10 / 20%)}button.pending{border-color:#b9f7f5;background:linear-gradient(145deg,#2a7185,#0b2c3d)}
+    .icon-button{display:grid;place-items:center;width:52px;height:52px;min-width:52px;min-height:52px;padding:0;border-radius:50%;font-size:25px;line-height:1}
+    .joystick{grid-row:2;position:relative;align-self:center;justify-self:center;width:min(47vh,350px);aspect-ratio:1;border:1px solid rgba(142,228,237,.5);border-radius:50%;background:radial-gradient(circle at 40% 30%,rgba(79,171,188,.34),rgba(9,36,51,.95) 64%,rgba(3,15,25,.98));box-shadow:0 14px 30px rgba(0,4,10,.32),inset 0 1px rgba(231,255,255,.16);touch-action:none}.joystick::before,.joystick::after{content:"";position:absolute;inset:14%;border:1px solid rgba(179,244,245,.2);border-radius:50%;pointer-events:none}.joystick::after{inset:32%;border-color:rgba(193,250,250,.38)}.joystick-thumb{position:absolute;left:50%;top:50%;width:39%;aspect-ratio:1;border:1px solid #c7ffff;border-radius:50%;background:radial-gradient(circle at 35% 28%,#92eef2,#2a8295 58%,#0b3347);box-shadow:0 9px 18px rgba(0,5,12,.4),inset 0 1px rgba(255,255,255,.42);transform:translate(-50%,-50%);pointer-events:none;transition:transform .06s linear}.joystick:active .joystick-thumb{border-color:#fff}
+    .utility{position:absolute;left:0;bottom:5px;display:flex;gap:10px}.utility .icon-button{background:linear-gradient(145deg,#133d52,#071a29)}
+    .boost-control{position:absolute;right:0;bottom:3px;width:74px;height:74px;min-width:74px;min-height:74px;font-size:33px;background:linear-gradient(145deg,#735b2d,#302716);border-color:#f2d37d;color:#fff5c9}
+    .continue{grid-row:3;justify-self:center;align-self:end;width:min(200px,46vw);min-height:54px;border-color:#d6ffff;background:linear-gradient(145deg,#91e7e9,#3b94a8);color:#06202b;font-size:17px}
+    .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .rotate-notice{display:none}
+    .code-gate{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,#15465a,#06121c 70%)}.code-gate[hidden]{display:none}.code-card{width:min(360px,100%);padding:26px;border:1px solid #8ce8ee;border-radius:18px;background:#082333;box-shadow:0 18px 45px #0008}.code-card h2{margin:0 0 8px;font-size:24px}.code-card p{color:#c7e3e7;line-height:1.55}.code-card input{width:100%;margin:12px 0 10px;padding:14px;border:1px solid #9cecf0;border-radius:9px;background:#061823;color:#fff;font:700 24px/1 inherit;letter-spacing:.18em;text-align:center}.code-card button{width:100%;min-height:52px;border-radius:10px;background:linear-gradient(145deg,#9be8ea,#3e9db2);color:#06202b}
+    @media (orientation:portrait){.controller{display:none}.rotate-notice{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px}.rotate-notice strong{font-size:clamp(28px,8vw,42px);letter-spacing:.1em;color:#effcff}}
+    @media (orientation:landscape) and (max-height:500px){body{padding:max(6px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(7px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}.controller{grid-template-rows:46px minmax(0,1fr) 52px;height:calc(100svh - max(6px,env(safe-area-inset-top)) - max(7px,env(safe-area-inset-bottom))}.icon-button{width:43px;height:43px;min-width:43px;min-height:43px;font-size:21px}.joystick{width:min(50vh,270px)}.continue{min-height:46px;width:min(230px,45vw);font-size:15px}.utility{bottom:2px}.boost-control{bottom:0;width:62px;height:62px;min-width:62px;min-height:62px;font-size:28px}}
+  </style>
+</head>
+<body>
+  <div class="rotate-notice"><strong>Turn phone</strong></div>
+  <section id="codeGate" class="code-gate" hidden><div class="code-card"><h2>Connect controller</h2><p>Enter the same student code as the game.</p><form id="codeForm"><input id="studentCode" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="0000" aria-label="Student code"><button>Connect</button></form><p id="codeStatus" role="status"></p></div></section>
+  <div class="controller" id="controller">
+    <header><div class="phone-brand"><h1>JelasVerse</h1></div><span class="sr-only" id="status" role="status">Ready</span><button class="icon-button" data-tap="settings" type="button" aria-label="Open settings on computer">⚙︎</button></header>
+    <main class="joystick" id="joystick" aria-label="Move joystick" role="application"><span class="joystick-thumb" id="joystickThumb"></span></main>
+    <section class="utility"><button class="icon-button" data-tap="pause" aria-label="Pause">⏸</button><button class="icon-button" data-tap="back" aria-label="Back or close settings">↩</button><button class="icon-button" data-tap="home" aria-label="Home">⌂</button></section>
+    <button class="icon-button boost-control" data-hold="boost" aria-label="Boost">⚡</button>
+    <button class="continue" data-tap="action">Continue</button>
+  </div>
+  <script>
+    const state={up:false,down:false,left:false,right:false,boost:false,action:false,pause:false,skip:false,home:false,back:false,settings:false};
+    const status=document.getElementById('status');
+    const controller=document.getElementById('controller');
+    const HOLD_DELAY=160,HEARTBEAT_MS=110,pendingHolds=new Map();
+    let heartbeatId=0,sendQueued=false,sending=false,resend=false;
+    document.addEventListener('contextmenu',event=>event.preventDefault());
+    document.addEventListener('selectstart',event=>event.preventDefault());
+    for(const name of ['gesturestart','gesturechange','gestureend','dblclick'])document.addEventListener(name,event=>event.preventDefault(),{passive:false});
+    document.addEventListener('touchmove',event=>{if(event.touches.length>1)event.preventDefault();},{passive:false});
+    function requestLandscape(){const lock=screen.orientation?.lock;if(typeof lock==='function')Promise.resolve(lock.call(screen.orientation,'landscape')).catch(()=>{});}
+    document.addEventListener('pointerdown',requestLandscape,{once:true});
+    function anyHeld(){return state.up||state.down||state.left||state.right||state.boost;}
+    function updateHeartbeat(){if(anyHeld()&&!heartbeatId)heartbeatId=setInterval(queueSend,HEARTBEAT_MS);if(!anyHeld()&&heartbeatId){clearInterval(heartbeatId);heartbeatId=0;}}
+    const dataApi=import('./jelasverse-data.js');
+    let studentCode=new URLSearchParams(location.search).get('code')||'';
+    const codeGate=document.getElementById('codeGate'),codeForm=document.getElementById('codeForm'),codeInput=document.getElementById('studentCode'),codeStatus=document.getElementById('codeStatus');
+    async function connect(code){try{const api=await dataApi;const student=await api.signInStudent(code);studentCode=student.code;codeGate.hidden=true;status.textContent='Connected';queueSend();}catch(error){codeStatus.textContent=error.message||'Use a four-digit code.';}}
+    if(studentCode)connect(studentCode);else{codeGate.hidden=false;codeInput.focus();}
+    codeForm.addEventListener('submit',event=>{event.preventDefault();connect(codeInput.value)});
+    async function send(){if(!studentCode||sending){if(sending)resend=true;return;}sending=true;do{resend=false;try{const api=await dataApi;await api.publishController(studentCode,state);status.textContent='Connected';}catch{status.textContent='Check Wi-Fi';}}while(resend);sending=false;}
+    function queueSend(){if(sendQueued)return;sendQueued=true;queueMicrotask(()=>{sendQueued=false;send();});}
+    function setHeld(button,key,value){state[key]=value;button.classList.toggle('active',value);button.classList.toggle('pending',false);updateHeartbeat();queueSend();}
+    function release(button,key){const pending=pendingHolds.get(button);if(pending){clearTimeout(pending.timer);pendingHolds.delete(button);}if(state[key])setHeld(button,key,false);else button.classList.remove('pending');}
+    function releaseAll(){for(const [button,{key,timer}] of pendingHolds){clearTimeout(timer);button.classList.remove('pending');pendingHolds.delete(button);}document.querySelectorAll('[data-hold]').forEach(button=>{const key=button.dataset.hold;if(state[key])setHeld(button,key,false);});resetJoystick();updateHeartbeat();queueSend();}
+    document.querySelectorAll('[data-hold]').forEach(button=>{
+      const key=button.dataset.hold;
+      button.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();if(pendingHolds.has(button)||state[key])return;try{button.setPointerCapture(event.pointerId);}catch{}button.classList.add('pending');const timer=setTimeout(()=>{pendingHolds.delete(button);setHeld(button,key,true);},HOLD_DELAY);pendingHolds.set(button,{key,timer});});
+      for(const eventName of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(eventName,event=>{event.preventDefault();release(button,key);});
+      button.addEventListener('click',event=>event.preventDefault());
+    });
+    const joystick=document.getElementById('joystick'),joystickThumb=document.getElementById('joystickThumb');let joystickPointer=null;
+    function setJoystick(event){const rect=joystick.getBoundingClientRect(),radius=rect.width/2,cx=rect.left+radius,cy=rect.top+radius;let x=(event.clientX-cx)/radius,y=(event.clientY-cy)/radius;const length=Math.hypot(x,y);if(length>1){x/=length;y/=length;}const changed=state.left!==x<-.22||state.right!==x>.22||state.up!==y<-.22||state.down!==y>.22;state.left=x<-.22;state.right=x>.22;state.up=y<-.22;state.down=y>.22;joystickThumb.style.transform=`translate(calc(-50% + ${x*72}%),calc(-50% + ${y*72}%))`;if(changed){updateHeartbeat();queueSend();}}
+    function resetJoystick(){joystickPointer=null;const changed=state.left||state.right||state.up||state.down;state.left=false;state.right=false;state.up=false;state.down=false;joystickThumb.style.transform='translate(-50%,-50%)';if(changed){updateHeartbeat();queueSend();}}
+    joystick.addEventListener('pointerdown',event=>{event.preventDefault();joystickPointer=event.pointerId;try{joystick.setPointerCapture(event.pointerId);}catch{}setJoystick(event);});
+    joystick.addEventListener('pointermove',event=>{if(event.pointerId===joystickPointer){event.preventDefault();setJoystick(event);}});
+    for(const eventName of ['pointerup','pointercancel','lostpointercapture'])joystick.addEventListener(eventName,event=>{if(event.pointerId===joystickPointer){event.preventDefault();resetJoystick();}});
+    document.querySelectorAll('[data-tap]').forEach(button=>button.addEventListener('click',event=>{event.preventDefault();const key=button.dataset.tap;state[key]=true;queueSend();setTimeout(()=>{state[key]=false;queueSend();},120)}));
+    window.addEventListener('blur',releaseAll);document.addEventListener('visibilitychange',()=>{if(document.hidden)releaseAll();});
+    window.addEventListener('pagehide',()=>{releaseAll();Object.keys(state).forEach(key=>state[key]=false);queueSend()});
+    queueSend();
+  </script>
+</body>
+</html>

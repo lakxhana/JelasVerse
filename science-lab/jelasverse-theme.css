@@ -1,0 +1,397 @@
+/* JelasVerse classroom chrome: shared with the launch and flight screens.
+   This file deliberately styles the lab's HTML interface only; the 3D scene
+   and its stations remain rendered by the supplied Science Lab build. */
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("/assets/fonts/OpenDyslexic-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("/assets/fonts/OpenDyslexic-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --jv-space: #030711;
+  --jv-panel: rgba(5, 24, 37, .94);
+  --jv-panel-soft: rgba(11, 42, 56, .92);
+  --jv-text: #f2fcfd;
+  --jv-muted: #bfd9df;
+  --jv-line: rgba(151, 233, 237, .56);
+  --jv-cyan: #a8f0f2;
+  --jv-warm: #f0cb83;
+  --jv-success: #bce9c8;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+summary,
+#root {
+  font-family: "OpenDyslexic", Arial, sans-serif !important;
+}
+
+body {
+  background: var(--jv-space) !important;
+  color: var(--jv-text);
+  letter-spacing: .018em;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  letter-spacing: .018em;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--jv-warm) !important;
+  outline-offset: 3px;
+}
+
+/* Compact HUD, matching the navigation screen. */
+.caption {
+  color: var(--jv-text) !important;
+  background: linear-gradient(120deg, rgba(3, 14, 25, .95), rgba(11, 43, 57, .89)) !important;
+  border: 1px solid var(--jv-line);
+  border-left: 3px solid var(--jv-cyan);
+  border-radius: 0 9px 9px 0;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 12px 15px !important;
+  font-size: 14px !important;
+  line-height: 1.55;
+  box-shadow: 0 10px 28px rgba(0, 5, 13, .32);
+}
+
+.caption strong {
+  color: var(--jv-cyan);
+  font-weight: 800;
+}
+
+.caption span {
+  display: none !important;
+}
+
+/* The game-level Settings panel owns these supports. Keep activities focused
+   on one task instead of repeating another settings menu inside every dialog. */
+.activity-dialog .support-bar {
+  display: none !important;
+}
+
+/* The parent game owns Rewards · Home · Teacher · Settings.  The source lab
+   has a second, older utility bar, which otherwise sits directly beneath it. */
+.metaverse-controls { display: none !important; }
+
+.metaverse-controls button,
+.star-points,
+.station-launch,
+.progress-launch,
+.control-notice,
+.flow-notice,
+.locked-option,
+.locked-note,
+.artefact-prompt,
+.direct-activity > span {
+  color: var(--jv-text) !important;
+  background: linear-gradient(135deg, rgba(17, 57, 72, .96), rgba(4, 24, 38, .96)) !important;
+  border: 1px solid var(--jv-line) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 22px rgba(0, 5, 14, .27) !important;
+}
+
+.metaverse-controls button,
+.star-points,
+.station-launch,
+.progress-launch {
+  min-height: 48px;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+.metaverse-controls button:hover,
+.station-launch:hover,
+.progress-launch:hover {
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(30, 91, 108, .98), rgba(9, 42, 57, .98)) !important;
+  border-color: var(--jv-cyan) !important;
+  transform: translateY(-1px);
+}
+
+.star-points {
+  color: #fff7d9 !important;
+  border-color: rgba(240, 203, 131, .68) !important;
+}
+
+.star-points strong,
+.caption strong,
+.activity-eyebrow,
+.choice-letter {
+  color: var(--jv-warm) !important;
+}
+
+.control-notice,
+.flow-notice,
+.locked-option,
+.locked-note,
+.artefact-prompt,
+.direct-activity > span {
+  color: var(--jv-muted) !important;
+  line-height: 1.5;
+}
+
+.flow-notice span,
+.progress-launch span {
+  color: var(--jv-space) !important;
+  background: var(--jv-cyan) !important;
+}
+
+.locked-option,
+.locked-note,
+.artefact-prompt.locked {
+  opacity: .78;
+}
+
+.artefact-prompt kbd {
+  color: var(--jv-text) !important;
+  border-color: var(--jv-line) !important;
+}
+
+/* Activity cards retain their existing layout, with calmer high-contrast panels. */
+.activity-dialog,
+.sense-explorer-dialog,
+.tap-quiz-dialog,
+.plant-learning-dialog,
+.reset-confirm {
+  color: var(--jv-text) !important;
+  background: linear-gradient(145deg, rgba(6, 28, 42, .985), rgba(2, 13, 25, .99)) !important;
+  border: 1px solid var(--jv-line) !important;
+  box-shadow: 0 20px 70px rgba(0, 3, 9, .62) !important;
+}
+
+.activity-dialog::backdrop {
+  background: rgba(1, 7, 15, .72) !important;
+}
+
+.activity-dialog h1,
+.activity-dialog h2,
+.reset-confirm h2,
+.reset-confirm p,
+.sense-info-panel h2,
+.organ-picture p,
+.plant-info h2 {
+  color: var(--jv-text) !important;
+}
+
+.activity-dialog legend,
+.activity-dialog p,
+.activity-dialog li,
+.activity-dialog label,
+.sense-info-panel p,
+.plant-info p,
+.narrator-line,
+.sense-progress,
+.match-instruction,
+.match-count,
+.optional-hint,
+.support-bar,
+.activity-feedback {
+  color: var(--jv-muted) !important;
+}
+
+.activity-dialog button,
+.reset-confirm button,
+.activity-dialog .visual-choice,
+.activity-dialog .sense-choice,
+.activity-dialog .need-button,
+.activity-dialog .sense-mini-list button,
+.activity-dialog .plant-hotspot,
+.activity-dialog .plant-3d-hotspot,
+.face-organ,
+.story-card,
+.object-icon,
+.sense-info-panel,
+.organ-picture,
+.plant-info,
+.support-bar,
+.sequence-goal,
+.match-target,
+.structure-hint,
+.quiz-feedback,
+.explorer-guidance,
+.narrator-line,
+.stay-note,
+.celebration-card {
+  color: var(--jv-text) !important;
+  background: linear-gradient(135deg, rgba(15, 51, 66, .97), rgba(6, 28, 42, .97)) !important;
+  border-color: rgba(151, 233, 237, .38) !important;
+}
+
+.activity-dialog button,
+.reset-confirm button,
+.activity-dialog .visual-choice,
+.activity-dialog .sense-choice,
+.activity-dialog .need-button,
+.activity-dialog .sense-mini-list button,
+.activity-dialog .plant-hotspot,
+.activity-dialog .plant-3d-hotspot,
+.face-organ {
+  border-width: 1px !important;
+  box-shadow: none !important;
+  transition: transform .16s ease, border-color .16s ease, background-color .16s ease;
+}
+
+.activity-dialog button:hover:not(:disabled),
+.reset-confirm button:hover:not(:disabled),
+.activity-dialog .visual-choice:hover,
+.activity-dialog .sense-choice:hover,
+.activity-dialog .need-button:hover,
+.activity-dialog .sense-mini-list button:hover,
+.activity-dialog .plant-hotspot:hover,
+.activity-dialog .plant-3d-hotspot:hover,
+.face-organ:hover {
+  color: #fff !important;
+  border-color: var(--jv-cyan) !important;
+  background: linear-gradient(135deg, rgba(24, 80, 95, .98), rgba(8, 40, 55, .98)) !important;
+  transform: translateY(-1px);
+}
+
+.activity-dialog button[aria-pressed=true],
+.activity-dialog .visual-choice[aria-pressed=true],
+.activity-dialog .sense-choice[aria-pressed=true],
+.activity-dialog .sense-mini-list button.selected,
+.activity-dialog .need-button.selected,
+.activity-dialog .plant-hotspot.selected,
+.activity-dialog .plant-3d-hotspot.selected,
+.face-organ.selected {
+  border-color: var(--jv-warm) !important;
+  outline: 2px solid rgba(240, 203, 131, .8) !important;
+  outline-offset: 2px;
+}
+
+.activity-dialog .activity-exit,
+.activity-dialog .hint-button,
+.activity-dialog .quiz-actions .activity-exit {
+  color: var(--jv-cyan) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.activity-dialog input,
+.activity-dialog select,
+.operation-entry input {
+  color: var(--jv-text) !important;
+  background: rgba(0, 12, 23, .7) !important;
+  border-color: var(--jv-line) !important;
+}
+
+.activity-dialog option {
+  color: var(--jv-text);
+  background: #0a2332;
+}
+
+.sense-model-stage,
+.quiz-celebration,
+.plant-board {
+  border-color: var(--jv-line) !important;
+  box-shadow: inset 0 0 0 3px rgba(168, 240, 242, .08) !important;
+}
+
+.quiz-question-symbol,
+.celebration-badge {
+  color: var(--jv-space) !important;
+  background: var(--jv-cyan) !important;
+  border-color: rgba(255,255,255,.75) !important;
+}
+
+.activity-dialog .sense-3d-badge {
+  color: var(--jv-text) !important;
+  background: rgba(8, 38, 52, .96) !important;
+  border-color: var(--jv-line) !important;
+}
+
+.activity-dialog .sense-3d-badge.selected,
+.activity-dialog .sense-3d-badge.correct {
+  border-color: var(--jv-warm) !important;
+  box-shadow: 0 0 0 3px rgba(240, 203, 131, .27) !important;
+}
+
+.waypoint-symbol.completed {
+  border-color: rgba(188, 233, 200, .95) !important;
+  box-shadow: 0 0 0 6px rgba(188, 233, 200, .22), 0 0 22px rgba(188, 233, 200, .62) !important;
+}
+
+.waypoint-symbol.completed span {
+  background: #4d9e72 !important;
+}
+
+/* The shared settings panel controls this class in the embedded classroom. */
+html.jv-large-text .activity-dialog,
+html.jv-large-text .sense-explorer-dialog,
+html.jv-large-text .tap-quiz-dialog,
+html.jv-large-text .plant-learning-dialog { font-size: 1.16em; }
+
+html.jv-large-text .activity-dialog :is(button,input,select,legend,p,li,label),
+html.jv-large-text .sense-explorer-dialog :is(button,input,select,p,li,label),
+html.jv-large-text .tap-quiz-dialog :is(button,input,select,p,li,label),
+html.jv-large-text .plant-learning-dialog :is(button,input,select,p,li,label) {
+  font-size: 1.1em !important;
+  line-height: 1.7 !important;
+}
+
+html.jv-large-text .activity-dialog :is(h1,h2),
+html.jv-large-text .sense-explorer-dialog h1,
+html.jv-large-text .tap-quiz-dialog h1,
+html.jv-large-text .plant-learning-dialog h1 {
+  font-size: 1.24em !important;
+  line-height: 1.25 !important;
+}
+
+/* One word at a time: a calm visual anchor for reading quiz prompts. */
+.activity-dialog .word-hover { color: var(--jv-text); }
+.activity-dialog .word-hover:hover { color: #fff !important; background: #246a7a; box-shadow: 0 3px 11px rgba(82,210,216,.27); }
+.activity-dialog .completion-actions { display:flex; justify-content:flex-end; gap:10px; }
+.activity-dialog .completion-actions button { min-width:auto !important; min-height:40px !important; padding:8px 14px !important; }
+
+@media (max-width: 620px) {
+  .caption {
+    top: 10px;
+    left: 10px;
+    padding: 9px 11px !important;
+    font-size: 12px !important;
+  }
+
+  .metaverse-controls {
+    top: 10px;
+    right: 10px;
+    gap: 6px !important;
+  }
+
+  .metaverse-controls button,
+  .star-points {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

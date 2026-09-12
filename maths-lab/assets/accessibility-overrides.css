@@ -1,0 +1,486 @@
+/* Dyslexia-friendly learning cards inspired by the supplied maths reference. */
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("../../assets/fonts/OpenDyslexic-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("../../assets/fonts/OpenDyslexic-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+html,
+body,
+button,
+input,
+select {
+  font-family: "OpenDyslexic", Arial, sans-serif !important;
+}
+
+#root,
+#root * {
+  font-family: "OpenDyslexic", Arial, sans-serif !important;
+}
+
+.activity-dialog {
+  color: #25364a;
+  background: #fffdf7;
+  border: 2px solid #d4e2e7;
+  border-radius: 22px;
+  box-shadow: 0 20px 58px rgb(34 55 74 / 18%);
+}
+
+.activity-dialog::backdrop {
+  background: rgb(32 55 70 / 46%);
+}
+
+.activity-dialog h1 {
+  letter-spacing: 0.018em;
+  line-height: 1.35;
+}
+
+.activity-dialog legend {
+  line-height: 1.65;
+}
+
+.activity-equation {
+  background: #e8f5fb;
+  border: 2px solid #b9dded;
+  border-radius: 16px;
+  text-decoration: underline;
+  text-decoration-color: #73b6d1;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.23em;
+}
+
+.activity-dialog button {
+  color: #23364d;
+  background: #fffdf7;
+  border: 2px solid #cbdce4;
+  border-radius: 14px;
+  box-shadow: 0 2px 0 #a4bfca;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.activity-dialog button:hover {
+  background: #edf8fc;
+  border-color: #69c3e8;
+  transform: translateY(-1px);
+}
+
+.activity-dialog button[aria-pressed="true"] {
+  color: #17466a;
+  background: #fff4bc;
+  border-color: #efc744;
+  outline: 3px solid #f7dfa0;
+}
+
+.activity-dialog .activity-exit {
+  box-shadow: none;
+}
+
+button:focus-visible,
+.activity-dialog h1:focus {
+  outline-color: #4fa9d5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-dialog button {
+    transition: none;
+  }
+}
+
+/* The same word-by-word cue is available after the game enters the Maths Lab. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #root .hover-word {
+    display: inline-block;
+    position: relative;
+    z-index: 0;
+    padding: 0 0.06em;
+    margin: 0 -0.01em;
+    border-radius: 4px;
+    transform-origin: center;
+    transition: transform 200ms ease-out, background 200ms ease-out, color 200ms ease-out, box-shadow 200ms ease-out, font-weight 160ms ease-out;
+    cursor: inherit;
+  }
+
+  #root .hover-word:hover {
+    z-index: 1;
+    color: #132c42;
+    background: #bdf8f2;
+    box-shadow: 0 3px 11px rgb(86 183 190 / 35%);
+    font-weight: 700;
+    transform: translateY(-2px) scale(1.15);
+  }
+}
+
+/* Orbit Runner classroom skin: short labels and the same calm sci-fi controls. */
+html,
+body,
+#root {
+  background: #06121e;
+}
+
+html,
+body,
+button,
+input,
+select {
+  font-family: "Atkinson Hyperlegible", Lexend, Arial, sans-serif;
+}
+
+.caption {
+  color: #ecfbff;
+  background: linear-gradient(135deg, rgb(8 31 45 / 92%), rgb(6 19 31 / 90%));
+  border: 1px solid rgb(150 239 244 / 45%);
+  border-left: 3px solid #96eff4;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0 12px 30px rgb(0 5 14 / 32%);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  padding: 12px 15px;
+}
+
+.caption strong {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.caption > span,
+.direct-activity > span {
+  display: none;
+}
+
+.direct-activity {
+  gap: 9px;
+  right: 20px;
+  bottom: 20px;
+}
+
+.station-launch {
+  min-width: 156px;
+  color: #edffff;
+  background: linear-gradient(135deg, rgb(19 65 82 / 96%), rgb(7 26 40 / 96%));
+  border: 1px solid rgb(150 239 244 / 55%);
+  border-radius: 9px;
+  box-shadow: 0 9px 22px rgb(0 7 18 / 30%);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.station-launch:hover,
+.station-launch:focus-visible {
+  color: #06202c;
+  background: linear-gradient(135deg, #bcf7f3, #7dd7e3);
+  border-color: #dfffff;
+}
+
+.artefact-prompt {
+  color: #e8fcff;
+  background: rgb(7 27 40 / 92%);
+  border-color: rgb(150 239 244 / 45%);
+  border-radius: 8px;
+  box-shadow: 0 7px 18px rgb(0 5 14 / 24%);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.artefact-prompt kbd {
+  display: none;
+}
+
+.activity-dialog {
+  color: #eefaff;
+  background: linear-gradient(145deg, rgb(8 31 45 / 98%), rgb(5 18 30 / 98%));
+  border-color: rgb(150 239 244 / 48%);
+  box-shadow: 0 22px 58px rgb(0 4 12 / 52%);
+}
+
+.activity-dialog::backdrop {
+  background: rgb(2 10 19 / 66%);
+}
+
+.activity-dialog h1,
+.activity-dialog legend,
+.activity-dialog p {
+  color: #f1fbff;
+}
+
+.activity-equation,
+.match-target,
+.sequence-goal,
+.structure-hint {
+  color: #092432;
+  background: #e9f8f7;
+  border-color: #9adfe5;
+}
+
+.activity-dialog button {
+  color: #ecffff;
+  background: linear-gradient(135deg, #1a5368, #0b2d43);
+  border-color: rgb(150 239 244 / 48%);
+  box-shadow: 0 2px 0 rgb(82 160 174 / 58%);
+}
+
+.activity-dialog button:hover,
+.activity-dialog button:focus-visible {
+  color: #06202c;
+  background: #bcf7f3;
+  border-color: #eaffff;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #root .hover-word {
+    color: inherit;
+  }
+
+  #root .hover-word:hover {
+    color: #061923;
+    background: #bdf8f2;
+    box-shadow: 0 3px 11px rgb(141 240 235 / 42%);
+  }
+}
+
+@media (max-width: 650px) {
+  .caption {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+
+  .direct-activity {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .station-launch {
+    min-width: 136px;
+    font-size: 12px;
+  }
+}
+
+/* Metaverse controls: keep the room arrangement intact and use the app's calm, cool palette. */
+.caption {
+  background: linear-gradient(135deg, rgb(10 39 55 / 95%), rgb(5 22 36 / 94%));
+  border-color: rgb(141 225 235 / 54%);
+}
+
+.artefact-prompt {
+  color: #ecfbff;
+  background: linear-gradient(135deg, rgb(14 52 69 / 94%), rgb(7 29 44 / 94%));
+  border-color: rgb(141 225 235 / 54%);
+}
+
+.activity-dialog {
+  background: linear-gradient(145deg, rgb(11 43 59 / 98%), rgb(5 23 37 / 98%));
+  border-color: rgb(141 225 235 / 56%);
+}
+
+.activity-equation,
+.match-target,
+.sequence-goal,
+.structure-hint {
+  color: #0b2d3f;
+  background: #e3f3f2;
+  border-color: #9bd6da;
+}
+
+/* The duplicate room shortcuts are intentionally removed; the in-world stations remain. */
+.direct-activity,
+#challenge-launch,
+#match-launch {
+  display: none !important;
+}
+
+#returnHome {
+  position: fixed;
+  top: 20px;
+  right: 178px;
+  z-index: 10;
+  min-height: 50px;
+  padding: 12px 18px;
+  color: #e9fbff;
+  background: linear-gradient(135deg, rgb(17 58 74 / 96%), rgb(6 24 38 / 96%));
+  border: 1px solid rgb(150 239 244 / 58%);
+  border-radius: 9px;
+  box-shadow: 0 8px 18px rgb(0 8 18 / 25%);
+  font: 700 13px/1.2 "Atkinson Hyperlegible", Lexend, Arial, sans-serif;
+  letter-spacing: .07em;
+  cursor: pointer;
+  transition: transform 160ms ease-out, background 160ms ease-out, color 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+#returnHome:hover,
+#returnHome:focus-visible {
+  color: #06202c;
+  background: linear-gradient(135deg, #c3f8f4, #80d8e3);
+  border-color: #e8ffff;
+  box-shadow: 0 11px 22px rgb(69 196 209 / 28%);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+#returnHome:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 650px) {
+  #returnHome {
+    top: 14px;
+    right: auto;
+    left: 14px;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #returnHome {
+    transition: none;
+  }
+}
+
+/* Science-lab atmosphere: a restrained lighting treatment over the existing 3D room.
+   It does not change the room layout, collision areas, or lesson interactions. */
+#root {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#root::before,
+#root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#root::before {
+  background:
+    radial-gradient(circle at 16% 18%, rgb(136 236 255 / 15%), transparent 25%),
+    radial-gradient(circle at 84% 19%, rgb(111 185 255 / 10%), transparent 23%),
+    linear-gradient(180deg, rgb(9 35 52 / 9%), transparent 34%, rgb(3 17 30 / 13%) 100%);
+  mix-blend-mode: screen;
+}
+
+#root::after {
+  box-shadow: inset 0 0 92px rgb(1 13 25 / 30%), inset 0 -46px 80px rgb(2 20 34 / 20%);
+}
+
+.caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  color: #effdff;
+  background:
+    linear-gradient(135deg, rgb(14 59 77 / 96%), rgb(4 26 43 / 94%)),
+    linear-gradient(90deg, #77e5ef, transparent);
+  border-color: rgb(151 239 243 / 70%);
+  box-shadow: 0 10px 26px rgb(0 15 28 / 26%), inset 0 1px rgb(226 255 255 / 10%);
+}
+
+.caption strong::before {
+  content: "";
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  margin-right: 9px;
+  vertical-align: -3px;
+  border: 1px solid #b9f8fb;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgb(129 229 239 / 12%), 0 0 13px rgb(127 237 244 / 30%);
+}
+
+.artefact-prompt,
+.station-launch,
+.activity-dialog {
+  box-shadow: 0 14px 32px rgb(0 10 20 / 30%), inset 0 1px rgb(221 255 255 / 7%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root::before {
+    mix-blend-mode: normal;
+  }
+}
+
+/* Match the classroom controls to the parent game's compact control rail. */
+#returnHome {
+  top: clamp(18px, 3vh, 32px);
+  right: 178px;
+  left: auto;
+  width: 132px;
+  min-width: 132px;
+  height: 54px;
+  min-height: 54px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+#classroomPoints {
+  position: fixed;
+  top: clamp(18px, 3vh, 32px);
+  right: 320px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 88px;
+  height: 54px;
+  padding: 0 13px;
+  color: #fff2ae;
+  background: linear-gradient(135deg, rgb(47 42 25 / 94%), rgb(20 31 31 / 94%));
+  border: 1px solid rgb(229 202 120 / 58%);
+  border-radius: 8px;
+  box-shadow: 0 7px 18px rgb(0 5 14 / 18%);
+  font: 700 15px/1 "Atkinson Hyperlegible", Lexend, Arial, sans-serif;
+  letter-spacing: .04em;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+#classroomPoints .reward-star {
+  font-size: 18px;
+  line-height: 1;
+  color: #ffdf72;
+  text-shadow: 0 0 12px rgb(255 218 105 / 45%);
+}
+
+@media (max-width: 650px) {
+  #returnHome {
+    top: 18px;
+    right: 138px;
+    left: auto;
+    width: 112px;
+    min-width: 112px;
+    height: 48px;
+    min-height: 48px;
+    padding: 12px 13px;
+    font-size: 12px;
+  }
+
+  #classroomPoints {
+    top: 18px;
+    right: 252px;
+    min-width: 64px;
+    width: 64px;
+    height: 48px;
+    padding: 0 5px;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  #classroomPoints .reward-star { font-size: 16px; }
+}

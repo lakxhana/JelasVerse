@@ -1,0 +1,22 @@
+body[data-reading-font="comic"] :is(.caption,.station-launch,.activity-dialog,.direct-activity,.artefact-prompt) {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+body[data-reading-font="andika"] :is(.caption,.station-launch,.activity-dialog,.direct-activity,.artefact-prompt) {
+  font-family: Andika, "Comic Sans MS", Arial, sans-serif;
+}
+
+body[data-reading-font="lexend"] :is(.caption,.station-launch,.activity-dialog,.direct-activity,.artefact-prompt) {
+  font-family: Lexend, Arial, sans-serif;
+}
+
+body[data-reading-font="arial"] :is(.caption,.station-launch,.activity-dialog,.direct-activity,.artefact-prompt) {
+  font-family: Arial, sans-serif;
+}
+
+body[data-baseline-underline="true"] .activity-dialog :is(h1,legend,.activity-equation) {
+  text-decoration: underline;
+  text-decoration-color: #73b6d1;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.23em;
+}

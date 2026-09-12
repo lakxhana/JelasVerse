@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Orbit Runner</title><style>#soundToggle{position:absolute;right:calc(4.5% + 72px);top:13%;z-index:2;pointer-events:auto;min-width:64px;padding:10px 9px;border:1px solid #a8edf0aa;border-radius:3px;background:#071a27e8;color:#efffff;font-size:9px;font-weight:700;letter-spacing:1px}#soundToggle:hover{background:#164252}@media(max-width:650px){#soundToggle{right:calc(3% + 58px);top:11%;min-width:54px;padding:8px 6px;font-size:8px}}</style><style>html body{font-family:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at 50% 12%,#112b3a 0%,#07131f 43%,#020711 100%);letter-spacing:.01em}body #ui{z-index:2}body #ui::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 38%,rgba(1,8,17,.18) 72%,rgba(1,5,12,.52) 100%)}body #dialogue,body #lesson,body .surface-tip,body #focusPanel,body #classroomZoom{background:linear-gradient(135deg,rgba(8,27,40,.93),rgba(8,19,31,.84));border:1px solid rgba(151,229,235,.32);box-shadow:0 16px 42px rgba(0,4,12,.28),inset 0 1px rgba(255,255,255,.045);border-radius:12px}body #dialogue{max-width:760px;padding:25px 31px 21px;border-left:3px solid #96eff4}body #dialogue::after{content:"";position:absolute;left:30px;right:30px;bottom:0;height:1px;background:linear-gradient(90deg,rgba(150,239,244,.7),transparent 72%)}body #line{font-size:20px;line-height:1.72;letter-spacing:.012em;color:#f4fbff}body .dialog-head{font-size:11px;letter-spacing:1.6px}.role,body .dialog-foot{letter-spacing:1.3px}.key{border-color:rgba(172,221,230,.48);background:rgba(178,238,241,.08);border-radius:5px}body #nav{background:radial-gradient(ellipse at 50% 34%,rgba(20,68,84,.56),rgba(3,11,23,.94) 68%);backdrop-filter:none}body #nav .nav-wrap{max-width:1060px}body #nav .nav-title{font-size:clamp(30px,3.2vw,43px);line-height:1.18;letter-spacing:.01em;margin-bottom:12px}body #nav .nav-sub{max-width:600px;font-size:14px;line-height:1.65;color:#b8cdd6}body #nav .routes{gap:18px}body #nav .route{min-height:262px;padding:25px 23px;border:1px solid rgba(129,187,199,.32);border-radius:14px;background:linear-gradient(155deg,rgba(24,60,75,.72),rgba(5,17,30,.9));box-shadow:0 12px 30px rgba(0,5,14,.2);transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}body #nav .route:hover,body #nav .route:focus-visible{transform:translateY(-3px);border-color:#a4edf0;background:linear-gradient(155deg,rgba(35,86,102,.86),rgba(7,25,40,.94));box-shadow:0 17px 34px rgba(0,9,20,.3)}body #nav .route.selected{border-color:#9ae9ee;background:linear-gradient(155deg,rgba(38,93,108,.86),rgba(8,30,45,.96));box-shadow:inset 0 0 0 1px rgba(170,246,248,.15),0 16px 34px rgba(0,9,20,.32)}body #nav .route h3{font-size:21px;letter-spacing:.01em}body #nav .route p{font-size:12px;line-height:1.65;color:#bdd2da}body button{font-family:inherit;border-radius:8px;font-weight:650;transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease}body button:hover{transform:translateY(-1px)}body button:active{transform:translateY(0);box-shadow:none}body button:focus-visible{outline:3px solid #f3d28a;outline-offset:3px}body .primary{border-radius:9px;background:linear-gradient(135deg,#b9f1ee,#78d3e0);box-shadow:0 8px 20px rgba(92,207,220,.18);font-size:11px;letter-spacing:1.4px}body .primary:hover{background:linear-gradient(135deg,#dbffff,#91e9ed);box-shadow:0 11px 24px rgba(92,207,220,.27)}body .secondary,body #pauseButton,body #languageToggle,body #soundToggle,body #focusToggle{border:1px solid rgba(147,214,222,.48);background:linear-gradient(135deg,rgba(17,53,68,.94),rgba(8,25,39,.94));box-shadow:0 7px 18px rgba(0,5,14,.18)}body #languageToggle,body #soundToggle,body #focusToggle{border-radius:7px}body #focusPanel{padding:13px;gap:9px}body #focusPanel button{border-radius:7px;background:rgba(25,63,78,.92);font-size:10px;letter-spacing:.35px}body .surface-title{padding:14px 17px;max-width:min(470px,78%);border-left:2px solid rgba(150,239,244,.76);background:linear-gradient(90deg,rgba(4,20,31,.77),rgba(4,20,31,.15));border-radius:0 10px 10px 0}.surface-title h2{font-size:clamp(22px,2.3vw,31px);line-height:1.18;letter-spacing:.06em}.surface-title p{font-size:13px;line-height:1.7;color:#e1f0f3}body .surface-tip{padding:16px 22px;max-width:650px}body #surfaceMessage{font-size:14px;line-height:1.68}body .surface-tip small{line-height:1.6;letter-spacing:.7px;color:#b7d2dc}body #lesson{width:min(430px,calc(100% - 34px));padding:28px;top:16%;border-top:3px solid #e6b979;box-shadow:0 20px 48px rgba(0,3,10,.42)}body #lesson .eyebrow{color:#8ee7ed;letter-spacing:2.1px}body #lesson h3{font-size:clamp(25px,2.6vw,33px);line-height:1.22;letter-spacing:.005em;margin:13px 0 14px;color:#fffdf7}body #lesson p{font-size:15px;line-height:1.78;color:#e2eef2}body #answers{gap:10px;margin:22px 0 16px}body #answers button{min-height:52px;padding:13px 15px;border:1px solid rgba(157,215,222,.38);border-radius:9px;background:linear-gradient(135deg,rgba(28,70,85,.95),rgba(13,38,52,.95));font-size:15px;line-height:1.4;color:#f5fbfc;box-shadow:0 5px 12px rgba(0,3,9,.15)}body #answers button:hover,body #answers button:focus-visible{border-color:#a9edf0;background:linear-gradient(135deg,rgba(47,108,120,.97),rgba(19,56,70,.97));box-shadow:0 8px 18px rgba(30,140,151,.16)}body #lessonFeedback{min-height:26px;padding:6px 9px;border-radius:6px;background:rgba(230,185,121,.1);font-size:13px!important;color:#ffe1a8!important}body #classroomZoom{padding:8px 9px;gap:7px}body #classroomZoom button{border-radius:7px;background:rgba(26,68,83,.94)}body #result,body #pause{background:rgba(2,9,18,.84)}body .modal{padding:38px;border:1px solid rgba(151,229,235,.3);border-radius:15px;background:linear-gradient(135deg,rgba(10,31,45,.94),rgba(5,16,29,.95));box-shadow:0 22px 54px rgba(0,2,8,.45)}body .modal h2{font-size:clamp(32px,4vw,45px);line-height:1.16}body .cornerhelp,body .flightrow{letter-spacing:1.1px;color:#c0d6de}body #notice{text-shadow:0 3px 14px rgba(0,0,0,.7)}@media(max-width:850px){body #dialogue{width:min(720px,92%)}body #nav .routes{gap:11px}body #nav .route{padding:18px;min-height:240px}body #lesson{top:15%;right:3%}}@media(max-width:650px){body #dialogue{padding:19px 20px 17px;border-radius:10px}body #line{font-size:17px;line-height:1.65}body #nav .routes{gap:8px}body #nav .route{min-height:224px;padding:13px 11px;border-radius:10px}body #nav .route h3{font-size:16px}body #nav .route p{font-size:10px}body .surface-title{padding:10px 12px;max-width:83%}body .surface-title h2{font-size:20px}body .surface-tip{width:88%;padding:11px 14px}body #lesson{top:18%;padding:21px;max-height:70%;overflow:auto}body #lesson h3{font-size:25px}body #answers button{min-height:48px;font-size:15px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}</style><style>
+:root{--ice:#96eff4;--ink:#07141d;--muted:#8babb7;--gold:#e6b979}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030711;color:#eefaff;font-family:Arial,Helvetica,sans-serif}canvas{display:block}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold);outline-offset:5px}#ui{position:fixed;inset:0;pointer-events:none}.brand{position:absolute;left:4.5%;top:5%;display:flex;gap:15px;align-items:center}.emblem{width:43px;height:43px;border:1px solid #b2f9ff88;border-radius:50%;position:relative;transform:rotate(-30deg)}.emblem:after{content:'';position:absolute;inset:12px -10px;border:2px solid var(--ice);border-radius:50%}.brand h1{font-size:23px;letter-spacing:8px;margin:0;font-weight:500}.brand small{display:block;letter-spacing:3.5px;font-size:9px;color:var(--muted);margin-top:8px}.topright{position:absolute;right:4.5%;top:5.5%;text-align:right;font-size:10px;letter-spacing:2px;color:var(--muted);line-height:1.9}.live{color:var(--ice)}.live:before{content:'●';margin-right:8px;font-size:7px}.scene-tag{position:absolute;left:4.5%;top:24%;font-size:10px;letter-spacing:2px;color:#bdd7dc;line-height:2.2}.scene-tag strong{font-size:13px;font-weight:400;letter-spacing:4px;color:white}.scene-tag:before{content:'';display:block;width:25px;height:1px;background:var(--gold);margin-bottom:14px}#dialogue{position:absolute;bottom:6%;left:50%;width:min(760px,89%);transform:translateX(-50%);padding:23px 30px 20px;background:linear-gradient(110deg,#06131eea,#0b2029da);border:1px solid #8fe6f333;border-left:2px solid var(--ice);backdrop-filter:blur(14px);pointer-events:auto;cursor:pointer}.dialog-head{display:flex;align-items:center;gap:12px;font-size:10px;letter-spacing:2px}.name{color:var(--ice);font-weight:bold}.role{color:#7897a5}.count{margin-left:auto;color:#698c99;letter-spacing:4px}#line{font-size:19px;line-height:1.65;margin:13px 0 19px;font-weight:400;min-height:58px}.dialog-foot{display:flex;justify-content:space-between;color:#789aa7;font-size:9px;letter-spacing:2px}.key{border:1px solid #8bacb755;padding:3px 7px;border-radius:3px;color:#d8ecf3;margin-right:7px;font-size:9px}.continue{color:#b9e8ed}#nav{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#04121ec9,#030a15a0);pointer-events:auto;backdrop-filter:blur(5px)}.nav-wrap{width:min(1040px,90%);margin-top:30px}.eyebrow{font-size:10px;letter-spacing:4px;color:var(--ice);text-transform:uppercase}.nav-title{font-size:37px;letter-spacing:1px;font-weight:400;margin:14px 0 9px}.nav-sub{color:#8daab7;font-size:13px;margin:0 0 32px}.routes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.route{text-align:left;border:1px solid #58748166;background:linear-gradient(145deg,#112c3980,#06101fcc);padding:25px;min-height:255px;position:relative;overflow:hidden;transition:.2s}.route:hover,.route.selected{border-color:var(--ice);background:linear-gradient(145deg,#214856a0,#091728)}.route .num{font-size:10px;letter-spacing:3px;color:#829ba8}.planet-icon{width:80px;height:80px;border-radius:50%;margin:20px auto 24px;box-shadow:inset -20px -6px 26px #000b,0 0 35px #599abd20;background-size:cover;position:relative}.route:nth-child(1) .planet-icon{background-image:url('textures/Earth.png')}.route:nth-child(2) .planet-icon{background-image:url('textures/Saturn.png')}.route:nth-child(2) .planet-icon:after{content:'';position:absolute;inset:23px -27px;border:9px solid #d7bd8888;border-radius:50%;transform:rotate(-25deg)}.route:nth-child(3) .planet-icon{background-image:url('textures/Neptune.png')}.route h3{font-size:20px;font-weight:400;margin:10px 0}.route p{font-size:11px;color:#8dabb9;line-height:1.8;margin:0}.route .tag{position:absolute;top:24px;right:20px;color:var(--gold);font-size:8px;letter-spacing:1px}.nav-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:25px;gap:15px}.controls{font-size:10px;color:#87a5b2;line-height:2;letter-spacing:.7px}.primary{background:#a8edf0;color:#09202b;border:0;padding:17px 31px;font-size:11px;letter-spacing:2px;transition:.2s}.primary:hover{background:white;box-shadow:0 0 28px #95edf044}#flight{display:none;position:absolute;inset:0}.dest{position:absolute;left:4%;top:5%;font-size:10px;color:#8daebf;letter-spacing:3px}.dest strong{display:block;color:#efffff;font-size:22px;font-weight:400;letter-spacing:5px;margin-top:8px}.dest span{display:block;color:var(--gold);margin-top:9px;font-size:9px;letter-spacing:2px}.flight-top{position:absolute;right:4%;top:5%;font-size:10px;letter-spacing:2px;color:#9dc3d1}.shield{display:flex;gap:5px;margin-top:11px}.shield i{width:25px;height:3px;background:var(--ice)}.bottomflight{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:min(460px,70%);text-align:center}.routebar{height:2px;background:#7db6c433;margin:12px 0}.routebar i{display:block;background:var(--ice);height:2px;width:0;box-shadow:0 0 9px #70eefc}.flightrow{display:flex;justify-content:space-between;font-size:9px;letter-spacing:2px;color:#8baebd}#notice{position:absolute;top:20%;width:100%;text-align:center;color:var(--ice);font-size:12px;letter-spacing:3px;opacity:0;transition:opacity .2s}.cornerhelp{position:absolute;left:4%;bottom:5%;color:#7895a6;font-size:9px;line-height:2;letter-spacing:1px}#pauseButton{position:absolute;right:4%;bottom:5%;pointer-events:auto;background:#08121f70;border:1px solid #89b3c344;padding:10px 14px;color:#b1c9d2;font-size:10px}.reticle{position:absolute;top:50%;left:50%;width:6px;height:6px;border:1px solid #a7edf077;border-radius:50%;transform:translate(-50%,-50%)}#result,#pause{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:#030b16bd;backdrop-filter:blur(10px);pointer-events:auto;text-align:center}.modal{max-width:560px;padding:35px}.modal h2{font-size:42px;font-weight:400;letter-spacing:2px}.modal p{color:#99b3c0;line-height:1.8;font-size:14px;margin-bottom:30px}.secondary{border:1px solid #769dab77;background:transparent;padding:16px 25px;font-size:11px;letter-spacing:2px;margin:10px}#flash{position:absolute;inset:0;box-shadow:inset 0 0 160px #ff4934;opacity:0;pointer-events:none}#fade{position:absolute;inset:0;background:#01050b;opacity:0;transition:opacity .45s;pointer-events:none}#loading{position:absolute;bottom:2%;left:4.5%;font-size:9px;letter-spacing:2px;color:#6d8b99}#mobile{display:none;position:absolute;inset:0;pointer-events:none}.pad{position:absolute;bottom:13%;left:4%;display:grid;grid-template-columns:repeat(3,40px);gap:4px;pointer-events:auto}.pad button,#boostTouch{height:40px;background:#0e293770;border:1px solid #9ce5ed44;color:#cdf7ff;border-radius:4px;touch-action:none}#boostTouch{position:absolute;right:5%;bottom:16%;width:65px;height:65px;border-radius:50%;pointer-events:auto;font-size:10px;letter-spacing:1px}@media(pointer:coarse){#mobile.visible{display:block}.cornerhelp{display:none}}@media(max-width:650px){.brand h1{font-size:15px;letter-spacing:5px}.brand small{font-size:7px}.emblem{width:30px;height:30px}.topright{font-size:8px}.scene-tag{top:20%;font-size:8px}#dialogue{bottom:5%;padding:17px 20px}#line{font-size:15px;margin-bottom:16px}.dialog-foot{font-size:7px}.role{font-size:8px}.nav-title{font-size:27px}.nav-sub{font-size:11px;margin-bottom:18px}.routes{gap:7px}.route{padding:12px;min-height:220px}.route h3{font-size:15px}.route p{font-size:9px}.route .tag{display:none}.planet-icon{width:55px;height:55px;margin:25px auto}.nav-bottom{align-items:flex-end}.controls{font-size:8px}.primary{padding:15px 18px;font-size:9px}.nav-wrap{margin-top:55px}.modal h2{font-size:30px}.bottomflight{bottom:5%;width:50%}.cornerhelp{font-size:8px}.flight-top{font-size:8px}.shield i{width:15px}}
+
+#surfaceHud{display:none;position:absolute;inset:0;pointer-events:none}.surface-title{position:absolute;left:4%;top:5%;text-shadow:0 2px 12px #000}.surface-title h2{font-size:26px;letter-spacing:4px;font-weight:400;margin:10px 0}.surface-title p{font-size:12px;color:#d0e4e9;line-height:1.8;margin:0;max-width:460px}.surface-tip{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);width:min(650px,78%);text-align:center;background:#061724de;border:1px solid #83dfe344;border-radius:4px;padding:15px 20px;backdrop-filter:blur(8px)}#surfaceMessage{font-size:13px;line-height:1.7;margin:0 0 7px;color:#e6f6ff}.surface-tip small{color:#96b7c4;font-size:10px;letter-spacing:1px}#interact{display:none;pointer-events:auto;margin-top:12px;padding:12px 22px}#languageToggle{position:absolute;right:4.5%;top:13%;pointer-events:auto;min-width:58px;padding:10px 12px;border:1px solid #a8edf0aa;border-radius:3px;background:#071a27e8;color:#efffff;font-size:11px;font-weight:700;letter-spacing:1.5px}#languageToggle:hover{background:#164252}#classroomZoom{display:none;position:absolute;right:4%;top:17%;gap:8px;align-items:center;padding:8px;background:#061724de;border:1px solid #83dfe366;border-radius:4px;pointer-events:auto;backdrop-filter:blur(8px)}#classroomZoom.visible{display:flex}#classroomZoom span{font-size:10px;letter-spacing:1.5px;color:#d5f5f8}#classroomZoom button{width:40px;height:40px;border:1px solid #b5f5f977;border-radius:3px;background:#153442;color:#efffff;font-size:24px;line-height:1}#classroomZoom button:hover{background:#245667}#lesson{position:absolute;right:4%;top:18%;width:min(400px,90%);background:#071a27ef;border:1px solid #91e5e966;border-top:3px solid var(--gold);padding:25px;display:none;pointer-events:auto;backdrop-filter:blur(10px)}#lesson h3{font-size:24px;font-weight:400;margin:12px 0}#lesson p{font-size:13px;line-height:1.75;color:#c0d6e0}#answers{display:grid;gap:9px;margin-top:18px}#answers button{background:#163342;border:1px solid #95c5d655;padding:12px;text-align:left;font-size:12px}#answers button:hover{border-color:var(--ice)}#lessonFeedback{min-height:22px;color:var(--gold)!important}.surface-mode #flight .dest,.surface-mode #flight .flight-top,.surface-mode #flight .reticle,.surface-mode #flight #notice,.surface-mode #flight .bottomflight,.surface-mode #flight .cornerhelp{display:none}.surface-mode #boostTouch{font-size:9px}.surface-mode .surface-title{max-width:80%}.cinematic .surface-tip{background:transparent;border:0}.cinematic #mobile,.cinematic #pauseButton{display:none!important}.altitude-key{font-size:9px}@media(max-width:650px){.surface-title h2{font-size:18px}.surface-title p{font-size:11px}.surface-tip{bottom:3%;padding:9px 12px;width:88%}#surfaceMessage{font-size:11px}.surface-tip small{font-size:8px}#languageToggle{right:3%;top:11%;min-width:50px;padding:8px;font-size:9px}#classroomZoom{top:17%;right:3%;gap:5px;padding:6px}#classroomZoom button{width:36px;height:36px}#classroomZoom span{font-size:8px}#lesson{top:20%;padding:17px;max-height:65%;overflow:auto}#lesson h3{font-size:20px}.surface-mode .pad{bottom:25%}.surface-mode #boostTouch{bottom:28%}}
+</style><style>#focusToggle{position:absolute;right:4.5%;top:20%;pointer-events:auto;min-width:58px;padding:10px 12px;border:1px solid #a8edf0aa;border-radius:3px;background:#071a27e8;color:#efffff;font-size:10px;font-weight:700;letter-spacing:1.2px}#focusToggle:hover,#focusToggle[aria-expanded="true"]{background:#164252}#focusPanel{display:none;position:absolute;right:4.5%;top:26%;width:205px;padding:12px;background:#071a27f2;border:1px solid #a8edf066;border-radius:4px;pointer-events:auto;backdrop-filter:blur(10px)}#focusPanel.visible{display:grid;gap:8px}#focusPanel p{margin:0 0 3px;font-size:10px;letter-spacing:1.5px;color:#d5f5f8}#focusPanel button{min-height:37px;border:1px solid #9adfe655;border-radius:3px;background:#153442;color:#efffff;text-align:left;padding:8px 10px;font-size:10px;letter-spacing:.6px}#focusPanel button:hover,#focusPanel button[aria-pressed="true"]{border-color:#a8edf0;background:#235564}#focusOverlay{display:none;position:fixed;inset:0;pointer-events:none;background:#f3e5b533;mix-blend-mode:screen;z-index:1}body.focus-mode #focusOverlay{display:block}body.large-text #dialogue #line{font-size:22px;line-height:1.75}body.large-text .surface-title h2{font-size:30px}body.large-text .surface-title p,body.large-text #surfaceMessage,body.large-text #lesson p{font-size:16px;line-height:1.85}body.large-text #lesson h3{font-size:28px}@media(max-width:650px){#focusToggle{right:3%;top:18%;min-width:50px;padding:8px;font-size:9px}#focusPanel{right:3%;top:24%;width:190px}}</style></head><body><div id="ui">
+<div class="brand" id="brand"><div class="emblem"></div><div><h1>JelasVerse</h1><small>DEEP SPACE EXPEDITION / 2086</small></div></div><div class="topright" id="bridgeStatus"><span class="live">ODYSSEY · COMMAND BRIDGE</span><br>09 : 41 : 08 &nbsp; / &nbsp; SATURN ORBIT</div><button id="languageToggle" type="button" aria-label="Switch to Malay" aria-pressed="false">BM</button><button id="focusToggle" type="button" aria-expanded="false">FOCUS</button><button id="flightHome" type="button" aria-label="Return to route selection" data-no-word-hover>HOME</button><div id="focusPanel" aria-label="Focus settings"><p>FOCUS SETTINGS</p><button id="calmToggle" type="button" aria-pressed="false">CALM OVERLAY: OFF</button><button id="textToggle" type="button" aria-pressed="false">LARGER TEXT: OFF</button><button id="motionToggle" type="button" aria-pressed="false">REDUCED MOTION: OFF</button><button id="readScreen" type="button">READ THIS SCREEN</button></div><div class="scene-tag" id="sceneTag">TRANSMISSION 001<br><strong>BEYOND THE RINGS</strong><br>9.58 AU FROM HOME</div>
+<div id="dialogue" role="button" tabindex="0" aria-label="Advance dialogue"><div class="dialog-head"><span class="name" id="speaker">MAYA</span><span class="role" id="role">FLIGHT COMMANDER</span><span class="count" id="count">01 / 03</span></div><p id="line">That signal again. Just beyond Saturn’s rings.<br>Tell me you’re hearing it too.</p><div class="dialog-foot"><span>ODYSSEY / ENCRYPTED COMMS</span><span class="continue"><span class="key">SPACE</span></span></div></div>
+<div id="nav"><div class="nav-wrap"><div class="eyebrow">ROUTE</div><h2 class="nav-title">Pick a route.</h2><p class="nav-sub">Choose one.</p><div class="routes"><button class="route" data-route="0" aria-label="Choose Inner Planets"><span class="num">01</span><span class="tag">4 WORLDS</span><div class="planet-icon"></div><h3>Inner Planets</h3><p>Earth → Mars</p></button><button class="route selected" data-route="1" aria-label="Choose Gas Giants"><span class="num">02</span><span class="tag">2 WORLDS</span><div class="planet-icon"></div><h3>Gas Giants</h3><p>Jupiter · Saturn</p></button><button class="route" data-route="2" aria-label="Choose Outer Orbit"><span class="num">03</span><span class="tag">3 WORLDS</span><div class="planet-icon"></div><h3>Outer Orbit</h3><p>Uranus → Pluto</p></button></div><div class="nav-bottom"><button class="secondary" id="storyBack">BACK</button><button class="primary" id="launch">START &nbsp; ↗</button></div></div></div>
+<div id="flight"><div class="dest"><strong id="destination">EARTH</strong><span id="legLabel" aria-hidden="true"></span></div><div class="flight-top" aria-hidden="true"><div class="shield" id="shield"><i></i><i></i><i></i><i></i><i></i></div></div><div class="reticle"></div><div id="notice"></div><button class="secondary" id="skipFlight" type="button" aria-label="Skip flight and land on the planet">SKIP FLIGHT</button><div class="bottomflight" data-no-word-hover><div class="flightrow"><span id="gatesLabel">GATES 0 / 7</span><span id="range">1,800 KM</span></div><div class="routebar"><i id="progress"></i></div><div class="flightrow"><span id="speed">CRUISE / 72</span><span id="boostLabel">BOOST READY</span></div></div><button id="pauseButton" aria-label="Pause">Ⅱ</button><div id="mobile"><div class="pad"><span></span><button data-key="KeyW">↑</button><span></span><button data-key="KeyA">←</button><button data-key="KeyS">↓</button><button data-key="KeyD">→</button></div><button id="boostTouch" data-key="Space">BOOST</button></div></div>
+<div id="result"><div class="modal"><div class="eyebrow" id="resultTag">EXPEDITION COMPLETE</div><h2 id="resultTitle">The signal is real.</h2><p id="resultText"></p><button class="primary" id="again">FLY AGAIN ↗</button><button class="secondary" id="routesBack">CHOOSE ROUTE</button></div></div><div id="pause"><div class="modal"><div class="eyebrow">FLIGHT ON HOLD</div><h2>Take a breath.</h2><button class="primary" id="resume">RESUME FLIGHT</button><button class="secondary" id="quit">NAVIGATION</button></div></div><div id="flash"></div><div id="fade"></div><div id="loading">INITIALIZING FLIGHT SYSTEMS…</div></div>
+<div id="surfaceHud"><div class="surface-title"><div class="eyebrow" id="surfacePhase">DESCENT / LANDING SEQUENCE</div><h2 id="surfaceName"></h2><p id="surfaceObjective"></p></div><div class="surface-tip"><p id="surfaceMessage"></p><small id="surfaceControls">WASD / ARROWS · WALK &nbsp; SHIFT · RUN &nbsp; F · INTERACT</small><br><button class="primary" id="interact">INTERACT</button></div></div><div id="classroomZoom" aria-label="Classroom zoom controls"><span>VIEW</span><button id="zoomOut" aria-label="Zoom out">−</button><button id="zoomIn" aria-label="Zoom in">+</button></div><div id="lesson"><div class="eyebrow">PLANETARY SCHOOL / FIELD CLASS</div><h3 id="lessonTitle"></h3><p id="lessonCopy"></p><div id="answers"></div><p id="lessonFeedback"></p><button class="secondary" id="closeLesson">BACK TO EXPLORING</button></div>
+<style>body.surface-mode #ui::before{background:radial-gradient(ellipse at 50% 59%,transparent 36%,rgba(12,46,63,.05) 70%,rgba(2,13,25,.25) 100%)}body.surface-mode #surfaceHud::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,38,65,.18),transparent 30%,rgba(255,255,255,.055) 51%,transparent 64%,rgba(4,20,31,.12)),radial-gradient(ellipse at 50% 54%,rgba(241,250,245,.07),transparent 48%)}body.surface-mode .surface-title{top:3.7%;left:4%;max-width:min(365px,72%);padding:10px 15px 11px 16px;border:0;border-left:2px solid rgba(161,239,242,.9);border-radius:0 8px 8px 0;background:linear-gradient(90deg,rgba(3,20,32,.73),rgba(3,20,32,.25),transparent);box-shadow:none;text-shadow:0 2px 12px rgba(0,13,20,.65)}body.surface-mode .surface-title .eyebrow{font-size:9px;letter-spacing:1.9px;color:#a9dfe2}body.surface-mode .surface-title h2{font-size:clamp(21px,2.2vw,29px);letter-spacing:.035em;line-height:1.14;margin:7px 0 6px;color:#f7fffd}body.surface-mode .surface-title p{font-size:12px;line-height:1.55;color:#d4e7e8;max-width:330px}body.surface-mode .surface-tip{bottom:4%;width:min(585px,76%);padding:13px 18px;border:1px solid rgba(169,226,229,.28);border-radius:10px;background:linear-gradient(105deg,rgba(4,25,37,.87),rgba(8,40,51,.72));box-shadow:0 12px 30px rgba(0,13,22,.2)}body.surface-mode #surfaceMessage{font-size:13px;line-height:1.62;color:#f2fbfa}body.surface-mode .surface-tip small{font-size:9px;letter-spacing:.55px;color:#bdd8da}body.surface-mode #interact{min-height:40px;margin-top:10px;padding:10px 18px}body.surface-mode.cinematic .surface-tip{width:min(570px,76%);padding:10px 16px;border-color:rgba(181,236,236,.22);background:linear-gradient(90deg,rgba(5,26,39,.45),rgba(5,26,39,.08),rgba(5,26,39,.45));box-shadow:none}body.surface-mode #pauseButton{width:42px;height:42px;padding:0;border-radius:50%;background:rgba(4,25,38,.72);border-color:rgba(187,235,237,.45);box-shadow:0 7px 18px rgba(0,11,19,.18);font-size:13px}body.surface-mode #pauseButton:hover{background:rgba(19,61,74,.9);transform:translateY(-2px)}body.surface-mode #languageToggle,body.surface-mode #soundToggle,body.surface-mode #focusToggle{background:linear-gradient(135deg,rgba(10,37,51,.82),rgba(6,23,35,.78));box-shadow:0 5px 14px rgba(0,13,21,.14)}@media(max-width:650px){body.surface-mode .surface-title{top:3%;left:3%;max-width:82%;padding:8px 11px 9px 12px}body.surface-mode .surface-title h2{font-size:20px}body.surface-mode .surface-tip,body.surface-mode.cinematic .surface-tip{bottom:3%;width:88%;padding:10px 13px}body.surface-mode #surfaceMessage{font-size:12px}body.surface-mode .surface-tip small{font-size:8px}}</style>
+<style>body:not(.surface-mode) #ui::before{background:radial-gradient(ellipse at 74% 31%,rgba(255,218,165,.105),transparent 24%),radial-gradient(ellipse at 17% 23%,rgba(31,82,148,.18),transparent 34%),radial-gradient(ellipse at 84% 11%,rgba(88,61,132,.12),transparent 29%),radial-gradient(ellipse at 49% 58%,rgba(30,120,148,.075),transparent 38%),radial-gradient(circle at 6% 18%,rgba(238,251,255,.7) 0 1px,transparent 1.8px),radial-gradient(circle at 12% 43%,rgba(180,224,255,.46) 0 1px,transparent 1.6px),radial-gradient(circle at 18% 11%,rgba(255,242,208,.58) 0 1.4px,transparent 2px),radial-gradient(circle at 23% 32%,rgba(199,236,255,.38) 0 .8px,transparent 1.5px),radial-gradient(circle at 28% 57%,rgba(238,251,255,.5) 0 1px,transparent 1.6px),radial-gradient(circle at 35% 19%,rgba(203,235,255,.43) 0 .8px,transparent 1.5px),radial-gradient(circle at 40% 42%,rgba(255,239,194,.45) 0 1px,transparent 1.7px),radial-gradient(circle at 48% 14%,rgba(179,221,255,.35) 0 .8px,transparent 1.5px),radial-gradient(circle at 54% 35%,rgba(242,251,255,.42) 0 1.1px,transparent 1.8px),radial-gradient(circle at 61% 9%,rgba(179,221,255,.42) 0 .8px,transparent 1.5px),radial-gradient(circle at 68% 47%,rgba(255,241,201,.42) 0 1px,transparent 1.7px),radial-gradient(circle at 78% 17%,rgba(193,230,255,.43) 0 .9px,transparent 1.5px),radial-gradient(circle at 88% 39%,rgba(241,251,255,.4) 0 .8px,transparent 1.4px),radial-gradient(circle at 94% 24%,rgba(255,241,205,.48) 0 1.2px,transparent 1.9px),radial-gradient(circle at 9% 66%,rgba(189,228,255,.35) 0 .8px,transparent 1.5px),radial-gradient(circle at 32% 74%,rgba(233,249,255,.3) 0 .8px,transparent 1.4px),radial-gradient(circle at 70% 69%,rgba(185,226,250,.27) 0 .7px,transparent 1.3px),linear-gradient(180deg,rgba(5,17,42,.09),transparent 28%,rgba(2,13,27,.025) 57%,rgba(5,27,43,.24) 100%);box-shadow:inset 0 0 150px rgba(0,4,14,.26),inset 0 -84px 120px rgba(7,35,55,.18)}body:not(.surface-mode) #ui::before{opacity:1}body:not(.surface-mode) .brand,body:not(.surface-mode) .topright,body:not(.surface-mode) .scene-tag{filter:drop-shadow(0 2px 9px rgba(0,8,18,.6))}@media(max-width:650px){body:not(.surface-mode) #ui::before{background:radial-gradient(ellipse at 78% 26%,rgba(255,218,165,.08),transparent 25%),radial-gradient(ellipse at 14% 20%,rgba(31,82,148,.14),transparent 33%),radial-gradient(circle at 9% 18%,rgba(238,251,255,.55) 0 1px,transparent 1.7px),radial-gradient(circle at 21% 43%,rgba(180,224,255,.38) 0 .8px,transparent 1.5px),radial-gradient(circle at 38% 11%,rgba(255,242,208,.5) 0 1px,transparent 1.7px),radial-gradient(circle at 56% 35%,rgba(242,251,255,.36) 0 .8px,transparent 1.4px),radial-gradient(circle at 77% 16%,rgba(193,230,255,.4) 0 .8px,transparent 1.5px),radial-gradient(circle at 91% 39%,rgba(241,251,255,.35) 0 .8px,transparent 1.4px),linear-gradient(180deg,rgba(5,17,42,.08),transparent 30%,rgba(5,27,43,.2) 100%)}}</style>
+<style>@media(min-width:651px){body:not(.surface-mode) .brand{top:clamp(18px,2.6vh,30px);left:clamp(28px,4.5vw,72px);gap:12px;max-width:calc(100% - 370px)}body:not(.surface-mode) .brand h1{font-size:clamp(18px,1.8vw,23px);letter-spacing:clamp(4px,.62vw,8px);line-height:1.1;white-space:nowrap}body:not(.surface-mode) .brand small{margin-top:5px;font-size:clamp(8px,.72vw,9px);letter-spacing:clamp(1.8px,.22vw,3.5px);line-height:1.25;white-space:nowrap}body:not(.surface-mode) .topright{top:clamp(20px,2.2vh,28px);right:clamp(28px,4.5vw,72px);font-size:clamp(8px,.75vw,10px);letter-spacing:clamp(1.1px,.16vw,2px);line-height:1.55;white-space:nowrap}}@media(min-width:651px) and (max-width:960px){body:not(.surface-mode) .brand{max-width:calc(100% - 300px)}body:not(.surface-mode) .emblem{width:36px;height:36px}body:not(.surface-mode) .emblem:after{inset:10px -8px}body:not(.surface-mode) .topright{right:28px}body:not(.surface-mode) #languageToggle{top:12%;right:3%}body:not(.surface-mode) #soundToggle{top:12%;right:calc(3% + 62px)}body:not(.surface-mode) #focusToggle{top:18%}}</style>
+<style>body #languageToggle,body #soundToggle,body #focusToggle,body #focusPanel{z-index:4}</style>
+<style id="route-accessibility">
+/* Route choice is a one-step action: one open path, two clearly unavailable paths. */
+#nav .nav-wrap>.eyebrow,#nav .nav-sub,#nav .nav-bottom{display:none!important}
+#nav .route.locked{cursor:not-allowed!important;opacity:.52;filter:saturate(.42) brightness(.8);border-color:rgba(126,157,169,.34)!important;background:linear-gradient(155deg,rgba(22,42,54,.76),rgba(4,13,23,.9))!important}
+#nav .route.locked::after{content:'🔒';position:absolute;top:18px;right:18px;font-size:22px;line-height:1;filter:grayscale(.2);text-shadow:0 2px 8px rgba(0,0,0,.42)}
+#nav .route.locked:hover,#nav .route.locked:focus-visible{transform:none!important;border-color:rgba(126,157,169,.34)!important;box-shadow:0 12px 30px rgba(0,5,14,.2)!important}
+#nav .route.locked:focus-visible{outline:3px solid rgba(230,185,121,.78);outline-offset:3px}
+@media(max-width:650px){#nav .route.locked::after{top:11px;right:11px;font-size:18px}}
+</style>
+<style id="settings-panel-accessibility">
+/* One predictable settings panel keeps personalisation available without crowding the game. */
+#focusToggle{top:clamp(18px,3vh,32px)!important;right:clamp(20px,3.2vw,54px)!important;min-width:132px!important;min-height:54px;padding:14px 20px!important;font-size:14px!important;letter-spacing:.08em!important;z-index:6!important}
+#flightHome{display:none;position:absolute;top:clamp(18px,3vh,32px);right:calc(clamp(20px,3.2vw,54px) + 144px);z-index:6;pointer-events:auto;min-width:104px;min-height:54px;padding:14px 18px;color:#e9fbff;background:linear-gradient(135deg,rgba(17,53,68,.94),rgba(8,25,39,.94));border:1px solid rgba(147,214,222,.48);border-radius:8px;box-shadow:0 7px 18px rgba(0,5,14,.18);font:650 14px/1.2 Lexend,"Atkinson Hyperlegible",Arial,sans-serif;letter-spacing:.08em;transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease}body.flight-active #flightHome{display:block}#flightHome:hover,#flightHome:focus-visible{color:#06202c;background:linear-gradient(135deg,#c3f8f4,#80d8e3);border-color:#e8ffff;box-shadow:0 11px 22px rgba(69,196,209,.28);transform:translateY(-2px)}#flightHome:active{transform:translateY(0)}
+#focusPanel{top:calc(clamp(18px,3vh,32px) + 64px)!important;right:clamp(20px,3.2vw,54px)!important;width:min(318px,calc(100vw - 40px))!important;max-height:min(73vh,610px)!important;padding:16px!important;overflow:auto;z-index:6!important}
+#focusPanel.visible{display:grid;gap:11px}
+#settingsTitle{margin:0!important;font-size:14px!important;font-weight:750!important;letter-spacing:.09em!important;color:#ecffff!important}
+.settings-section{display:grid;gap:8px;padding:12px 0 0;border-top:1px solid rgba(157,215,222,.2)}
+.setting-label{color:#9fdde3;font-size:11px;font-weight:750;letter-spacing:.09em}
+#focusPanel .settings-section button{position:static!important;top:auto!important;right:auto!important;width:100%;min-width:0!important;min-height:46px!important;margin:0!important;padding:11px 13px!important;text-align:left;font-size:13px!important;letter-spacing:.03em!important}
+#focusPanel #languageToggle,#focusPanel #soundToggle,#focusPanel #speechToggle{background:linear-gradient(135deg,rgba(17,53,68,.96),rgba(8,25,39,.96))!important}
+#motionToggle{display:none!important}
+#focusPanel button:disabled{cursor:not-allowed;opacity:.48;transform:none!important}
+#focusPanel button.controller-selected{color:#06202c!important;background:linear-gradient(135deg,#c8fbf5,#83dfe7)!important;border-color:#ecffff!important;box-shadow:0 0 0 3px rgba(150,239,244,.2),0 8px 20px rgba(67,188,202,.2)!important}
+/* The classroom is an iframe, so keep the student settings above it at all times. */
+body.maths-lab-active #ui{z-index:30!important}
+body.maths-lab-active #focusToggle,body.maths-lab-active #focusPanel{z-index:31!important}
+@media(max-width:650px){#focusToggle{top:18px!important;right:18px!important;min-height:48px!important;min-width:112px!important;font-size:12px!important}#flightHome{top:18px;right:138px;min-width:86px;min-height:48px;padding:12px 13px;font-size:12px}#focusPanel{top:76px!important;right:18px!important;width:min(304px,calc(100vw - 36px))!important;max-height:74vh!important}#settingsTitle{font-size:13px!important}.setting-label{font-size:10px}#focusPanel .settings-section button{min-height:43px!important;font-size:12px!important}}
+</style>
+<style id="control-rail-alignment">
+/* Home and Settings share one fixed control rail throughout flight. */
+:root{--control-rail-top:clamp(18px,3vh,32px);--control-rail-right:clamp(20px,3.2vw,54px);--control-rail-height:54px;--control-rail-gap:10px}
+#focusToggle,#flightHome{top:var(--control-rail-top)!important;min-height:var(--control-rail-height)!important;height:var(--control-rail-height);box-sizing:border-box}
+#focusToggle{right:var(--control-rail-right)!important}
+#flightHome{right:calc(var(--control-rail-right) + 132px + var(--control-rail-gap))!important;display:none;align-items:center;justify-content:center}
+body.flight-active #flightHome{display:flex}
+@media(max-width:650px){:root{--control-rail-top:18px;--control-rail-right:18px;--control-rail-height:48px;--control-rail-gap:8px}#flightHome{right:calc(var(--control-rail-right) + 112px + var(--control-rail-gap))!important}}
+</style>
+<style id="flight-rewards">
+/* One quiet score counter and a short reward movement after a successful gate. */
+#flightPoints{display:none;position:absolute;top:var(--control-rail-top);right:calc(var(--control-rail-right) + 132px + var(--control-rail-gap) + 104px + var(--control-rail-gap));z-index:6;align-items:center;justify-content:center;gap:8px;min-width:88px;height:var(--control-rail-height);padding:0 13px;border:1px solid rgba(229,202,120,.58);border-radius:8px;background:linear-gradient(135deg,rgba(47,42,25,.94),rgba(20,31,31,.94));box-shadow:0 7px 18px rgba(0,5,14,.18);color:#fff2ae;font:700 15px/1 Lexend,"Atkinson Hyperlegible",Arial,sans-serif;letter-spacing:.04em;pointer-events:none}
+body.flight-active #flightPoints{display:flex}
+#flightPoints .reward-star{font-size:18px;line-height:1;color:#ffdf72;text-shadow:0 0 12px rgba(255,218,105,.45)}
+#flightPoints.reward-bump{animation:reward-bump .36s ease-out}
+.flight-reward-star{position:fixed;left:50%;top:50%;z-index:12;pointer-events:none;color:#ffe78a;font:700 38px/1 Arial,sans-serif;text-shadow:0 0 10px rgba(255,231,138,.9),0 0 28px rgba(99,244,150,.65);animation:reward-to-score .72s cubic-bezier(.2,.85,.35,1) forwards}
+.gate-success-ring{position:fixed;left:50%;top:50%;z-index:11;width:clamp(104px,16vw,190px);aspect-ratio:1;border:4px solid #71f29a;border-radius:50%;box-shadow:0 0 16px rgba(113,242,154,.82),inset 0 0 20px rgba(113,242,154,.24);pointer-events:none;animation:gate-success-ring .52s ease-out forwards}
+@keyframes reward-to-score{0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(calc(-50% + var(--reward-x)),calc(-50% + var(--reward-y))) scale(.48)}}
+@keyframes reward-bump{0%,100%{transform:scale(1)}45%{transform:scale(1.1);border-color:#fff3b4}}
+@keyframes gate-success-ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}22%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.18)}}
+@media(max-width:650px){#flightPoints{right:calc(var(--control-rail-right) + 112px + var(--control-rail-gap) + 86px + var(--control-rail-gap));min-width:74px;padding:0 9px;gap:5px;font-size:13px}#flightPoints .reward-star{font-size:16px}.flight-reward-star{font-size:32px}}
+@media(prefers-reduced-motion:reduce){#flightPoints.reward-bump{animation:none}.flight-reward-star,.gate-success-ring{display:none}}
+</style>
+<script id="flight-reward-ui">
+window.addEventListener('DOMContentLoaded',()=>{
+  if(document.getElementById('flightPoints'))return;
+  const points=document.createElement('div');
+  points.id='flightPoints';
+  points.setAttribute('aria-live','polite');
+  points.setAttribute('aria-label','Flight points');
+  points.innerHTML='<span class="reward-star" aria-hidden="true">★</span><span id="pointsValue">0</span>';
+  document.getElementById('flightHome')?.insertAdjacentElement('afterend',points);
+});
+</script>
+<style id="dyslexia-accessibility-theme">
+/* Readable system fonts and predictable spacing for low-stress reading. */
+html,body,button,input,textarea,select{font-family:Lexend,Arial,sans-serif!important}
+body{letter-spacing:.025em}
+body #line,body #lesson p,body #surfaceMessage,body .surface-title p,body .nav-sub,body #nav .route p,body .modal p{letter-spacing:.028em;word-spacing:.075em;line-height:1.82}
+body #line,body #lesson p,body #surfaceMessage{max-width:58ch}
+body #nav .nav-title,body #nav .route h3,body #lesson h3,body .surface-title h2{letter-spacing:.018em}
+body .dialog-head,body .dialog-foot,body .eyebrow,body .brand small,body .topright{letter-spacing:.12em}
+body #answers button{letter-spacing:.018em;line-height:1.55}
+/* The existing Calm Overlay setting uses this quiet cream/sepia layer. */
+#focusOverlay{background:radial-gradient(ellipse at 50% 42%,rgba(255,248,226,.13),rgba(238,218,168,.2) 72%,rgba(111,78,38,.16));mix-blend-mode:soft-light}
+body.focus-mode #ui::before{background:radial-gradient(ellipse at 50% 46%,transparent 38%,rgba(83,55,19,.1) 73%,rgba(45,27,9,.23) 100%)}
+body.focus-mode #dialogue,body.focus-mode #lesson,body.focus-mode .surface-tip,body.focus-mode #focusPanel{border-color:rgba(240,216,159,.48);background:linear-gradient(135deg,rgba(30,30,26,.94),rgba(37,31,22,.9))}
+body.focus-mode .primary{background:linear-gradient(135deg,#f1dfa8,#d9b86f);color:#29220f}
+body.focus-mode .key{border-color:rgba(242,216,159,.55);background:rgba(248,232,191,.11)}
+@media(max-width:650px){body{letter-spacing:.018em}body #line,body #lesson p,body #surfaceMessage,body .surface-title p,body .nav-sub,body #nav .route p{letter-spacing:.015em;word-spacing:.04em;line-height:1.72}}
+</style>
+<style id="calm-flight-feedback">
+/* Keep flight feedback quiet: hazards still work, but there are no flashing damage tints or urgent banners. */
+#flash,#notice{display:none!important}
+/* Hide the rapidly changing flight telemetry, including its route-progress bar. */
+#flight .bottomflight{display:none!important}
+/* The flight label is intentionally minimal: only the current planet remains. */
+#flight .dest #legLabel,#flight .flight-top{display:none!important}
+/* Keep dialogue focused on its main line, not the communication metadata. */
+#dialogue .dialog-foot>span:first-child{display:none}
+#dialogue .dialog-foot{justify-content:flex-end}
+/* Story mode shows only the title, speaker, and narrative line. */
+body:not(.surface-mode) .brand small,body:not(.surface-mode) .topright,body:not(.surface-mode) .scene-tag,#dialogue .role,#dialogue .count{display:none!important}
+body:not(.surface-mode) #dialogue #line{margin-bottom:0;min-height:0}
+body:not(.surface-mode) #dialogue .dialog-foot{display:flex!important;justify-content:flex-end;margin-top:13px;font-size:0}.dialog-foot .continue .key{display:none}body:not(.surface-mode) #dialogue .continue::after{content:"SPACE  /  CONTINUE";display:inline-block;padding:6px 10px;border:1px solid rgba(172,221,230,.55);border-radius:7px;background:rgba(178,238,241,.09);color:#dffcff;font-size:10px;font-weight:700;letter-spacing:.09em}
+</style>
+<style id="friendly-control-guide">
+/* Two short, predictable control lines are easier to scan than a dense instruction sentence. */
+.controls,.cornerhelp{display:grid;gap:7px;font-family:Lexend,Arial,sans-serif!important;font-size:0!important;letter-spacing:0!important;line-height:1.35!important}.controls .key,.cornerhelp .key{display:none}.controls::before,.controls::after,.cornerhelp::before,.cornerhelp::after{display:block;width:max-content;padding:6px 9px;border:1px solid rgba(172,221,230,.58);border-radius:7px;background:rgba(178,238,241,.11);color:#efffff;font-size:10px;font-weight:650;letter-spacing:.075em}.controls::before,.cornerhelp::before{content:"W A S D  /  ↑ ↓ ← →"}.controls::after,.cornerhelp::after{content:"SPACE · BOOST"}.cornerhelp{bottom:4.2%;padding:10px 12px;border:1px solid rgba(149,222,229,.22);border-radius:10px;background:rgba(5,20,32,.7)}@media(max-width:650px){.controls::before,.controls::after,.cornerhelp::before,.cornerhelp::after{font-size:8px;padding:5px 7px}.cornerhelp{padding:8px 9px}}
+</style>
+<style id="hover-pop-feedback">
+/* Clearly visible, but calm, feedback for clickable cards. */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){body #nav .route{transition:transform 180ms ease,background 180ms ease,border-color 180ms ease,box-shadow 180ms ease}body #nav .route:hover,body #nav .route:focus-visible{transform:translateY(-8px) scale(1.025);border-color:#b4f8fb;box-shadow:0 20px 34px rgba(0,8,22,.42),inset 0 0 0 1px rgba(188,253,255,.22)}body #nav .route:hover .planet-icon,body #nav .route:focus-visible .planet-icon{transform:scale(1.08);box-shadow:inset -20px -6px 26px #000b,0 0 28px rgba(128,235,243,.38)}}
+@media (prefers-reduced-motion:reduce){body #nav .route{transition:none!important}}
+</style>
+<style id="hover-pill-text">
+/* Every visible UI word has the same calm, word-by-word hover cue. */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word{display:inline-block;position:relative;padding:0 .06em;margin:0 -.01em;border-radius:4px;transform-origin:center;transition:transform 200ms ease-out,background 200ms ease-out,color 200ms ease-out,box-shadow 200ms ease-out,font-weight 160ms ease-out;cursor:inherit;pointer-events:auto}body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word:hover{z-index:1;transform:translateY(-2px) scale(1.15);font-weight:700;color:#061923;background:#bdf8f2;box-shadow:0 3px 11px rgba(141,240,235,.42)}}
+/* High-contrast hover state: never switch a word to near-black on the dark HUD. */
+body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word{color:#fff!important}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word,body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word:hover{color:#fff!important}body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word:hover{background:#246a7a!important;border:1px solid #a9f3f4;text-shadow:0 1px 2px rgba(0,0,0,.45);box-shadow:0 4px 13px rgba(71,202,211,.32)}}
+@media (prefers-reduced-motion:reduce){body :is(#ui,#surfaceHud,#classroomZoom,#lesson) .hover-word{transition:none!important}}
+/* The landing cinematic intentionally presents one calm line and nothing else. */
+.cinematic .surface-title,.cinematic #surfaceControls{display:none!important}.cinematic .surface-tip{width:min(430px,86%);padding:16px 22px}body.surface-mode.cinematic #surfaceMessage{margin:0;max-width:58ch;font-family:Lexend,Arial,sans-serif!important;font-size:20px;font-weight:400;font-style:normal;line-height:1.72;letter-spacing:.028em;word-spacing:.075em;color:#f4fbff}@media(max-width:650px){body.surface-mode.cinematic #surfaceMessage{font-size:18px}}
+</style>
+<style id="flight-skip-control">#skipFlight{position:absolute;left:50%;bottom:12%;z-index:2;pointer-events:auto;min-height:48px;margin:0;padding:12px 18px;font-family:Lexend,"Atkinson Hyperlegible",Arial,sans-serif;font-size:13px;font-weight:650;letter-spacing:.04em;line-height:1.35;text-transform:none;transform:translateX(-50%)}#skipFlight:hover,#skipFlight:focus-visible{transform:translateX(-50%) translateY(-2px)}#skipFlight:active{transform:translateX(-50%)}body:not(.flight-active) #skipFlight,body.surface-mode #skipFlight,body.maths-lab-active #skipFlight{display:none!important}@media(max-width:650px){#skipFlight{bottom:25%;min-height:44px;padding:10px 14px;font-size:12px}}</style>
+<script>(()=>{const excluded='script,style,textarea,option,code,.hover-word,[data-no-word-hover]',uiRoots='#ui,#surfaceHud,#classroomZoom,#lesson';const isSharedText=node=>!!node?.closest?.(uiRoots);const canDecorate=node=>{const parent=node.parentElement;return !!(parent&&isSharedText(parent)&&!parent.closest(excluded)&&/\S/.test(node.nodeValue));};const isDecoratableRoot=node=>{const element=node?.nodeType===Node.TEXT_NODE?node.parentElement:node;return !!(element&&isSharedText(element)&&!element.closest(excluded));};const decorate=root=>{const scope=root?.nodeType===Node.TEXT_NODE?root.parentElement:root;if(!scope)return;const walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT,{acceptNode:node=>canDecorate(node)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}),nodes=[];for(let node=walker.nextNode();node;node=walker.nextNode())nodes.push(node);nodes.forEach(node=>{const fragment=document.createDocumentFragment();node.nodeValue.split(/(\s+)/).forEach(part=>{if(/\S/.test(part)){const word=document.createElement('span');word.className='hover-word';word.textContent=part;fragment.append(word);}else fragment.append(document.createTextNode(part));});node.replaceWith(fragment);});};const unwrap=root=>root?.querySelectorAll('.hover-word').forEach(word=>word.replaceWith(document.createTextNode(word.textContent)));window.decorateUIWords=decorate;window.decorateDialogueWords=decorate;document.addEventListener('DOMContentLoaded',()=>{const roots=[...document.querySelectorAll(uiRoots)];roots.forEach(decorate);const observer=new MutationObserver(records=>{const rootsToDecorate=new Set();for(const record of records){if(record.type==='characterData'){if(canDecorate(record.target))rootsToDecorate.add(record.target.parentElement);}else for(const node of record.addedNodes)if(isDecoratableRoot(node))rootsToDecorate.add(node);}if(rootsToDecorate.size)queueMicrotask(()=>rootsToDecorate.forEach(decorate));});observer.observe(document.body,{childList:true,characterData:true,subtree:true});document.addEventListener('click',event=>{if(event.target.closest('#languageToggle'))roots.forEach(unwrap);},true);},{once:true});})();</script>
+<style id="maths-lab-transition">
+/* The supplied classroom replaces the legacy campus only after touchdown. */
+#mathsLab{display:none;position:fixed;inset:0;width:100%;height:100%;border:0;background:#c5d6dc;z-index:20}body.maths-lab-active #focusToggle,body.maths-lab-active #focusPanel{z-index:30}
+body.maths-lab-active #mathsLab{display:block}
+</style>
+<script>
+const mathsLabFrame=document.createElement('iframe');
+mathsLabFrame.id='mathsLab';
+mathsLabFrame.title='Science Lab classroom';
+mathsLabFrame.dataset.src='science-lab/index.html';
+document.body.append(mathsLabFrame);
+</script>
+<style id="large-text-accessibility">
+  /* The text-size setting must be visible in every main game view. */
+  body.large-text #line{font-size:clamp(23px,2vw,27px)!important;line-height:1.8!important;letter-spacing:.025em}
+  body.large-text .dialog-head,body.large-text .dialog-foot{font-size:12px!important;line-height:1.65}
+  body.large-text .nav-title{font-size:clamp(36px,4vw,50px)!important;line-height:1.24}
+  body.large-text .nav-sub{font-size:17px!important;line-height:1.75}
+  body.large-text #nav .route h3{font-size:24px!important;line-height:1.3}
+  body.large-text #nav .route p,body.large-text #nav .route .num{font-size:14px!important;line-height:1.7}
+  body.large-text .surface-title h2{font-size:clamp(29px,3vw,38px)!important;line-height:1.28}
+  body.large-text .surface-title p,body.large-text #surfaceMessage{font-size:17px!important;line-height:1.85!important}
+  body.large-text #lesson h3{font-size:32px!important;line-height:1.3}
+  body.large-text #lesson p,body.large-text #answers button{font-size:17px!important;line-height:1.75!important}
+  body.large-text #focusPanel,body.large-text #focusPanel button{font-size:14px!important;line-height:1.55!important}
+  body.large-text #focusPanel button{min-height:46px!important}
+  @media(max-width:650px){body.large-text #line{font-size:20px!important}body.large-text .nav-title{font-size:31px!important}body.large-text #nav .route h3{font-size:18px!important}body.large-text #nav .route p{font-size:12px!important}body.large-text #lesson p,body.large-text #answers button{font-size:16px!important}}
+</style>
+<script id="settings-layout">
+/* Keep the accessibility choices in one stable, keyboard-friendly location. */
+(() => {
+  const panel=document.getElementById('focusPanel');
+  const title=panel?.querySelector(':scope > p');
+  const language=document.getElementById('languageToggle');
+  const calm=document.getElementById('calmToggle');
+  const text=document.getElementById('textToggle');
+  const motion=document.getElementById('motionToggle');
+  const read=document.getElementById('readScreen');
+  if(!panel||!title||!language||!calm||!text||!motion||!read)return;
+  title.id='settingsTitle';
+  const section=(label,id)=>{const group=document.createElement('section');group.className='settings-section';group.setAttribute('aria-label',label);const heading=document.createElement('span');heading.className='setting-label';heading.id=id;heading.textContent=label;group.append(heading);return group;};
+  const languageSection=section('LANGUAGE','languageLabel');
+  languageSection.append(language);
+  const speechSection=section('READ ALOUD','speechLabel');
+  const speech=document.createElement('button');
+  speech.id='speechToggle';speech.type='button';speech.setAttribute('aria-pressed','true');speech.textContent='ON';
+  speechSection.append(speech,read);
+  const soundSection=section('SOUND','soundLabel');
+  soundSection.id='soundSection';
+  const focusSection=section('FOCUS','focusLabel');
+  focusSection.append(calm,text,motion);
+  panel.replaceChildren(title,languageSection,speechSection,soundSection,focusSection);
+  panel.setAttribute('aria-label','Accessibility settings');
+  panel.setAttribute('aria-hidden','true');
+  const trigger=document.getElementById('focusToggle');
+  trigger?.setAttribute('aria-controls','focusPanel');
+})();
+</script>
+<script>
+/* The supplied loop is active only while the rocket is actively flying. */
+(() => {
+  const flightMusic=new Audio('audio/rocket-flight-loop.mp3');
+  flightMusic.loop=true;
+  flightMusic.preload='metadata';
+  flightMusic.volume=.18;
+  const isVisible=element=>element&&getComputedStyle(element).display!=='none';
+  const syncFlightMusic=()=>{
+    const flying=isVisible(document.getElementById('flight'))&&!document.body.classList.contains('surface-mode')&&!isVisible(document.getElementById('pause'));
+    const soundOn=document.getElementById('soundToggle')?.getAttribute('aria-pressed')!=='false';
+    if(flying&&soundOn&&document.hasFocus())flightMusic.play().catch(()=>{});
+    else flightMusic.pause();
+  };
+  const flightObserver=new MutationObserver(syncFlightMusic);
+  flightObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+  for(const element of [document.getElementById('flight'),document.getElementById('pause')])flightObserver.observe(element,{attributes:true,attributeFilter:['style']});
+  document.addEventListener('click',()=>queueMicrotask(syncFlightMusic));
+  document.addEventListener('keydown',()=>queueMicrotask(syncFlightMusic));
+  window.addEventListener('blur',()=>flightMusic.pause());
+  window.addEventListener('focus',syncFlightMusic);
+  syncFlightMusic();
+})();
+</script>
+<script id="ocean-landing-audio">
+/* Ocean ambience is only audible during an Earth splashdown and never loads into the flight loop. */
+(() => {
+  const oceanAmbience=new Audio('audio/ocean-waves.mp3');
+  oceanAmbience.loop=true;
+  oceanAmbience.preload='metadata';
+  oceanAmbience.volume=.14;
+  const syncOceanAmbience=()=>{
+    const soundOn=document.getElementById('soundToggle')?.getAttribute('aria-pressed')!=='false';
+    const splashedDown=document.body.dataset.landingWorld==='earth'&&document.body.classList.contains('surface-mode');
+    if(splashedDown&&soundOn&&document.hasFocus())oceanAmbience.play().catch(()=>{});
+    else oceanAmbience.pause();
+  };
+  new MutationObserver(syncOceanAmbience).observe(document.body,{attributes:true,attributeFilter:['class','data-landing-world']});
+  document.addEventListener('click',()=>queueMicrotask(syncOceanAmbience));
+  document.addEventListener('keydown',()=>queueMicrotask(syncOceanAmbience));
+  window.addEventListener('blur',()=>oceanAmbience.pause());
+  window.addEventListener('focus',syncOceanAmbience);
+  syncOceanAmbience();
+})();
+</script>
+<script id="remove-reduced-motion-preference">
+/* The student-facing setting was removed; do not keep an old saved toggle active. */
+try { localStorage.removeItem('orbit-focus-motion'); } catch {}
+</script>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+import { FBXLoader } from './vendor/loaders/FBXLoader.js';
+import { GLTFLoader } from './vendor/loaders/GLTFLoader.js';
+import { MTLLoader } from './vendor/loaders/MTLLoader.js';
+import { OBJLoader } from './vendor/loaders/OBJLoader.js';
+import { clone } from './vendor/utils/SkeletonUtils.js';
+const $=id=>document.getElementById(id),clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
+const malayText={'DEEP SPACE EXPEDITION / 2086':'EKSPEDISI ANGKASA DALAM / 2086','FLIGHT COMMANDER':'KOMANDER PENERBANGAN','NAVIGATION SPECIALIST':'PAKAR NAVIGASI','TRANSMISSION 001':'TRANSMISI 001','BEYOND THE RINGS':'MELEPASI GELANG','9.58 AU FROM HOME':'9.58 AU DARI RUMAH','That signal again. Just beyond Saturn’s rings.':'Isyarat itu lagi. Tepat di luar gelang Zuhal.','Tell me you’re hearing it too.':'Beritahu saya kamu dengar juga.','I hear it. A repeating pattern… not a distress call.':'Saya dengar. Corak yang berulang… bukan panggilan kecemasan.','Someone out there wants us to follow.':'Seseorang di luar sana mahu kita ikut.','Then let’s find them. Choose a route on the console.':'Mari kita cari mereka. Pilih laluan di konsol.','Stay inside the gates. Watch for ion beams.':'Kekal di dalam pintu. Awasi pancaran ion.','OR CLICK TO CONTINUE →':'ATAU KLIK UNTUK TERUSKAN →','Navigation console / flight authorization':'Konsol navigasi / kebenaran penerbangan','Choose your horizon.':'Pilih hala tuju anda.','Three routes. Nine worlds. One signal waiting to be found.':'Tiga laluan. Sembilan dunia. Satu isyarat menunggu untuk ditemui.','EXPLORATION':'EKSPLORASI','SIGNAL DETECTED':'ISYARAT DIKESAN','DEEP SPACE':'ANGKASA DALAM','Inner System':'Sistem Dalaman','Gas Giants':'Gergasi Gas','Outer Orbit':'Orbit Luar','LAUNCH EXPEDITION ↗':'MULA EKSPEDISI ↗','APPROACH VECTOR':'VEKTOR PENDEKATAN','HULL INTEGRITY':'INTEGRITI KAPAL','WASD / ARROWS   STEER':'WASD / ANAK PANAH   KAWAL','SPACE   BOOST   ·   ESC   PAUSE':'RUANG   PECUT   ·   ESC   JEDA','FLIGHT ON HOLD':'PENERBANGAN DIJEDA','Take a breath.':'Tarik nafas.','RESUME FLIGHT':'SAMBUNG PENERBANGAN','NAVIGATION':'NAVIGASI','PLANETARY SCHOOL / FIELD CLASS':'SEKOLAH PLANET / KELAS LAPANGAN','BACK TO EXPLORING':'KEMBALI MENEROKA','BACK TO CLASS':'KEMBALI KE KELAS','VIEW':'PAPARAN','Choose one of four learning tables.':'Pilih satu daripada empat meja pembelajaran.','LEO: Take your time. Walk up to a table, then press F.':'LEO: Ambil masa anda. Dekati meja, kemudian tekan F.','Nice work. You solved this table.':'Bagus. Anda telah menyelesaikan meja ini.','Try another answer.':'Cuba jawapan lain.','This table is complete.':'Meja ini sudah selesai.','Number Builder':'Bina Nombor','Pattern Path':'Laluan Corak','Equal Groups':'Kumpulan Sama','Quick Compare':'Banding Pantas','6 + ? = 10':'6 + ? = 10','2 · 4 · 6 · ?':'2 · 4 · 6 · ?','12 stars shared by 3 explorers':'12 bintang dikongsi oleh 3 peneroka','Which number is greatest?':'Nombor manakah paling besar?','3 each':'3 setiap seorang','4 each':'4 setiap seorang','5 each':'5 setiap seorang','RETURN TO CAMPUS':'KEMBALI KE KAMPUS','JOIN THE PLANET CLASS':'SERTAI KELAS PLANET','DISCOVER · ASK · EXPLORE':'TEMUI · TANYA · TEROKA','EXIT TO CAMPUS':'KELUAR KE KAMPUS','ON FOOT / MAYA / REPRESENTATIVE':'BERJALAN / MAYA / WAKIL','Explore the two field labs, then visit the school.':'Teroka dua makmal lapangan, kemudian lawati sekolah.','MAYA: I’ll investigate the field labs, then enter the school. Stay on comms, Leo.':'MAYA: Saya akan menyiasat makmal lapangan, kemudian masuk ke sekolah. Kekal berhubung, Leo.','F · RETURN TO CAMPUS':'F · KEMBALI KE KAMPUS','F · OPEN NUMBER BUILDER':'F · BUKA BINA NOMBOR','F · OPEN PATTERN PATH':'F · BUKA LALUAN CORAK','F · OPEN EQUAL GROUPS':'F · BUKA KUMPULAN SAMA','F · OPEN QUICK COMPARE':'F · BUKA BANDING PANTAS','F · VIEW NUMBER BUILDER':'F · LIHAT BINA NOMBOR','F · VIEW PATTERN PATH':'F · LIHAT LALUAN CORAK','F · VIEW EQUAL GROUPS':'F · LIHAT KUMPULAN SAMA','F · VIEW QUICK COMPARE':'F · LIHAT BANDING PANTAS'};
+Object.assign(malayText,{'ROUTE':'LALUAN','Pick a route.':'Pilih laluan.','Choose one.':'Pilih satu.','4 WORLDS':'4 DUNIA','3 WORLDS':'3 DUNIA','2 WORLDS':'2 DUNIA','Inner Planets':'Planet Dalaman','START ↗':'MULA ↗'});const englishText=Object.fromEntries(Object.entries(malayText).map(([english,malay])=>[malay,english]));let language=(()=>{try{return localStorage.getItem('orbit-runner-language')==='ms'?'ms':'en';}catch{return'en';}})();function translateTextNode(node){if(node.nodeType!==Node.TEXT_NODE||node.parentElement?.closest('#languageToggle'))return;const raw=node.nodeValue,parts=raw.match(/^(\s*)(.*?)(\s*)$/s),core=parts?.[2]??raw,lexicon=language==='ms'?malayText:englishText;let translated=lexicon[core];if(!translated&&language==='ms'&&core.startsWith('TOP VIEW / '))translated=core.replace('TOP VIEW / ','PANDANGAN ATAS / ');if(!translated&&language==='en'&&core.startsWith('PANDANGAN ATAS / '))translated=core.replace('PANDANGAN ATAS / ','TOP VIEW / ');if(!translated&&language==='ms'&&core.includes('OR CLICK TO CONTINUE'))translated=core.replace('OR CLICK TO CONTINUE','ATAU KLIK UNTUK TERUSKAN');if(!translated&&language==='en'&&core.includes('ATAU KLIK UNTUK TERUSKAN'))translated=core.replace('ATAU KLIK UNTUK TERUSKAN','OR CLICK TO CONTINUE');if(translated&&translated!==core)node.nodeValue=(parts?.[1]??'')+translated+(parts?.[3]??'');}function translateTree(root=document.body){if(root.nodeType===Node.TEXT_NODE){translateTextNode(root);return;}const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);for(let node=walker.nextNode();node;node=walker.nextNode())translateTextNode(node);}function applyLanguage(){document.documentElement.lang=language==='ms'?'ms':'en';const toggle=$('languageToggle');toggle.textContent=language==='en'?'BM':'EN';toggle.setAttribute('aria-pressed',String(language==='ms'));toggle.setAttribute('aria-label',language==='en'?'Switch to Malay':'Tukar kepada Bahasa Inggeris');translateTree();try{localStorage.setItem('orbit-runner-language',language);}catch{}}const languageObserver=new MutationObserver(records=>{for(const record of records){if(record.type==='characterData')translateTextNode(record.target);else for(const node of record.addedNodes)translateTree(node);}});languageObserver.observe(document.body,{childList:true,characterData:true,subtree:true});$('languageToggle').onclick=()=>{language=language==='en'?'ms':'en';applyLanguage();};applyLanguage();
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.25));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;document.body.prepend(renderer.domElement);let focusMode=false,largeText=false,reducedMotion=false;function readFocusPrefs(){try{focusMode=localStorage.getItem('orbit-focus-calm')==='1';largeText=localStorage.getItem('orbit-focus-text')==='1';reducedMotion=localStorage.getItem('orbit-focus-motion')==='1';}catch{}}function saveFocusPref(key,value){try{localStorage.setItem(key,value?'1':'0');}catch{}}function setFocusButton(id,label,enabled){const button=$(id);button.textContent=label+(enabled?'ON':'OFF');button.setAttribute('aria-pressed',String(enabled));}function updateFocusPanel(){document.body.classList.toggle('focus-mode',focusMode);document.body.classList.toggle('large-text',largeText);renderer.domElement.style.filter=focusMode?'sepia(.14) saturate(.82) brightness(1.06)':'none';const ms=language==='ms',on=ms?'HIDUP':'ON',off=ms?'MATI':'OFF';$('focusToggle').textContent=ms?'FOKUS':'FOCUS';$('focusPanel').querySelector('p').textContent=ms?'TETAPAN FOKUS':'FOCUS SETTINGS';setFocusButton('calmToggle',(ms?'LAPISAN TENANG: ':'CALM OVERLAY: '),focusMode);setFocusButton('textToggle',(ms?'TEKS BESAR: ':'LARGER TEXT: '),largeText);setFocusButton('motionToggle',(ms?'KURANGKAN GERAKAN: ':'REDUCED MOTION: '),reducedMotion);$('readScreen').textContent=ms?'BACA SKRIN INI':'READ THIS SCREEN';$('readScreen').disabled=!('speechSynthesis'in window);$('focusToggle').setAttribute('aria-label',ms?'Buka tetapan fokus':'Open focus settings');}function readThisScreen(){if(!('speechSynthesis'in window))return;const source=[$('lesson'),$('surfaceHud'),$('dialogue'),$('nav')].find(element=>element&&getComputedStyle(element).display!=='none');const message=(source?.innerText||'').replace(/\s+/g,' ').trim();if(!message)return;window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(message);utterance.lang=language==='ms'?'ms-MY':'en-US';utterance.rate=.82;window.speechSynthesis.speak(utterance);}$('focusToggle').onclick=()=>{const open=!$('focusPanel').classList.contains('visible');$('focusPanel').classList.toggle('visible',open);$('focusToggle').setAttribute('aria-expanded',String(open));};$('calmToggle').onclick=()=>{focusMode=!focusMode;saveFocusPref('orbit-focus-calm',focusMode);updateFocusPanel();};$('textToggle').onclick=()=>{largeText=!largeText;saveFocusPref('orbit-focus-text',largeText);updateFocusPanel();};$('motionToggle').onclick=()=>{reducedMotion=!reducedMotion;saveFocusPref('orbit-focus-motion',reducedMotion);updateFocusPanel();};$('readScreen').onclick=readThisScreen;readFocusPrefs();updateFocusPanel();
+$('languageToggle').addEventListener('click',()=>queueMicrotask(updateFocusPanel));const soundToggle=document.createElement('button');soundToggle.id='soundToggle';soundToggle.type='button';$('ui').append(soundToggle);let soundEnabled=(()=>{try{return localStorage.getItem('orbit-runner-sound')!=='0';}catch{return true;}})();const gateSuccessAudio=new Audio('audio/gate-correct.mp3');gateSuccessAudio.preload='auto';gateSuccessAudio.volume=.32;function playGateSuccess(){if(!soundEnabled)return;gateSuccessAudio.currentTime=0;gateSuccessAudio.play().catch(()=>{});}function updateSoundToggle(){const ms=language==='ms';soundToggle.textContent=soundEnabled?(ms?'BUNYI HIDUP':'SOUND ON'):(ms?'BUNYI MATI':'SOUND OFF');soundToggle.setAttribute('aria-pressed',String(soundEnabled));soundToggle.setAttribute('aria-label',soundEnabled?(ms?'Matikan bunyi':'Turn sound off'):(ms?'Hidupkan bunyi':'Turn sound on'));$('readScreen').disabled=!soundEnabled||!('speechSynthesis'in window);}soundToggle.onclick=()=>{soundEnabled=!soundEnabled;try{localStorage.setItem('orbit-runner-sound',soundEnabled?'1':'0');}catch{}if(!soundEnabled){window.speechSynthesis?.cancel();audio?.suspend?.();gateSuccessAudio.pause();}updateSoundToggle();if(soundEnabled)sound(520,.1,'sine',.035);};$('languageToggle').addEventListener('click',()=>queueMicrotask(updateSoundToggle));updateSoundToggle();const scene=new THREE.Scene();scene.background=new THREE.Color(0x020611);const camera=new THREE.PerspectiveCamera(56,innerWidth/innerHeight,.1,12000);camera.position.set(0,2.7,7.8);camera.lookAt(0,1.6,-5);
+const ambient=new THREE.HemisphereLight(0xc6eaff,0x172238,2);scene.add(ambient);const sun=new THREE.DirectionalLight(0xffdfb0,3.1);sun.position.set(-70,55,35);scene.add(sun);const blueLight=new THREE.PointLight(0x67dafa,45,28);blueLight.position.set(0,4,2);scene.add(blueLight);
+let state='intro',dialogIndex=0,selected=0,time=0,zoom=0,classroomZoom=.65,health=100,boost=100,distance=0,leg=0,passed=0,totalPassed=0,invulnerable=0,noticeTime=0,velX=0,velY=0,shake=0,arrival=0,boostArmed=true,boostViewOffset=0;const keys={},phoneKeys={};const isPressed=code=>!!(keys[code]||phoneKeys[code]);const mixers=[];const activityStations=[[-4.6,-2.2,0x58b6df], [4.6,-2.2,0xf0af61], [-4.6,-7.4,0x74c987], [4.6,-7.4,0xb692e8]];const tableTasks=[{title:'Number Builder',prompt:'6 + ? = 10',choices:['2','4','6'],answer:1,done:false},{title:'Pattern Path',prompt:'2 · 4 · 6 · ?',choices:['7','8','10'],answer:1,done:false},{title:'Equal Groups',prompt:'12 stars shared by 3 explorers',choices:['3 each','4 each','5 each'],answer:1,done:false},{title:'Quick Compare',prompt:'Which number is greatest?',choices:['18','81','28'],answer:1,done:false}].map((task,index)=>({...task,x:activityStations[index][0],z:activityStations[index][1]}));const loader=new GLTFLoader(),fighterLoader=new FBXLoader(),schoolMtlLoader=new MTLLoader(),schoolObjLoader=new OBJLoader(),tl=new THREE.TextureLoader();
+const texturePaths={earth:'textures/Earth.png',mercury:'textures/Mercury.png',venus:'textures/Venus.png',mars:'textures/Mars.png',jupiter:'textures/Jupiter.png',saturn:'textures/Saturn.png',uranus:'textures/Uranus.png',neptune:'textures/Neptune.png',pluto:'textures/Pluto.png'};const maps={};for(const [n,p] of Object.entries(texturePaths)){maps[n]=tl.load(p);maps[n].colorSpace=THREE.SRGBColorSpace;maps[n].anisotropy=4;}const rockMap=tl.load('textures/rocks/SpaceRocks_albedo.jpeg');rockMap.colorSpace=THREE.SRGBColorSpace;const earthMountainHorizon=tl.load('assets/environment/earth-mountain-horizon.jpg');earthMountainHorizon.mapping=THREE.EquirectangularReflectionMapping;earthMountainHorizon.colorSpace=THREE.SRGBColorSpace;earthMountainHorizon.anisotropy=2;
+function mat(c,metal=.3,rough=.6){return new THREE.MeshStandardMaterial({color:c,metalness:metal,roughness:rough});}const dark=mat(0x182733,.65,.45),edge=mat(0x344a57,.7,.4),black=mat(0x07121d,.4,.6),cyan=new THREE.MeshBasicMaterial({color:0x77e8f5}),warm=new THREE.MeshBasicMaterial({color:0xe4b97d});
+function mesh(g,m,parent=scene,x=0,y=0,z=0){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);parent.add(o);return o;}function box(w,h,d,m,parent,x=0,y=0,z=0){return mesh(new THREE.BoxGeometry(w,h,d),m,parent,x,y,z);}function lineBetween(a,b,color,parent){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color,transparent:true,opacity:.4}));parent.add(l);return l;}
+function createDeepSpaceBackground(){const c=document.createElement('canvas');c.width=1024;c.height=512;const q=c.getContext('2d');q.fillStyle='#020712';q.fillRect(0,0,c.width,c.height);for(const [x,y,r,color] of [[150,160,280,'rgba(22,64,120,.26)'],[500,92,235,'rgba(47,48,110,.16)'],[805,255,325,'rgba(21,94,128,.16)'],[930,78,190,'rgba(105,62,119,.12)']]){const g=q.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,color);g.addColorStop(.45,color.replace(/,[\d.]+\)$/,',.07)'));g.addColorStop(1,'rgba(0,0,0,0)');q.fillStyle=g;q.fillRect(0,0,c.width,c.height);}for(let i=0;i<720;i++){const x=Math.random()*c.width,y=Math.random()*c.height,size=i<610?.35+Math.random()*.7:.8+Math.random()*1.25,alpha=i<610?.12+Math.random()*.35:.3+Math.random()*.42,hue=Math.random()<.14?'255,224,183':Math.random()<.55?'192,225,255':'235,246,255';q.fillStyle=`rgba(${hue},${alpha})`;q.beginPath();q.arc(x,y,size,0,Math.PI*2);q.fill();}for(const [x,y,r,color] of [[118,102,11,'rgba(142,189,255,.22)'],[744,144,6,'rgba(255,220,166,.25)'],[884,282,9,'rgba(125,181,224,.16)']]){const g=q.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,color);g.addColorStop(.35,color);g.addColorStop(1,'rgba(0,0,0,0)');q.fillStyle=g;q.fillRect(x-r,y-r,r*2,r*2);}q.strokeStyle='rgba(156,207,230,.08)';q.lineWidth=1;q.beginPath();q.ellipse(768,178,128,42,-.19,0,Math.PI*2);q.stroke();const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=2;return t;}const deepSpaceBackground=createDeepSpaceBackground();scene.background=deepSpaceBackground;
+// Dense, layered galactic sky; all stars are real points around the scene.
+const sky=new THREE.Group();scene.add(sky);let seed=9861;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}const starPos=[],starColors=[];for(let i=0;i<2800;i++){let x,y,z;const r=1800+rand()*4000;if(i<3500){const a=rand()*Math.PI*2;x=Math.cos(a)*r;y=(rand()-.5)*r*.22+x*.3;z=Math.sin(a)*r;}else{const a=rand()*Math.PI*2,b=Math.acos(rand()*2-1);x=r*Math.sin(b)*Math.cos(a);y=r*Math.cos(b);z=r*Math.sin(b)*Math.sin(a);}starPos.push(x,y,z);const c=new THREE.Color().setHSL(.52+rand()*.15,.15+rand()*.3,.5+rand()*.5);starColors.push(c.r,c.g,c.b);}const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPos,3));starGeo.setAttribute('color',new THREE.Float32BufferAttribute(starColors,3));sky.add(new THREE.Points(starGeo,new THREE.PointsMaterial({size:2.6,vertexColors:true,sizeAttenuation:true,transparent:true,opacity:.9})));
+const cloudCanvas=document.createElement('canvas');cloudCanvas.width=cloudCanvas.height=128;const cx=cloudCanvas.getContext('2d'),gradient=cx.createRadialGradient(64,64,0,64,64,64);gradient.addColorStop(0,'rgba(180,210,255,.22)');gradient.addColorStop(.4,'rgba(90,130,200,.10)');gradient.addColorStop(1,'rgba(0,0,0,0)');cx.fillStyle=gradient;cx.fillRect(0,0,128,128);const cloudTex=new THREE.CanvasTexture(cloudCanvas);for(let i=0;i<48;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,color:i%3===0?0x84639c:0x407f9f,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:.5}));s.position.set((i-24)*140,(i-24)*35+rand()*200-100,-2500-rand()*900);s.scale.set(700+rand()*1000,250+rand()*650,1);sky.add(s);}
+function planet(name,r,parent){const g=new THREE.Group();parent.add(g);const sphere=mesh(new THREE.SphereGeometry(r,48,32),new THREE.MeshStandardMaterial({map:maps[name],roughness:.95,metalness:0}),g);const glow=mesh(new THREE.SphereGeometry(r*1.022,32,20),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,depthWrite:false,uniforms:{color:{value:new THREE.Color(name==='earth'||name==='neptune'?0x468dff:0x84cddf)}},vertexShader:'varying vec3 n; varying vec3 v; void main(){vec4 p=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-p.xyz);gl_Position=projectionMatrix*p;}',fragmentShader:'varying vec3 n;varying vec3 v;uniform vec3 color;void main(){float a=pow(1.-abs(dot(normalize(n),normalize(v))),3.);gl_FragColor=vec4(color,a*.42);}'}),g);if(name==='saturn'||name==='uranus'){const ringGroup=new THREE.Group();ringGroup.rotation.x=-1.15;ringGroup.rotation.y=.22;g.add(ringGroup);for(let i=0;i<10;i++){mesh(new THREE.RingGeometry(r*(1.35+i*.09),r*(1.41+i*.09),100),new THREE.MeshStandardMaterial({color:i%3===0?0x786a54:0xccb88d,side:THREE.DoubleSide,transparent:true,opacity:i===5?.25:.73,roughness:1}),ringGroup);}}g.userData.sphere=sphere;return g;}
+const bridge=new THREE.Group();scene.add(bridge);const vista=planet('saturn',23,bridge);vista.position.set(21,16,-81);vista.rotation.z=-.15;
+box(18,.3,20,dark,bridge,0,-.18,0);for(let i=-8;i<=8;i+=2){box(.025,.014,18,edge,bridge,i,.005,0);}for(let z=-7;z<9;z+=2)box(17,.014,.018,edge,bridge,0,.006,z);box(18,.5,4,black,bridge,0,5.7,1);box(18,1.2,.7,dark,bridge,0,-.05,-6);box(18,.7,.7,dark,bridge,0,5,-6);
+for(const x of [-8,-5.7,5.7,8]){const beam=box(.26,6,.5,edge,bridge,x,2.4,-6);beam.rotation.z=x<0?-.12:.12;box(.055,4.8,.055,cyan,bridge,x+(x<0?.15:-.15),2.5,-5.71);}for(const x of [-8.7,8.7]){box(.6,6,18,dark,bridge,x,2.6,0);box(.06,.045,16,cyan,bridge,x*.985,.2,0);box(.06,.035,14,cyan,bridge,x*.985,4.5,0);}for(const z of [-4,1,6]){box(17,.2,.25,edge,bridge,0,5.1,z);box(7,.035,.05,cyan,bridge,0,4.985,z);}
+function screenTexture(){const c=document.createElement('canvas');c.width=512;c.height=256;const q=c.getContext('2d');q.fillStyle='#071e2b';q.fillRect(0,0,512,256);q.strokeStyle='#1d4d61';q.lineWidth=1;for(let i=0;i<512;i+=32){q.beginPath();q.moveTo(i,0);q.lineTo(i,256);q.stroke();}for(let i=0;i<256;i+=32){q.beginPath();q.moveTo(0,i);q.lineTo(512,i);q.stroke();}q.strokeStyle='#65e9ef';for(let i=0;i<4;i++){q.beginPath();q.ellipse(255,130,40+i*27,26+i*21,0,0,Math.PI*2);q.stroke();}q.fillStyle='#b0fcfa';q.font='14px monospace';q.fillText('ORBITAL NAVIGATION',18,28);q.font='10px monospace';q.fillText('SATURN // SIGNAL ACQUIRED',18,237);for(let i=0;i<15;i++){q.fillStyle=i%3?'#32748b':'#d8b575';q.fillRect(400,36+i*12,rand()*80+5,4);}return new THREE.CanvasTexture(c);}const screenMat=new THREE.MeshBasicMaterial({map:screenTexture()});
+function consoleAt(x,z,rot=0){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=rot;bridge.add(g);box(2.3,.85,1.1,dark,g,0,.45,0);const top=box(2.5,.13,1.3,edge,g,0,.94,0);top.rotation.x=.18;const sc=mesh(new THREE.PlaneGeometry(2.12,1),screenMat,g,0,1.024,.01);sc.rotation.x=-Math.PI/2+.18;for(let i=0;i<8;i++)box(.12,.025,.08,i%3?cyan:warm,g,-.9+i*.25,1.09,.47);return g;}consoleAt(0,-2.8);consoleAt(-5,-3.9,.25);consoleAt(5,-3.9,-.25);consoleAt(-5.8,.5,.65);consoleAt(5.8,.5,-.65);
+// Central navigation hologram.
+const holo=new THREE.Group();holo.position.set(0,1.7,-2.8);bridge.add(holo);mesh(new THREE.SphereGeometry(.38,32,24),new THREE.MeshBasicMaterial({color:0x67dfea,wireframe:true,transparent:true,opacity:.23}),holo);for(let i=0;i<3;i++){const t=mesh(new THREE.TorusGeometry(.57+i*.17,.004,6,72),cyan,holo);t.rotation.set(1.15+i*.2,.2,0);}const holoLight=new THREE.PointLight(0x52e4ff,4,5);holo.add(holoLight);
+const npcs=[];let astronautSource,astronautClip;loader.load('models/walking-astronaut.glb',gltf=>{astronautSource=gltf.scene;astronautClip=gltf.animations[0];crewTemplate=astronautSource;walkClip=idleClip=astronautClip;for(let i=0;i<2;i++){const character=clone(astronautSource);character.scale.setScalar(.78);character.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.color.set(0xf4f6f2);o.frustumCulled=false;}});const group=new THREE.Group();group.position.set(i?2.6:-2.6,0,-.9);group.rotation.y=i?Math.PI+.34:Math.PI-.34;group.add(character);bridge.add(group);if(astronautClip){const mixer=new THREE.AnimationMixer(character);mixer.clipAction(astronautClip).play();mixer.setTime(i*.7);mixers.push(mixer);}npcs.push(group);}if(surface.visible&&!explorers.length)spawnExplorers();$('loading').style.display='none';},undefined,()=>{$('loading').textContent='FLIGHT SYSTEMS READY';});
+const flightWorld=new THREE.Group();scene.add(flightWorld);flightWorld.visible=false;const ship=new THREE.Group();flightWorld.add(ship);const shipVisual=new THREE.Group();ship.add(shipVisual);
+const fallback=new THREE.Group();shipVisual.add(fallback);const hull=mesh(new THREE.ConeGeometry(1,5.7,5),mat(0xa4b8c5,.7,.3),fallback);hull.rotation.x=-Math.PI/2;hull.scale.x=.65;for(let s of [-1,1]){const wing=box(3.1,.14,2.2,mat(0x9bacb7,.75,.35),fallback,s*1.4,-.2,.8);wing.rotation.y=-s*.36;box(.2,.18,2,edge,fallback,s*2.8,-.1,1.1);}const glass=mesh(new THREE.SphereGeometry(.56,24,16),mat(0x0b3349,.8,.2),fallback,0,.44,-.4);glass.scale.set(.65,.55,1.6);
+fighterLoader.load('models/space-fighter/space-fighter.fbx',fighter=>{fighter.updateMatrixWorld(true);const bounds=new THREE.Box3().setFromObject(fighter),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3()),scale=6.3/Math.max(size.x,size.y,size.z);fighter.scale.setScalar(scale);fighter.position.copy(center.multiplyScalar(-scale));fighter.traverse(o=>{if(o.isMesh){o.castShadow=false;o.frustumCulled=false;}});const wrap=new THREE.Group();wrap.add(fighter);shipVisual.add(wrap);fallback.visible=false;},undefined,()=>{fallback.visible=true;});
+const exhaust=[];for(const s of [-1,1]){mesh(new THREE.CylinderGeometry(.19,.24,.35,16),edge,ship,s*1.1,-.05,1.7).rotation.x=Math.PI/2;const e=mesh(new THREE.ConeGeometry(.24,2.9,20),new THREE.MeshBasicMaterial({color:0x70eeff,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}),ship,s*1.1,-.05,3);e.rotation.x=Math.PI/2;exhaust.push(e);const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,color:0x49dfff,blending:THREE.AdditiveBlending,depthWrite:false}));glow.position.set(s*1.1,0,2);glow.scale.set(3,3,3);ship.add(glow);}
+const destinationGroup=new THREE.Group();flightWorld.add(destinationGroup);let destinationPlanet;const gates=[],rocks=[],beams=[],routeDecor=new THREE.Group();flightWorld.add(routeDecor);const rockGeo=new THREE.IcosahedronGeometry(1,1);const pos=rockGeo.attributes.position;for(let i=0;i<pos.count;i++){const m=.78+rand()*.4;pos.setXYZ(i,pos.getX(i)*m,pos.getY(i)*m,pos.getZ(i)*m);}rockGeo.computeVertexNormals();const rockMat=new THREE.MeshStandardMaterial({map:rockMap,roughness:1,color:0x8c929e});const modules=[{name:'INNER SYSTEM',worlds:['earth','mercury','venus','mars']},{name:'GAS GIANTS',worlds:['jupiter','saturn']},{name:'OUTER ORBIT',worlds:['uranus','neptune','pluto']}];
+function disposeTree(obj){obj.traverse(o=>{if(o.geometry&&o.geometry!==rockGeo)o.geometry.dispose();});}
+function makeLeg(){distance=0;passed=0;arrival=0;ship.position.set(0,0,0);velX=velY=0;for(const o of [...gates,...rocks,...beams]){routeDecor.remove(o);disposeTree(o);}gates.length=rocks.length=beams.length=0;for(const o of [...routeDecor.children]){routeDecor.remove(o);disposeTree(o);}if(destinationPlanet){destinationGroup.remove(destinationPlanet);disposeTree(destinationPlanet);}const name=modules[selected].worlds[leg];destinationPlanet=planet(name,name==='jupiter'||name==='saturn'?240:185,destinationGroup);destinationPlanet.position.set(20,35,-2160);for(let i=0;i<7;i++){const x=i===0?0:Math.sin(i*1.6+leg)*13,y=i===0?0:Math.cos(i*1.3+leg)*6;const g=new THREE.Group();g.position.set(x,y,-(180+i*225));g.userData={at:180+i*225,done:false};routeDecor.add(g);mesh(new THREE.TorusGeometry(6.4,.15,12,80),cyan,g);mesh(new THREE.TorusGeometry(6.67,.034,6,80),new THREE.MeshBasicMaterial({color:0x47b0cc,transparent:true,opacity:.5}),g);for(let j=0;j<4;j++){const a=j*Math.PI/2;const tick=box(.18,1.3,.2,warm,g,Math.cos(a)*6.4,Math.sin(a)*6.4,0);tick.rotation.z=a-Math.PI/2;}const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,color:0x00cfff,transparent:true,opacity:.14,blending:THREE.AdditiveBlending,depthWrite:false}));sprite.scale.set(22,22,1);g.add(sprite);gates.push(g);if(i>0){const prev=gates[i-1];lineBetween([prev.position.x,prev.position.y,-prev.userData.at],[x,y,-g.userData.at],0x397184,routeDecor);}}
+for(let i=0;i<48;i++){const z=110+rand()*1710,x=(rand()-.5)*120,y=(rand()-.5)*70,r=1.2+rand()*3.8;const near=gates.some(g=>Math.abs(g.userData.at-z)<40&&Math.hypot(x-g.position.x,y-g.position.y)<11);if(near)continue;const m=mesh(rockGeo,rockMat,routeDecor,x,y,-z);m.scale.set(r,r*(.7+rand()*.6),r);m.rotation.set(rand()*6,rand()*6,rand()*6);m.userData={at:z,r,rot:rand()*.2+.04,hit:false};rocks.push(m);}for(let i=0;i<3;i++){const g=new THREE.Group(),at=470+i*475;g.position.set(0,(i%2?1:-1)*(9+rand()*3),-at);g.userData={at,phase:i*1.7,hit:false};const core=box(75,.22,.28,new THREE.MeshBasicMaterial({color:0xff6255}),g);const aura=box(75,1.1,.6,new THREE.MeshBasicMaterial({color:0xff442b,transparent:true,opacity:.17,blending:THREE.AdditiveBlending,depthWrite:false}),g);for(const x of [-37.5,37.5]){mesh(new THREE.IcosahedronGeometry(1.6,1),edge,g,x,0,0);mesh(new THREE.SphereGeometry(.6,12,8),warm,g,x,0,0);}routeDecor.add(g);beams.push(g);} $('destination').textContent=name.toUpperCase();$('legLabel').textContent=modules[selected].name+' / '+String(leg+1).padStart(2,'0')+' OF '+modules[selected].worlds.length;notify('ALIGN WITH THE CYAN ROUTE GATES',3);}
+const dialogues=[['MAYA','FLIGHT COMMANDER','That signal again. Just beyond Saturn’s rings.<br>Tell me you’re hearing it too.'],['LEO','NAVIGATION SPECIALIST','I hear it. A repeating pattern… not a distress call.<br>Someone out there wants us to follow.'],['MAYA','FLIGHT COMMANDER','Then let’s find them. Choose a route on the console.<br>Stay inside the gates. Watch for ion beams.']];
+let audio;function sound(freq=440,duration=.12,type='sine',volume=.04){if(!soundEnabled)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime);o.frequency.exponentialRampToValueAtTime(freq*.65,audio.currentTime+duration);g.gain.setValueAtTime(volume,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+duration);}catch(e){}}
+function advance(){if(state!=='intro')return;sound(660,.08);dialogIndex++;if(dialogIndex<dialogues.length){const d=dialogues[dialogIndex];$('speaker').textContent=d[0];$('role').textContent=d[1];$('line').innerHTML=d[2];window.decorateDialogueWords?.($('line'));$('count').textContent='0'+(dialogIndex+1)+' / 03';}else{state='zoom';zoom=0;$('dialogue').style.display='none';$('sceneTag').style.display='none';}}
+function showNav(){resetSurface();document.body.classList.remove('maths-lab-active','flight-active');const lab=$('mathsLab');if(lab)lab.src='';state='nav';bridge.visible=true;flightWorld.visible=false;sky.position.set(0,0,0);blueLight.visible=true;$('nav').style.display='flex';$('brand').style.display='flex';$('bridgeStatus').style.display='block';$('flight').style.display='none';$('result').style.display='none';$('pause').style.display='none';camera.position.set(0,2.1,1.8);camera.lookAt(0,1.05,-2.8);}
+function showStory(){state='intro';dialogIndex=0;const d=dialogues[0];$('speaker').textContent=d[0];$('role').textContent=d[1];$('line').innerHTML=d[2];window.decorateDialogueWords?.($('line'));$('count').textContent='01 / 03';$('nav').style.display='none';$('dialogue').style.display='block';$('sceneTag').style.display='block';$('brand').style.display='flex';$('bridgeStatus').style.display='block';bridge.visible=true;flightWorld.visible=false;camera.position.set(0,2.7,7.8);camera.lookAt(0,1.6,-5);}
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==$('mathsLab')?.contentWindow)return;
+  if(event.data?.type==='orbit-runner-home'){window.requestOrbitHome?.();return;}
+  if(event.data?.type==='jelasverse-quiz-complete'&&state==='mathsLab'){
+    const lab=$('mathsLab');lab.src='';document.body.classList.remove('maths-lab-active');
+    departPlanet();
+  }
+});
+document.addEventListener('orbit-home-confirmed',showNav);
+function launch(){sound(150,.7,'triangle',.09);state='flight';document.body.classList.add('flight-active');health=100;boost=100;leg=0;totalPassed=0;invulnerable=1;shake=0;boostArmed=true;boostViewOffset=0;bridge.visible=false;flightWorld.visible=true;blueLight.visible=false;$('nav').style.display='none';$('brand').style.display='none';$('bridgeStatus').style.display='none';$('flight').style.display='block';$('mobile').classList.add('visible');$('result').style.display='none';$('pause').style.display='none';for(const k in keys)keys[k]=false;makeLeg();if(modules[selected].worlds[0]==='earth')requestOceanWaves(oceanLanding);camera.position.set(0,5,17);camera.lookAt(0,1,-55);}
+function notify(text,seconds=2){$('notice').textContent=text;noticeTime=seconds;$('notice').style.opacity=1;}
+const rewardStorageKey='jelasverse-reward-stars';
+let flightPoints=(()=>{try{const saved=Number.parseInt(localStorage.getItem(rewardStorageKey)||'0',10);return Number.isFinite(saved)&&saved>=0?saved:0;}catch{return 0;}})();
+function updateFlightPoints(){const value=$('pointsValue');if(value)value.textContent=String(flightPoints);try{const points=String(flightPoints);sessionStorage.setItem('orbit-flight-points',points);localStorage.setItem(rewardStorageKey,points);}catch{}}
+document.addEventListener('DOMContentLoaded',updateFlightPoints,{once:true});
+function showGateConfirmation(){
+  if(reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const ring=document.createElement('div');
+  ring.className='gate-success-ring';
+  ring.setAttribute('aria-hidden','true');
+  ring.addEventListener('animationend',()=>ring.remove(),{once:true});
+  document.body.append(ring);
+}
+function showGateReward(){
+  const badge=$('flightPoints');
+  if(!badge)return;
+  flightPoints++;
+  updateFlightPoints();
+  badge.classList.remove('reward-bump');
+  void badge.offsetWidth;
+  badge.classList.add('reward-bump');
+  if(reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const target=badge.getBoundingClientRect();
+  const star=document.createElement('span');
+  star.className='flight-reward-star';
+  star.textContent='★';
+  star.setAttribute('aria-hidden','true');
+  star.style.setProperty('--reward-x',(target.left+target.width/2-innerWidth/2)+'px');
+  star.style.setProperty('--reward-y',(target.top+target.height/2-innerHeight/2)+'px');
+  star.addEventListener('animationend',()=>star.remove(),{once:true});
+  document.body.append(star);
+}
+function lightGateGreen(g){
+  g.traverse(object=>{
+    if(object.isMesh){
+      object.material=object.material.clone();
+      if(object.material.color)object.material.color.set(0x65ef93);
+      if('emissive' in object.material){object.material.emissive.set(0x1d8e54);object.material.emissiveIntensity=.9;}
+    }else if(object.isSprite&&object.material){object.material=object.material.clone();object.material.color.set(0x7dff9f);object.material.opacity=.58;}
+  });
+  g.userData.successTimer=.56;
+}
+for(const id of ['launch','again'])$(id)?.addEventListener('click',()=>{flightPoints=0;updateFlightPoints();});
+function damage(amount,text,silent=false){if(invulnerable>0||state!=='flight')return;health=Math.max(0,health-amount);shake=0;invulnerable=1.3;if(!silent)sound(70,.35,'sawtooth',.065);notify(text,1.4);if(health<=0)finish(false,silent);}
+function finish(won,silent=false){state='result';document.body.classList.remove('flight-active');$('result').style.display='flex';$('resultTag').textContent=won?'EXPEDITION COMPLETE':'FLIGHT SIGNAL LOST';$('resultTitle').textContent=won?(selected===1?'The signal is real.':'A new horizon, reached.'):'Adrift, but not forgotten.';$('resultText').textContent=won?'All '+modules[selected].worlds.length+' worlds reached. '+totalPassed+' route gates synchronized. '+Math.ceil(health)+'% hull integrity. Odyssey has your coordinates.':'The rescue beacon is active. Take another flight, stay within the cyan gates, and give the red ion beams room.';if(!silent)sound(won?880:90,.8,'triangle',.08);}
+function pause(){if(state==='flight'){state='paused';document.body.classList.remove('flight-active');$('pause').style.display='flex';}else if(state==='paused'){state='flight';document.body.classList.add('flight-active');$('pause').style.display='none';}for(const k in keys)keys[k]=false;}
+$('dialogue').onclick=advance;$('dialogue').onkeydown=e=>{if(e.code==='Enter'){e.preventDefault();advance();}};document.querySelectorAll('.route').forEach(b=>b.onclick=()=>{selected=+b.dataset.route;document.querySelectorAll('.route').forEach(o=>o.classList.toggle('selected',o===b));sound(500+selected*120);});$('launch').onclick=launch;$('again').onclick=launch;$('routesBack').onclick=showNav;$('storyBack').onclick=showStory;$('quit').onclick=showNav;$('flightHome').onclick=showNav;$('resume').onclick=pause;$('pauseButton').onclick=pause;function adjustClassroomZoom(amount){classroomZoom=clamp(classroomZoom+amount,0,1);sound(520,.06,'sine',.025);}$('zoomOut').onclick=()=>adjustClassroomZoom(-.16);$('zoomIn').onclick=()=>adjustClassroomZoom(.16);window.addEventListener('wheel',e=>{if(state==='school'){e.preventDefault();adjustClassroomZoom(e.deltaY<0?.08:-.08);}},{passive:false});
+window.addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();keys[e.code]=true;if(!e.repeat){if(e.code==='Space'&&state==='intro')advance();else if(e.code==='Space'&&state==='nav')launch();else if(e.code==='Escape')pause();else if(state==='nav'&&['Digit1','Digit2','Digit3'].includes(e.code))document.querySelectorAll('.route')[+e.code.slice(-1)-1].click();}});window.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>{for(const k in keys)keys[k]=false;if(state==='flight')pause();});document.querySelectorAll('[data-key]').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);keys[b.dataset.key]=true;};b.onpointerup=b.onpointercancel=()=>keys[b.dataset.key]=false;});
+const labControllerState={};
+const labControllerMap={up:['KeyW','w'],down:['KeyS','s'],left:['KeyA','a'],right:['KeyD','d'],action:['KeyF','f']};
+function applyLabController(next){
+  const target=$('mathsLab')?.contentWindow;
+  if(!target)return;
+  for(const [control,[code,key]] of Object.entries(labControllerMap)){
+    const pressed=next[control]===true;
+    if(labControllerState[control]===pressed)continue;
+    labControllerState[control]=pressed;
+    target.dispatchEvent(new KeyboardEvent(pressed?'keydown':'keyup',{code,key,bubbles:true,cancelable:true}));
+  }
+}
+function releaseLabController(){
+  const target=$('mathsLab')?.contentWindow;
+  if(!target)return;
+  for(const [control,[code,key]] of Object.entries(labControllerMap)){
+    if(!labControllerState[control])continue;
+    labControllerState[control]=false;
+    target.dispatchEvent(new KeyboardEvent('keyup',{code,key,bubbles:true,cancelable:true}));
+  }
+}
+let phoneActionDown=false,phonePauseDown=false,phoneSkipDown=false,phoneHomeDown=false,phoneBackDown=false,phoneSettingsDown=false,phoneUpDown=false,phoneDownDown=false;
+function applyPhoneController(input){
+  const next=input&&typeof input==='object'?input:{};
+  let settingsOpen=window.isOrbitSettingsOpen?.()===true;
+  let homeConfirmOpen=window.isOrbitHomeConfirmationOpen?.()===true;
+  const canMove=['flight','explore','school'].includes(state)&&!settingsOpen&&!homeConfirmOpen;
+  phoneKeys.KeyW=canMove&&next.up===true;phoneKeys.KeyS=canMove&&next.down===true;phoneKeys.KeyA=canMove&&next.left===true;phoneKeys.KeyD=canMove&&next.right===true;phoneKeys.Space=state==='flight'&&next.boost===true&& !settingsOpen&&!homeConfirmOpen;
+  if(state==='mathsLab')applyLabController(next);else releaseLabController();
+  if(next.settings===true&&!phoneSettingsDown&&!homeConfirmOpen){$('focusToggle')?.click();settingsOpen=window.isOrbitSettingsOpen?.()===true;}
+  if(next.back===true&&!phoneBackDown){if(homeConfirmOpen)window.closeOrbitHomeConfirmation?.();else if(settingsOpen)window.closeOrbitSettings?.();}
+  homeConfirmOpen=window.isOrbitHomeConfirmationOpen?.()===true;
+  settingsOpen=window.isOrbitSettingsOpen?.()===true;
+  if(homeConfirmOpen){if(next.action===true&&!phoneActionDown)window.confirmOrbitHome?.();}
+  else if(settingsOpen){
+    if(next.up===true&&!phoneUpDown)window.moveOrbitSettingsSelection?.(-1);
+    if(next.down===true&&!phoneDownDown)window.moveOrbitSettingsSelection?.(1);
+    if(next.action===true&&!phoneActionDown)window.activateOrbitSettingsSelection?.();
+  }else if(next.action===true&&!phoneActionDown){if(state==='intro')advance();else if(state==='nav')document.querySelector('#nav .route[data-route="0"]')?.click();else if(state==='explore'||state==='school')interactSurface();}
+  if(next.pause===true&&!phonePauseDown&&(state==='flight'||state==='paused'))pause();
+  if(next.skip===true&&!phoneSkipDown&&state==='flight')startLanding();
+  if(next.home===true&&!phoneHomeDown&&['flight','paused','explore','school','mathsLab'].includes(state))window.requestOrbitHome?.();
+  phoneActionDown=next.action===true;phonePauseDown=next.pause===true;phoneSkipDown=next.skip===true;phoneHomeDown=next.home===true;phoneBackDown=next.back===true;phoneSettingsDown=next.settings===true;phoneUpDown=next.up===true;phoneDownDown=next.down===true;
+}
+let stopCloudController=()=>{};
+function connectCloudController(){
+  stopCloudController();
+  const code=window.JelasVerseData?.getStudentCode?.();
+  if(code)stopCloudController=window.JelasVerseData.subscribeController(code,applyPhoneController);
+}
+window.addEventListener('jelasverse-data-ready',connectCloudController,{once:true});
+window.addEventListener('storage',event=>{if(event.key==='jelasverse-student-code')connectCloudController();});
+// Planet visits: landing cinematic, a walkable campus, and an explorable school.
+const visitThemes={
+ earth:{title:'Earth · Blue Horizon School',sky:0x91cbea,ground:0x62965a,accent:0x78e3b0,school:'BLUE HORIZON SCHOOL',place:'Coastal biosphere campus',facts:['Liquid water covers about 71% of Earth’s surface.','Earth’s atmosphere protects life and helps keep the planet warm.'],question:'What covers most of Earth’s surface?',choices:['Liquid water','Desert sand','Ice'],answer:0},
+ mercury:{title:'Mercury · Dawnside School',sky:0x151e30,ground:0x77716a,accent:0xffc384,school:'DAWNSIDE SCHOOL',place:'Shielded crater settlement',facts:['Mercury is the closest planet to the Sun.','Mercury has almost no atmosphere to hold heat.'],question:'Why does Mercury lose heat so quickly at night?',choices:['It is far from the Sun','It has almost no atmosphere','It is covered in oceans'],answer:1},
+ venus:{title:'Venus · Cloudlight School',sky:0xb49457,ground:0x957244,accent:0xffdf93,school:'CLOUDLIGHT SCHOOL',place:'Climate-controlled surface habitat',facts:['Venus has a thick atmosphere rich in carbon dioxide.','Venus is hotter than Mercury because of its powerful greenhouse effect.'],question:'What makes Venus so hot?',choices:['Its thick greenhouse atmosphere','It has two suns','It is the closest planet to the Sun'],answer:0},
+ mars:{title:'Mars · Red Dune School',sky:0x9e6a57,ground:0x975941,accent:0xffbd83,school:'RED DUNE SCHOOL',place:'Pressurized canyon habitat',facts:['Iron minerals give Martian dust its rusty red color.','Mars has two small moons: Phobos and Deimos.'],question:'What gives Mars its red color?',choices:['Red oceans','Iron minerals in its dust','Red clouds'],answer:1},
+ jupiter:{title:'Jupiter · Stormwatch School',sky:0xab8c78,ground:0x656674,accent:0xffd298,school:'STORMWATCH SCHOOL',place:'Floating campus · above the cloud decks',floating:true,facts:['Jupiter is a gas giant with no solid surface to land on.','The Great Red Spot is a giant storm. This campus floats above the clouds.'],question:'What is Jupiter’s Great Red Spot?',choices:['A volcano','An ocean','A giant storm'],answer:2},
+ saturn:{title:'Saturn · Ringlight School',sky:0x9f977d,ground:0x68727b,accent:0xffe0a6,school:'RINGLIGHT SCHOOL',place:'Floating campus · beneath the rings',floating:true,facts:['Saturn’s rings are made mostly of pieces of ice, with some rock.','Saturn has no solid surface. Our fictional school floats above its clouds.'],question:'What are Saturn’s rings mostly made of?',choices:['Pieces of ice','Solid gold','Clouds of steam'],answer:0},
+ uranus:{title:'Uranus · Aurora School',sky:0x54858f,ground:0x4f7885,accent:0x9bfff1,school:'AURORA SCHOOL',place:'Floating campus · upper atmosphere',floating:true,facts:['Uranus is an ice giant that rotates almost on its side.','Methane in its atmosphere absorbs red light, giving Uranus a blue-green appearance.'],question:'What is unusual about Uranus?',choices:['It has no atmosphere','It rotates almost on its side','It is a star'],answer:1},
+ neptune:{title:'Neptune · Bluewind School',sky:0x354d88,ground:0x4d6585,accent:0x94cfff,school:'BLUEWIND SCHOOL',place:'Floating campus · sheltered cloud station',floating:true,facts:['Neptune has some of the fastest winds in the solar system.','Neptune is an ice giant. This floating campus is protected from its storms.'],question:'What is Neptune famous for?',choices:['Its forests','Its very fast winds','Its warm beaches'],answer:1},
+ pluto:{title:'Pluto · Far Horizon School',sky:0x17233a,ground:0x8e94a5,accent:0xc4bbff,school:'FAR HORIZON SCHOOL',place:'Heated outpost · nitrogen-ice plains',facts:['Pluto is a dwarf planet in the Kuiper Belt.','Pluto’s surface includes frozen nitrogen and water ice.'],question:'How is Pluto classified?',choices:['A gas giant','A star','A dwarf planet'],answer:2}
+};
+const surface=new THREE.Group(),campus=new THREE.Group(),classroom=new THREE.Group(),crew=new THREE.Group(),oceanLanding=new THREE.Group();scene.add(surface);surface.add(campus,classroom,crew,oceanLanding);surface.visible=false;classroom.visible=false;oceanLanding.visible=false;const explorers=[];const surfaceMixers=[];let currentTheme,landingClock=0,landedShip,landingShadow,schoolDoor,interiorGlobe,nearby=null,scanCount=0,schoolComplete=false,schoolsVisited=0,resumeState='flight';const discoveries=[],obstacles=[];const walkCamera=new THREE.Vector3();let crewTemplate,walkClip,idleClip,schoolTemplate;
+schoolMtlLoader.setPath('models/school-building/').setResourcePath('models/school-building/');schoolMtlLoader.load('schol_19.mtl',materials=>{materials.preload();schoolObjLoader.setMaterials(materials);schoolObjLoader.load('models/school-building/schol_19.obj',school=>{school.traverse(o=>{if(o.isMesh){const materials=Array.isArray(o.material)?o.material:[o.material];for(const material of materials){if(material.map)material.color.set(0xffffff);material.shininess=22;}o.frustumCulled=false;o.userData.borrowed=true;}});schoolTemplate=school;},undefined,()=>{});},undefined,()=>{});
+function clearKeys(){for(const k in keys)keys[k]=false;for(const k in phoneKeys)phoneKeys[k]=false;}
+$('skipFlight').onclick=()=>{if(state==='flight')startLanding();};
+const earthTreeFoliage=tl.load('assets/environment/earth-tree-foliage.png');earthTreeFoliage.colorSpace=THREE.SRGBColorSpace;earthTreeFoliage.anisotropy=2;const earthMountainManager=new THREE.LoadingManager();earthMountainManager.setURLModifier(url=>/Chunk\d+_Color\.(?:png|jpe?g)/i.test(url)?'assets/environment/earth-tree-foliage.png':url);const earthMountainLoader=new FBXLoader(earthMountainManager);let earthMountainTemplate=null,earthMountainInstance=null,earthMountainLoading=false;
+function addEarthMountain(parent){if(!earthMountainTemplate||earthMountainInstance)return;earthMountainInstance=earthMountainTemplate.clone(true);earthMountainInstance.position.set(0,0,-108);parent.add(earthMountainInstance);}
+function requestEarthMountain(parent){if(earthMountainTemplate){addEarthMountain(parent);return;}if(earthMountainLoading)return;earthMountainLoading=true;earthMountainLoader.setPath('models/earth-mountain/').setResourcePath('models/earth-mountain/').load('Tristennoeckel.fbx',mountain=>{const bounds=new THREE.Box3().setFromObject(mountain),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3()),scale=86/Math.max(size.x,size.z);mountain.scale.setScalar(scale);mountain.position.set(-center.x*scale,-bounds.min.y*scale,-center.z*scale);mountain.traverse(o=>{if(o.isMesh){o.material=new THREE.MeshStandardMaterial({color:0x59645a,roughness:.94,metalness:0,flatShading:false});o.frustumCulled=true;}});earthMountainTemplate=mountain;earthMountainLoading=false;if(currentTheme===visitThemes.earth&&surface.visible)addEarthMountain(campus);},undefined,()=>{earthMountainLoading=false;});}
+// The supplied ocean mesh stays out of the initial scene. A simple water plane keeps the splashdown seamless while it loads.
+let oceanWaveTemplate=null,oceanWaveInstance=null,oceanWaveLoading=false;
+function addOceanWaves(parent){
+ if(!oceanWaveTemplate||oceanWaveInstance)return;
+ const waves=oceanWaveTemplate.clone(true),bounds=new THREE.Box3().setFromObject(waves),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3()),scale=135/Math.max(size.x,size.z,1);
+ waves.scale.setScalar(scale);
+ waves.position.set(-center.x*scale,-bounds.min.y*scale+.37,-20-center.z*scale);
+ waves.traverse(o=>{if(o.isMesh){o.userData.borrowed=true;o.frustumCulled=true;}});
+ parent.add(waves);oceanWaveInstance=waves;
+}
+function requestOceanWaves(parent){
+ if(oceanWaveTemplate){addOceanWaves(parent);return;}
+ if(oceanWaveLoading)return;
+ oceanWaveLoading=true;
+ loader.load('models/ocean/ocean-wave.glb',gltf=>{
+   oceanWaveTemplate=gltf.scene;oceanWaveLoading=false;
+   if(currentTheme===visitThemes.earth&&surface.visible)addOceanWaves(oceanLanding);
+ },undefined,()=>{oceanWaveLoading=false;});
+}
+// Earth remains decorative: the imported mountain is distant and has no collision.
+function buildEarthLandingHorizon(parent){
+ const trunkMat=mat(0x5b4734,.02,1),pineMat=new THREE.MeshStandardMaterial({map:earthTreeFoliage,color:0x7ca36d,roughness:.95});
+ const cityMat=mat(0x536d78,.18,.78),windowMat=new THREE.MeshBasicMaterial({color:0xb8e8e8,transparent:true,opacity:.42});
+ const earthRockMat=new THREE.MeshStandardMaterial({map:rockMap,color:0x6d725d,roughness:1,flatShading:true});
+ requestEarthMountain(parent);
+ for(let i=0;i<18;i++){const x=-72+i*8.4+(i%3-1)*1.8,z=-88-(i%4)*5,h=3.2+(i%4)*.8;box(.32,h,.32,trunkMat,parent,x,h*.5,z);const crown=mesh(new THREE.ConeGeometry(1,1,7),pineMat,parent,x,h+1.7,z);crown.scale.set(2.2+(i%3)*.35,4.3+(i%3)*.5,2.2+(i%3)*.35);}
+ for(let i=0;i<9;i++){const x=-34+i*8.5,z=-99-(i%2)*4,h=3+(i%4)*1.35;box(3.2,h,2.5,cityMat,parent,x,h*.5,z);for(let row=1;row<h-.3;row+=1.2)box(2.65,.13,.03,windowMat,parent,x,row,z+1.27);}
+ const cloudMat=new THREE.SpriteMaterial({map:cloudTex,color:0xeaf8ff,transparent:true,opacity:.2,depthWrite:false});
+ for(const [x,y,z,w,h] of [[-62,21,-105,34,10],[-17,26,-119,46,12],[37,19,-108,38,10],[75,24,-123,30,9]]){const cloud=new THREE.Sprite(cloudMat.clone());cloud.position.set(x,y,z);cloud.scale.set(w,h,1);parent.add(cloud);}
+ for(let i=0;i<18;i++){const a=i/18*Math.PI*2,r=9.5+(i%3)*2.2,rock=mesh(rockGeo,earthRockMat,parent,Math.cos(a)*r,0,8+Math.sin(a)*r);rock.scale.set(.45+(i%4)*.18,.28+(i%3)*.16,.42+(i%4)*.15);rock.rotation.set(rand()*1.3,rand()*3,rand()*1.3);}
+ surfaceLabel('EARTH LANDING SITE',5.2,.55,parent,0,1.15,14.7);
+}
+function surfaceLabel(text,width=8,height=1,parent=campus,x=0,y=3,z=0){const c=document.createElement('canvas');c.width=1024;c.height=128;const q=c.getContext('2d');q.fillStyle='#071e2b';q.fillRect(0,0,1024,128);q.strokeStyle='#a8e8e5';q.lineWidth=3;q.strokeRect(8,8,1008,112);q.textAlign='center';q.textBaseline='middle';q.fillStyle='#e6ffff';q.font='500 44px Arial';q.fillText(text,512,67,960);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshBasicMaterial({map:t}),parent,x,y,z);}
+function disposeVisit(){for(const g of [campus,classroom,oceanLanding]){g.traverse(o=>{if(!o.isMesh||o.userData.borrowed)return;if(o.geometry!==rockGeo)o.geometry?.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];for(const m of materials){if(!m||[dark,edge,black,cyan,warm,rockMat,screenMat].includes(m))continue;if(m.map?.isCanvasTexture)m.map.dispose();m.dispose();}});g.clear();}oceanWaveInstance=null;if(landedShip){surface.remove(landedShip);landedShip=null;}discoveries.length=0;obstacles.length=0;}
+function fallbackExplorer(index){const g=new THREE.Group();const white=mat(0xf4f6ee,.08,.7);mesh(new THREE.CapsuleGeometry(.3,.65,6,12),white,g,0,1,0);mesh(new THREE.SphereGeometry(.3,20,16),white,g,0,1.65,0);const visor=mesh(new THREE.SphereGeometry(.24,20,16),mat(0x725326,.85,.2),g,0,1.66,-.17);visor.scale.z=.5;for(const side of [-1,1]){mesh(new THREE.CapsuleGeometry(.13,.4,4,10),white,g,side*.19,.4,0);mesh(new THREE.CapsuleGeometry(.12,.4,4,10),white,g,side*.43,1,0);}box(.18,.14,.07,index?warm:cyan,g,0,1.15,-.32);return g;}
+function spawnExplorers(){crew.clear();explorers.length=0;surfaceMixers.length=0;const root=new THREE.Group();let model;if(crewTemplate){model=clone(crewTemplate);model.scale.setScalar(.78);model.rotation.y=Math.PI;const armRest=[];model.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.color.set(0xf4f6f2);o.frustumCulled=false;}if(o.isBone&&/(?:^|_)[LR]_(?:Arm|Elbow)_/i.test(o.name))armRest.push([o,o.quaternion.clone()]);});if(walkClip){const mixer=new THREE.AnimationMixer(model),walk=mixer.clipAction(walkClip);walk.enabled=true;walk.setEffectiveWeight(0);walk.play();root.userData={mixer,walk,armRest};surfaceMixers.push(mixer);}}else model=fallbackExplorer(0);root.add(model);root.position.set(0,0,5);crew.add(root);explorers.push(root);crew.visible=state!=='landing';}
+function buildCampus(name){disposeVisit();currentTheme=visitThemes[name];const t=currentTheme;const accent=new THREE.MeshBasicMaterial({color:t.accent});const pavement=mat(0x4d616d,.4,.7),wall=mat(0xc4d4d8,.3,.6),glass=new THREE.MeshStandardMaterial({color:t.accent,emissive:t.accent,emissiveIntensity:.18,metalness:.5,roughness:.25});
+scene.background=name==='earth'?earthMountainHorizon:new THREE.Color(t.sky);scene.fog=new THREE.FogExp2(t.sky,t.floating?.007:.004);sky.visible=!t.floating&&name!=='earth';sky.position.set(0,0,0);ambient.intensity=2.5;sun.intensity=3;
+if(name==='earth'){
+ const sea=new THREE.MeshStandardMaterial({color:0x1c718b,roughness:.24,metalness:.12});
+ const seaSurface=mesh(new THREE.PlaneGeometry(650,650),sea,oceanLanding,0,.31,-20);
+ seaSurface.rotation.x=-Math.PI/2;
+ requestOceanWaves(oceanLanding);
+}
+if(t.floating){box(75,2.4,100,edge,campus,0,-1.25,-16);for(const x of [-36,36]){box(.18,1,98,glass,campus,x,.5,-16);box(.2,.1,98,accent,campus,x,1.03,-16);}for(const z of [-64,32]){box(72,1,.18,glass,campus,0,.5,z);box(72,.1,.2,accent,campus,0,1.03,z);}for(let i=0;i<45;i++){const cloud=mesh(new THREE.SphereGeometry(1,12,8),new THREE.MeshStandardMaterial({color:t.sky,roughness:1}),campus,(rand()-.5)*450,-16-rand()*22,(rand()-.5)*400);cloud.scale.set(15+rand()*25,4+rand()*5,12+rand()*25);}}
+else{if(name==='earth'){const lawn=new THREE.MeshStandardMaterial({color:0x609451,roughness:1});mesh(new THREE.PlaneGeometry(650,650),lawn,campus,0,-.12,-20).rotation.x=-Math.PI/2;}else{const groundMap=rockMap.clone();groundMap.wrapS=groundMap.wrapT=THREE.RepeatWrapping;groundMap.repeat.set(50,50);groundMap.needsUpdate=true;mesh(new THREE.PlaneGeometry(650,650),new THREE.MeshStandardMaterial({map:groundMap,color:t.ground,roughness:1}),campus,0,-.12,-20).rotation.x=-Math.PI/2;for(let i=0;i<75;i++){const a=rand()*Math.PI*2,r=45+rand()*160;const rock=mesh(rockGeo,new THREE.MeshStandardMaterial({map:rockMap,color:t.ground,roughness:1}),campus,Math.cos(a)*r,0,Math.sin(a)*r-20);rock.scale.set(3+rand()*9,2+rand()*12,3+rand()*9);}}}
+box(8,.08,38,pavement,campus,0,0,-12);for(const x of [-4.15,4.15])box(.08,.05,37,accent,campus,x,.08,-12);for(let z=1;z>-29;z-=4){box(.8,.018,.15,accent,campus,0,.07,z);for(const x of [-6,6]){box(.15,1.9,.15,edge,campus,x,.95,z);mesh(new THREE.SphereGeometry(.2,12,8),accent,campus,x,1.95,z);}}
+const pad=mesh(new THREE.CylinderGeometry(8,8.5,.35,64),pavement,campus,0,.05,8);const ring=mesh(new THREE.TorusGeometry(7,.07,8,80),accent,campus,0,.25,8);ring.rotation.x=Math.PI/2;box(.18,.03,3,accent,campus,-.9,.25,8);box(.18,.03,3,accent,campus,.9,.25,8);box(1.8,.03,.18,accent,campus,0,.25,8);landingShadow=mesh(new THREE.CircleGeometry(3.5,40),new THREE.MeshBasicMaterial({color:0x071323,transparent:true,opacity:.28,depthWrite:false}),campus,0,.27,8);landingShadow.rotation.x=-Math.PI/2;
+// The supplied school is the campus centrepiece; the plaza and field stations change per planet.
+const schoolRoot=new THREE.Group();campus.add(schoolRoot);if(schoolTemplate){const school=schoolTemplate.clone(true),bounds=new THREE.Box3().setFromObject(school),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3()),scale=25/Math.max(size.x,size.z);school.scale.setScalar(scale);school.position.set(-center.x*scale,-bounds.min.y*scale,-38-center.z*scale);schoolRoot.add(school);}else{box(24,.22,15,pavement,schoolRoot,0,0,-38);box(9,5.5,12,wall,schoolRoot,-7,2.85,-38);box(9,5.5,12,wall,schoolRoot,7,2.85,-38);box(5,1.4,12,wall,schoolRoot,0,4.9,-38);box(25,.45,14,edge,schoolRoot,0,5.8,-38);for(const x of [-8,-5,5,8])box(2.3,2.3,.09,glass,schoolRoot,x,2.75,-31.93);}const entranceLight=new THREE.PointLight(t.accent,22,31),fillLight=new THREE.PointLight(0xfff1d3,14,24);entranceLight.position.set(0,5,-26);fillLight.position.set(-10,4,-30);campus.add(entranceLight,fillLight);box(25,.16,2,edge,campus,0,.1,-29.5);schoolDoor=box(3.9,3.6,.14,glass,campus,0,1.8,-31.8);surfaceLabel(t.school,14,1.5,campus,0,4.65,-31.89);surfaceLabel('WELCOME, EXPLORERS',3.6,.45,campus,0,3.12,-31.6);for(const x of [-2.2,2.2])box(.09,3.5,.08,accent,campus,x,1.75,-31.65);for(const x of [-10,10]){box(3,.18,.75,wall,campus,x,.35,-27.5);box(3.18,.08,.9,edge,campus,x,.58,-27.5);mesh(new THREE.CylinderGeometry(.45,.55,.7,12),accent,campus,x-2.1,.42,-27.5);mesh(new THREE.SphereGeometry(.55,12,8),glass,campus,x-2.1,1.12,-27.5);}for(const x of [-14,14])for(const z of [-35,-42]){mesh(new THREE.CylinderGeometry(.16,.25,2.6,10),mat(0x5b4b3a),campus,x,1.3,z);mesh(new THREE.SphereGeometry(1.2,14,10),new THREE.MeshStandardMaterial({color:t.accent,roughness:.75}),campus,x,2.9,z);}
+for(let i=0;i<2;i++){const x=i?9:-9,z=i?-21:-9;const station=new THREE.Group();station.position.set(x,0,z);campus.add(station);mesh(new THREE.CylinderGeometry(1.6,1.9,.2,32),pavement,station,0,.12,0);box(1.3,1.3,.75,edge,station,0,.8,0);const sample=mesh(i?new THREE.SphereGeometry(.65,24,16):new THREE.IcosahedronGeometry(.75,0),i?new THREE.MeshStandardMaterial({map:maps[name],roughness:.9}):new THREE.MeshStandardMaterial({color:t.accent,emissive:t.accent,emissiveIntensity:.35,metalness:.3,roughness:.4}),station,0,2.1,0);surfaceLabel(i?'02 / SKY OBSERVATORY':'01 / FIELD LAB',4,.6,station,0,3.5,.15);discoveries.push({group:station,sample,done:false,fact:t.facts[i]});}
+for(const x of [-16,16]){const dome=mesh(new THREE.SphereGeometry(4,24,12,0,Math.PI*2,0,Math.PI/2),glass,campus,x,.1,-13);box(9,.25,9,edge,campus,x,0,-13);obstacles.push({x,z:-13,w:4.5,d:4.5});for(let j=0;j<3;j++){box(2,.8,1,pavement,campus,x,0.4,-22-j*2);}}
+if(name==='earth'){const asphalt=mat(0x3f5157,.05,.92),sidewalk=mat(0xc9d0ca,.05,.88),bark=mat(0x5c432f,.02,1),leaf=mat(0x2f7541,.02,.95),hedge=mat(0x3e8249,.02,.95);box(55,.05,10,asphalt,campus,0,.01,-51);box(38,.04,2.2,sidewalk,campus,0,.08,-45.5);for(let x=-22;x<=22;x+=3.8){box(.14,.02,2.8,new THREE.MeshBasicMaterial({color:0xf7f4db}),campus,x,.07,-51);}for(const x of [-17,-12,12,17]){box(.18,3.6,.18,edge,campus,x,1.8,-46);mesh(new THREE.SphereGeometry(.22,12,8),accent,campus,x,3.75,-46);}for(const [x,z,s] of [[-25,-38,1.35],[-21,-48,1],[-18,-31,.9],[-15,-54,1.15],[25,-38,1.35],[21,-48,1],[18,-31,.9],[15,-54,1.15],[-27,-22,1.25],[27,-22,1.25],[-24,-12,.9],[24,-12,.9]]){mesh(new THREE.CylinderGeometry(.16,.28,2.7*s,10),bark,campus,x,1.35*s,z);mesh(new THREE.SphereGeometry(1.55*s,14,10),leaf,campus,x,3.15*s,z);mesh(new THREE.SphereGeometry(1.15*s,14,10),leaf,campus,x+.7*s,3.35*s,z+.1);}for(let i=0;i<30;i++){const side=i%2?-1:1,x=side*(8+(i%5)*3.4),z=-31-Math.floor(i/5)*3.1;mesh(new THREE.SphereGeometry(.45+(i%3)*.1,10,8),hedge,campus,x,.42,z);}for(const x of [-11,11]){box(3,.14,.7,bark,campus,x,.42,-23.5);for(const dx of [-1.1,1.1])box(.1,.62,.1,edge,campus,x+dx,.25,-23.5);}for(let x=-8;x<=8;x+=4){mesh(new THREE.CylinderGeometry(.75,.95,.16,20),new THREE.MeshStandardMaterial({color:0xc9875b,roughness:1}),campus,x,.08,-33);for(let j=0;j<7;j++)mesh(new THREE.SphereGeometry(.13,8,6),new THREE.MeshStandardMaterial({color:j%2?0xffe487:0xff8ea1,roughness:1}),campus,x+(j%3-.9)*.33,.33,-33+(Math.floor(j/3)-.5)*.28);}}
+if(name==='earth'){earthMountainInstance=null;buildEarthLandingHorizon(campus);}
+if(name==='saturn'){for(let i=0;i<5;i++){const arc=mesh(new THREE.TorusGeometry(170+i*7,1.8,6,100,Math.PI),new THREE.MeshBasicMaterial({color:0xe4d4b1,transparent:true,opacity:.45}),campus,0,20,-140);arc.rotation.z=.25;}}
+// Walkable classroom, kept roofless so the trailing camera never clips a ceiling.
+const classroomRoot=new THREE.Group();classroom.add(classroomRoot);const classFloor=new THREE.MeshStandardMaterial({color:0xe8e2d6,roughness:.9}),classWall=new THREE.MeshStandardMaterial({color:0xbdd7d4,roughness:.8}),chairMat=new THREE.MeshStandardMaterial({color:0x445660,roughness:.62});box(20,.24,21,classFloor,classroomRoot,0,1.05,-6);box(20,3.8,.28,classWall,classroomRoot,0,2.95,-16.4);for(const x of [-9.85,9.85])box(.28,3.8,21,classWall,classroomRoot,x,2.95,-6);for(const z of [-2,-8,-13]){box(.2,1.5,2.8,new THREE.MeshStandardMaterial({color:0x9bdceb,emissive:0x9bdceb,emissiveIntensity:.08,roughness:.35}),classroomRoot,-9.68,2.6,z);box(.2,1.5,2.8,new THREE.MeshStandardMaterial({color:0x9bdceb,emissive:0x9bdceb,emissiveIntensity:.08,roughness:.35}),classroomRoot,9.68,2.6,z);}for(const [index,[x,z,color]] of activityStations.entries()){const task=tableTasks[index],pad=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.08,roughness:.66});box(3.65,.16,2.55,pad,classroom,x,1.47,z);box(3.25,.1,2.12,new THREE.MeshStandardMaterial({color:0xf8fbf6,roughness:.82}),classroom,x,1.6,z);for(const [dx,dz] of [[-1.55,-.72],[1.55,-.72],[-1.55,.72],[1.55,.72]])mesh(new THREE.CylinderGeometry(.3,.3,.52,16),chairMat,classroom,x+dx,1.45,z+dz);task.beacon=mesh(new THREE.CylinderGeometry(.24,.24,.16,16),new THREE.MeshBasicMaterial({color}),classroom,x,1.76,z);}surfaceLabel(t.school,12,1.2,classroom,0,4.8,-16.2);box(4,1.2,1.4,edge,classroom,0,1.7,-12.5);interiorGlobe=planet(name,1.05,classroom);interiorGlobe.position.set(0,3.6,-12.5);surfaceLabel('DISCOVER · ASK · EXPLORE',8,.65,classroom,0,3.5,-16.05);surfaceLabel('EXIT TO CAMPUS',4,.6,classroom,0,3.1,4.8);const light=new THREE.PointLight(0xc9f5ff,35,30);light.position.set(0,6,-5);classroom.add(light);
+landedShip=new THREE.Group();const parked=shipVisual.clone(true);parked.rotation.set(0,0,0);parked.position.set(0,0,0);landedShip.add(parked);surface.add(landedShip);spawnExplorers();}
+function startLanding(){state='landing';document.body.classList.remove('flight-active');clearKeys();landingClock=0;scanCount=0;schoolComplete=false;nearby=null;tableTasks.forEach(task=>task.done=false);const world=modules[selected].worlds[leg],worldName=world.charAt(0).toUpperCase()+world.slice(1);document.body.dataset.landingWorld=world;buildCampus(world);surface.visible=true;campus.visible=world!=='earth';oceanLanding.visible=world==='earth';classroom.visible=false;crew.visible=false;bridge.visible=false;flightWorld.visible=false;blueLight.visible=false;$('surfaceHud').style.display='block';$('classroomZoom').classList.remove('visible');document.body.classList.add('surface-mode','cinematic');$('surfaceName').textContent='';$('surfacePhase').textContent='';$('surfaceObjective').textContent='';$('surfaceMessage').textContent=worldName+' reached.';window.decorateUIWords?.($('surfaceMessage'));$('surfaceControls').textContent='';$('interact').style.display='none';$('flash').style.opacity=0;camera.fov=56;camera.updateProjectionMatrix();landedShip.position.set(0,25,-5);camera.position.set(8,28,13);camera.lookAt(0,20,-2);sound(120,1,'triangle',.045);}
+function setExplore(){state='mathsLab';document.body.classList.remove('flight-active');clearKeys();disposeVisit();surface.visible=false;campus.visible=false;classroom.visible=false;crew.visible=false;oceanLanding.visible=false;$('surfaceHud').style.display='none';$('lesson').style.display='none';$('classroomZoom').classList.remove('visible');$('flight').style.display='none';document.body.classList.remove('surface-mode','cinematic');delete document.body.dataset.landingWorld;document.body.classList.add('maths-lab-active');const lab=$('mathsLab');if(!lab.getAttribute('src'))lab.src=lab.dataset.src;}
+function resetSurface(){document.body.classList.remove('flight-active');surface.visible=false;campus.visible=false;oceanLanding.visible=false;$('surfaceHud').style.display='none';$('lesson').style.display='none';$('classroomZoom').classList.remove('visible');document.body.classList.remove('surface-mode','cinematic');delete document.body.dataset.landingWorld;scene.background=new THREE.Color(0x020611);scene.fog=null;sky.visible=true;ambient.intensity=2;sun.intensity=3.1;$('boostTouch').textContent='BOOST';$('boostTouch').dataset.key='Space';clearKeys();}
+function enterSchool(){state='school';clearKeys();classroomZoom=.65;campus.visible=false;landedShip.visible=false;classroom.visible=true;explorers[0].position.set(0,1.26,2);camera.position.set(0,20,2);camera.lookAt(0,1.2,-6);$('classroomZoom').classList.add('visible');$('surfacePhase').textContent='TOP VIEW / '+currentTheme.school;$('surfaceObjective').textContent='Choose one of four learning tables.';$('surfaceMessage').textContent='LEO: Take your time. Walk up to a table, then press F.';sound(640,.25);}
+function leaveSchool(){state='explore';clearKeys();$('classroomZoom').classList.remove('visible');campus.visible=true;landedShip.visible=true;classroom.visible=false;explorers[0].position.set(0,0,-28.5);$('surfacePhase').textContent='ON FOOT / MAYA / REPRESENTATIVE';$('surfaceObjective').textContent=schoolComplete?'School visited. Keep exploring or continue your expedition.':'Explore both field labs, then return to the school.';}
+function openLesson(){state='lesson';clearKeys();$('lesson').style.display='block';$('interact').style.display='none';$('lessonTitle').textContent=schoolComplete?'Discovery badge earned':currentTheme.school;$('lessonCopy').textContent=schoolComplete?'You’ve completed this world’s field class. Stay to explore, or depart for your next destination.':currentTheme.facts.join(' ')+' '+currentTheme.question;$('lessonFeedback').textContent='';const answers=$('answers');answers.replaceChildren();if(schoolComplete){const depart=document.createElement('button');depart.textContent=leg<modules[selected].worlds.length-1?'DEPART FOR '+modules[selected].worlds[leg+1].toUpperCase()+' ↗':'COMPLETE EXPEDITION ↗';depart.onclick=departPlanet;answers.append(depart);}else currentTheme.choices.forEach((choice,index)=>{const b=document.createElement('button');b.textContent=choice;b.onclick=()=>{if(index===currentTheme.answer){schoolComplete=true;schoolsVisited++;sound(1040,.4,'triangle',.06);openLesson();$('lessonFeedback').textContent='Correct! '+schoolsVisited+' school'+(schoolsVisited===1?'':'s')+' visited on this expedition.';}else{$('lessonFeedback').textContent='Not quite — read the field notes above and try again.';sound(170,.12);}};answers.append(b);});}
+function openTableTask(task){state='tableTask';clearKeys();$('classroomZoom').classList.remove('visible');$('lesson').style.display='block';$('interact').style.display='none';$('lessonTitle').textContent=task.title;$('lessonCopy').textContent=task.prompt;$('lessonFeedback').textContent=task.done?'This table is complete.':'';const answers=$('answers');answers.replaceChildren();const returnToClass=()=>{state='school';$('lesson').style.display='none';$('classroomZoom').classList.add('visible');clearKeys();};if(task.done){const done=document.createElement('button');done.textContent='BACK TO CLASS';done.onclick=returnToClass;answers.append(done);return;}task.choices.forEach((choice,index)=>{const answer=document.createElement('button');answer.textContent=choice;answer.onclick=()=>{if(index===task.answer){task.done=true;if(task.beacon){task.beacon.material.color.set(0xffe58a);task.beacon.scale.setScalar(1.35);}$('lessonFeedback').textContent='Nice work. You solved this table.';answers.replaceChildren();const done=document.createElement('button');done.textContent='BACK TO CLASS';done.onclick=returnToClass;answers.append(done);sound(1040,.28,'triangle',.06);}else{$('lessonFeedback').textContent='Try another answer.';sound(170,.1);}};answers.append(answer);});}
+function departPlanet(){resetSurface();if(leg<modules[selected].worlds.length-1){leg++;health=Math.min(100,health+15);state='flight';document.body.classList.add('flight-active');flightWorld.visible=true;$('flight').style.display='block';makeLeg();camera.position.set(0,5,17);camera.lookAt(0,1,-55);notify('HOLD W / ↑ TO FLY TO '+modules[selected].worlds[leg].toUpperCase(),4);}else{surface.visible=true;campus.visible=false;classroom.visible=true;crew.visible=true;scene.background=new THREE.Color(currentTheme.sky);finish(true);$('resultText').textContent='You landed on all '+modules[selected].worlds.length+' worlds, explored with Leo, and visited '+schoolsVisited+' planetary schools. Every world has something new to teach you.';}}
+function interactSurface(){if(!nearby||!['explore','school'].includes(state))return;if(nearby.type==='scan'){const d=nearby.data;if(!d.done){d.done=true;scanCount++;sound(850,.22);}$('surfaceMessage').textContent=d.fact;$('surfaceObjective').textContent='FIELD NOTES '+scanCount+' / 2 · '+(scanCount===2?'Head to the school entrance.':'Find the other glowing field lab.');}else if(nearby.type==='door')enterSchool();else if(nearby.type==='exit')leaveSchool();else if(nearby.type==='table')openTableTask(nearby.data);else if(nearby.type==='class'){if(scanCount<2){$('surfaceMessage').textContent='LEO: We need both field notes for class. Head back outside and explore the two labs.';}else openLesson();}}
+$('interact').onclick=interactSurface;$('closeLesson').onclick=()=>{state='school';clearKeys();$('lesson').style.display='none';$('classroomZoom').classList.add('visible');};
+window.addEventListener('keydown',e=>{if(e.code==='KeyF'&&!e.repeat)interactSurface();});
+function walkAllowed(x,z){if(state==='school'){if(x<-9||x>9||z<-15.3||z>4.2)return false;for(const [dx,dz] of activityStations)if(Math.abs(x-dx)<2.25&&Math.abs(z-dz)<1.7)return false;if(Math.abs(x)<2.7&&Math.abs(z+12.5)<1.45)return false;return true;}if(x<-33||x>33||z<-58||z>29)return false;const inSchoolFootprint=Math.abs(x)<13.1&&z<-28.1&&z>-49.2,atDoorway=Math.abs(x)<2.35&&z>-34.5&&z<-28.1;if(inSchoolFootprint&&!atDoorway)return false;for(const o of obstacles)if(Math.abs(x-o.x)<o.w+.45&&Math.abs(z-o.z)<o.d+.45)return false;for(const d of discoveries)if(Math.hypot(x-d.group.position.x,z-d.group.position.z)<1.5)return false;return true;}
+function poseExplorer(root,moving,dt){if(root.userData.mixer){root.userData.walk.setEffectiveWeight(lerp(root.userData.walk.getEffectiveWeight(),moving?1:0,Math.min(1,dt*10)));root.userData.mixer.update(dt);for(const [bone,rest] of root.userData.armRest)bone.quaternion.copy(rest);}else root.children[0].position.y=moving?Math.abs(Math.sin(time*9))*.08:0;}
+function updateSurface(dt){if(!surface.visible)return;for(const d of discoveries){d.sample.rotation.y+=dt*.4;d.sample.position.y=2.1+Math.sin(time*1.8)*.13;d.sample.scale.setScalar(d.done?.8:1);}if(interiorGlobe)interiorGlobe.rotation.y+=dt*.15;
+if(state==='landing'){landingClock+=dt;const t=clamp(landingClock/7,0,1),e=t*t*(3-2*t);landedShip.position.set(0,lerp(25,1.4,e),lerp(-5,8,e));landedShip.rotation.z=Math.sin(t*Math.PI*2)*.04*(1-t);landingShadow.scale.setScalar(lerp(.35,1,e));camera.position.set(lerp(8,20,e),lerp(28,15,e),lerp(13,31,e));camera.lookAt(0,lerp(20,2,e),lerp(-2,-7,e));if(t>=1){if(landingClock>8.3)setExplore();}return;}
+if(!['explore','school'].includes(state)||!explorers.length)return;const player=explorers[0];let dx=(isPressed('KeyD')||isPressed('ArrowRight')?1:0)-(isPressed('KeyA')||isPressed('ArrowLeft')?1:0),dz=(isPressed('KeyS')||isPressed('ArrowDown')?1:0)-(isPressed('KeyW')||isPressed('ArrowUp')?1:0);const moving=dx!==0||dz!==0;if(moving){const n=Math.hypot(dx,dz);dx/=n;dz/=n;const speed=isPressed('ShiftLeft')||isPressed('ShiftRight')?7.5:4.3;const nx=player.position.x+dx*speed*dt,nz=player.position.z+dz*speed*dt;if(walkAllowed(nx,player.position.z))player.position.x=nx;if(walkAllowed(player.position.x,nz))player.position.z=nz;const target=Math.atan2(-dx,-dz);player.rotation.y+=Math.atan2(Math.sin(target-player.rotation.y),Math.cos(target-player.rotation.y))*Math.min(1,dt*12);}poseExplorer(player,moving,dt);
+if(state==='school'){walkCamera.set(player.position.x,lerp(31,18,classroomZoom),player.position.z);camera.position.lerp(walkCamera,1-Math.exp(-dt*4));camera.lookAt(player.position.x,1.2,player.position.z);}else{walkCamera.set(player.position.x,player.position.y+7.8,player.position.z+12);camera.position.lerp(walkCamera,1-Math.exp(-dt*3));camera.lookAt(player.position.x,1.2,player.position.z-3);}nearby=null;let prompt='';if(state==='explore'){for(const d of discoveries)if(player.position.distanceTo(d.group.position)<3.8){nearby={type:'scan',data:d};prompt=d.done?'READ FIELD NOTE':'INVESTIGATE FIELD LAB';}if(Math.abs(player.position.x)<3&&Math.abs(player.position.z+30)<3){schoolDoor.position.x=lerp(schoolDoor.position.x,3.6,dt*5);nearby={type:'door'};prompt='ENTER '+currentTheme.school;}else schoolDoor.position.x=lerp(schoolDoor.position.x,0,dt*5);}else{for(const task of tableTasks)if(Math.hypot(player.position.x-task.x,player.position.z-task.z)<3.35){nearby={type:'table',data:task};prompt=task.done?'VIEW '+task.title.toUpperCase():'OPEN '+task.title.toUpperCase();break;}if(!nearby&&player.position.z>2.8){nearby={type:'exit'};prompt='RETURN TO CAMPUS';}if(!nearby&&Math.abs(player.position.x)<3&&player.position.z<-9){nearby={type:'class'};prompt=scanCount<2?'FIELD NOTES NEEDED: '+scanCount+' / 2':schoolComplete?'VIEW DISCOVERY BADGE / DEPART':'JOIN THE PLANET CLASS';}}
+$('interact').style.display=nearby?'inline-block':'none';$('interact').textContent='F · '+prompt;
+}
+const streakGeo=new THREE.BufferGeometry(),streakArray=new Float32Array(100*6);for(let i=0;i<100;i++){const x=(rand()-.5)*150,y=(rand()-.5)*100,z=-rand()*350;streakArray.set([x,y,z,x,y,z-5],i*6);}streakGeo.setAttribute('position',new THREE.BufferAttribute(streakArray,3));const streaks=new THREE.LineSegments(streakGeo,new THREE.LineBasicMaterial({color:0x9cdbe9,transparent:true,opacity:.25}));flightWorld.add(streaks);
+let last=performance.now();function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.045);last=now;time+=dt*(reducedMotion?.35:1);for(const m of mixers)m.update(dt);holo.rotation.y+=dt*.15;vista.userData.sphere.rotation.y+=dt*.006;
+if(state==='intro'){camera.position.x=Math.sin(time*.16)*.09;camera.lookAt(0,1.6,-5);}if(state==='zoom'){zoom=Math.min(1,zoom+dt*.64);const ease=zoom*zoom*(3-2*zoom);camera.position.set(0,lerp(2.7,2.1,ease),lerp(7.8,1.8,ease));camera.lookAt(0,lerp(1.6,1.05,ease),lerp(-5,-2.8,ease));if(zoom===1)showNav();}
+if(state==='flight'){
+  invulnerable=Math.max(0,invulnerable-dt);noticeTime-=dt;$('notice').style.opacity=noticeTime>0?1:0;shake=Math.max(0,shake-dt*2);$('flash').style.opacity=0;
+  const forward=!!(isPressed('KeyW')||isPressed('ArrowUp')||isPressed('Space'))&&!(isPressed('KeyS')||isPressed('ArrowDown'));
+  const wantsBoost=forward&&isPressed('Space');
+  if(!isPressed('Space'))boostArmed=true;
+  const boosting=wantsBoost&&boostArmed&&boost>0;
+  boost=clamp(boost+(boosting?-26:15)*dt,0,100);
+  if(boost<=0)boostArmed=false;
+  const speed=forward?(boosting?132:72):0;
+  const ax=(isPressed('KeyD')||isPressed('ArrowRight')?1:0)-(isPressed('KeyA')||isPressed('ArrowLeft')?1:0),ay=(isPressed('KeyQ')?1:0)-(isPressed('KeyE')?1:0);
+  velX=lerp(velX,ax*23,1-Math.exp(-dt*7));velY=lerp(velY,ay*18,1-Math.exp(-dt*7));
+  ship.position.x=clamp(ship.position.x+velX*dt,-34,34);ship.position.y=clamp(ship.position.y+velY*dt,-20,20);distance+=speed*dt;ship.position.z=-distance;
+  shipVisual.rotation.z=lerp(shipVisual.rotation.z,-ax*.46,dt*6);shipVisual.rotation.x=lerp(shipVisual.rotation.x,ay*.18,dt*5);shipVisual.rotation.y=lerp(shipVisual.rotation.y,-ax*.12,dt*5);shipVisual.position.y=Math.sin(time*3)*.04;
+  for(const e of exhaust){e.scale.y=lerp(e.scale.y,boosting?2.3:1,1-Math.exp(-dt*12));e.material.opacity=boosting?.95:.65;}
+  camera.position.x=lerp(camera.position.x,ship.position.x*.78,1-Math.exp(-dt*4));camera.position.y=lerp(camera.position.y,ship.position.y+4.2,1-Math.exp(-dt*4));
+  boostViewOffset=lerp(boostViewOffset,boosting?2:0,1-Math.exp(-dt*7));camera.position.z=ship.position.z+17+boostViewOffset;
+  camera.lookAt(ship.position.x*.85,ship.position.y+1,-distance-60);camera.fov=lerp(camera.fov,boosting?66:56,dt*3);camera.updateProjectionMatrix();sky.position.copy(camera.position);
+  streaks.position.set(ship.position.x,ship.position.y,ship.position.z);streaks.material.opacity=boosting?.52:.15;
+  for(let i=0;i<100;i++){let z=streakArray[i*6+2]+speed*dt;if(z>18)z=-350;streakArray[i*6+2]=z;streakArray[i*6+5]=z-(boosting?13:3);}streakGeo.attributes.position.needsUpdate=true;
+for(const g of gates){g.rotation.z=Math.sin(time*.5)*.04;if(g.userData.successTimer>0){g.userData.successTimer-=dt;g.scale.setScalar(1+Math.max(0,g.userData.successTimer)*.18);if(g.userData.successTimer<=0)g.visible=false;continue;}if(!g.userData.done&&distance>=g.userData.at){g.userData.done=true;if(Math.hypot(ship.position.x-g.position.x,ship.position.y-g.position.y)<6.25){passed++;totalPassed++;health=Math.min(100,health+3);lightGateGreen(g);showGateConfirmation();showGateReward();playGateSuccess();notify('GATE SYNCHRONIZED  /  '+passed+' OF 7',1);}else{g.visible=false;}}}
+for(const r of rocks){if(Math.abs(r.userData.at-distance)<180){r.rotation.x+=dt*r.userData.rot;r.rotation.y+=dt*r.userData.rot*.6;}if(!r.userData.hit&&Math.abs(r.userData.at-distance)<r.userData.r+2&&Math.hypot(ship.position.x-r.position.x,ship.position.y-r.position.y)<r.userData.r+1.2){r.userData.hit=true;damage(24,'ASTEROID IMPACT  /  HULL −24');}}
+for(const b of beams){const active=Math.sin(time*1.6+b.userData.phase)>-.3;b.children[0].material.color.set(active?0xff5b47:0x6a3440);b.children[1].visible=active;if(Math.abs(b.userData.at-distance)<4&&Math.abs(ship.position.y-b.position.y)<1.7&&active&&!b.userData.hit){b.userData.hit=true;damage(28,'ION DISCHARGE  /  HULL −28');}}
+destinationPlanet.userData.sphere.rotation.y+=dt*.017;[...$('shield').children].forEach((e,i)=>e.style.background=health>i*20?(health<35?'#ff7f69':'#96eff4'):'#29404d');
+if(distance>1740&&arrival===0){arrival=1;notify(modules[selected].worlds[leg].toUpperCase()+' ORBIT REACHED',3);sound(1000,.5,'triangle',.07);}if(distance>1800&&state==='flight'){startLanding();}}
+updateSurface(dt);
+if(!surface.visible&&scene.background!==deepSpaceBackground)scene.background=deepSpaceBackground;
+if(state!=='mathsLab')renderer.render(scene,camera);}
+requestAnimationFrame(frame);window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+</script>
+<script id="settings-behaviour">
+/* Settings are independent: muting game audio never disables read-aloud. */
+window.addEventListener('DOMContentLoaded',()=>{
+  const panel=document.getElementById('focusPanel');
+  const trigger=document.getElementById('focusToggle');
+  const language=document.getElementById('languageToggle');
+  const speech=document.getElementById('speechToggle');
+  const read=document.getElementById('readScreen');
+  const sound=document.getElementById('soundToggle');
+  const title=document.getElementById('settingsTitle');
+  if(!panel||!trigger||!language||!speech||!read||!sound||!title)return;
+
+  const labels={
+    en:{settings:'SETTINGS',language:'LANGUAGE',english:'ENGLISH',malay:'MALAY',read:'READ ALOUD',sound:'SOUND',focus:'FOCUS',on:'ON',off:'OFF',readScreen:'READ THIS SCREEN'},
+    ms:{settings:'TETAPAN',language:'BAHASA',english:'INGGERIS',malay:'MELAYU',read:'BACA KUAT',sound:'BUNYI',focus:'FOKUS',on:'HIDUP',off:'MATI',readScreen:'BACA SKRIN INI'}
+  };
+  let speechEnabled=true;
+  try{speechEnabled=localStorage.getItem('orbit-read-aloud')!=='0';}catch{}
+  const canSpeak='speechSynthesis' in window;
+  const languageIsMalay=()=>document.documentElement.lang==='ms';
+  const close=()=>{panel.classList.remove('visible');panel.setAttribute('aria-hidden','true');trigger.setAttribute('aria-expanded','false');panel.querySelectorAll('.controller-selected').forEach(button=>button.classList.remove('controller-selected'));};
+  window.closeOrbitSettings=close;
+  window.isOrbitSettingsOpen=()=>panel.classList.contains('visible');
+  let controllerSettingIndex=0;
+  const controllerSettings=()=>[...panel.querySelectorAll('button:not([disabled])')];
+  const selectControllerSetting=index=>{
+    const controls=controllerSettings();
+    if(!controls.length)return;
+    controllerSettingIndex=(index+controls.length)%controls.length;
+    controls.forEach((control,controlIndex)=>{
+      const selected=controlIndex===controllerSettingIndex;
+      control.classList.toggle('controller-selected',selected);
+      control.setAttribute('aria-current',selected?'true':'false');
+    });
+    const selected=controls[controllerSettingIndex];
+    selected.focus({preventScroll:true});
+    selected.scrollIntoView({block:'nearest',behavior:'smooth'});
+  };
+  window.moveOrbitSettingsSelection=direction=>selectControllerSetting(controllerSettingIndex+(direction<0?-1:1));
+  window.activateOrbitSettingsSelection=()=>controllerSettings()[controllerSettingIndex]?.click();
+  const sync=()=>{
+    const text=labels[languageIsMalay()?'ms':'en'];
+    const soundOn=sound.getAttribute('aria-pressed')!=='false';
+    title.textContent=text.settings;
+    trigger.textContent=text.settings;
+    trigger.setAttribute('aria-label',languageIsMalay()?'Buka tetapan':'Open settings');
+    panel.setAttribute('aria-label',languageIsMalay()?'Tetapan kebolehcapaian':'Accessibility settings');
+    panel.querySelector('#languageLabel').textContent=text.language;
+    language.closest('.settings-section').setAttribute('aria-label',text.language);
+    language.textContent=languageIsMalay()?text.malay:text.english;
+    panel.querySelector('#speechLabel').textContent=text.read;
+    speech.closest('.settings-section').setAttribute('aria-label',text.read);
+    speech.textContent=speechEnabled?text.on:text.off;
+    speech.setAttribute('aria-pressed',String(speechEnabled));
+    speech.setAttribute('aria-label',`${text.read}: ${speechEnabled?text.on:text.off}`);
+    panel.querySelector('#soundLabel').textContent=text.sound;
+    sound.textContent=soundOn?text.on:text.off;
+    sound.setAttribute('aria-label',`${text.sound}: ${soundOn?text.on:text.off}`);
+    panel.querySelector('#focusLabel').textContent=text.focus;
+    sound.closest('.settings-section').setAttribute('aria-label',text.sound);
+    document.getElementById('calmToggle').closest('.settings-section').setAttribute('aria-label',text.focus);
+    read.textContent=text.readScreen;
+    read.disabled=!speechEnabled||!canSpeak;
+    read.setAttribute('aria-disabled',String(read.disabled));
+    panel.setAttribute('aria-hidden',String(!panel.classList.contains('visible')));
+  };
+
+  document.getElementById('soundSection').append(sound);
+  speech.addEventListener('click',()=>{
+    speechEnabled=!speechEnabled;
+    try{localStorage.setItem('orbit-read-aloud',speechEnabled?'1':'0');}catch{}
+    if(!speechEnabled)window.speechSynthesis?.cancel();
+    sync();
+  });
+  read.addEventListener('click',event=>{
+    if(!speechEnabled||!canSpeak){event.preventDefault();event.stopImmediatePropagation();}
+  },true);
+  language.addEventListener('click',()=>queueMicrotask(sync));
+  language.addEventListener('click',()=>queueMicrotask(()=>document.getElementById('mathsLab')?.contentWindow?.postMessage({type:'orbit-runner-language',language:document.documentElement.lang==='ms'?'ms':'en'},location.origin)));
+  sound.addEventListener('click',()=>queueMicrotask(sync));
+  for(const control of ['calmToggle','textToggle','motionToggle']){
+    document.getElementById(control)?.addEventListener('click',()=>queueMicrotask(sync));
+  }
+  trigger.addEventListener('click',()=>queueMicrotask(()=>{
+    const open=panel.classList.contains('visible');
+    panel.setAttribute('aria-hidden',String(!open));
+    trigger.setAttribute('aria-expanded',String(open));
+    if(open)selectControllerSetting(0);
+    sync();
+  }));
+  document.addEventListener('pointerdown',event=>{
+    if(panel.classList.contains('visible')&&!panel.contains(event.target)&&!trigger.contains(event.target))close();
+  },true);
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&panel.classList.contains('visible')){event.preventDefault();event.stopImmediatePropagation();close();trigger.focus();}
+  },true);
+  sync();
+});
+</script>
+<script id="route-selection">
+/* Keep future routes visible as goals, without allowing accidental launches. */
+window.addEventListener('DOMContentLoaded',()=>{
+  const nav=document.getElementById('nav');
+  const routes=[...document.querySelectorAll('#nav .route')];
+  const start=document.getElementById('launch');
+  const openRoute=routes[0];
+  const lockedRoutes=routes.slice(1);
+  if(!nav||!start||!openRoute||lockedRoutes.length!==2)return;
+
+  start.closest('.nav-bottom')?.setAttribute('aria-hidden','true');
+  routes.forEach(route=>route.classList.toggle('selected',route===openRoute));
+  openRoute.setAttribute('aria-label','Start Inner Planets');
+  lockedRoutes.forEach(route=>{
+    const name=route.querySelector('h3')?.textContent?.trim()||'Route';
+    route.classList.add('locked');
+    route.disabled=true;
+    route.setAttribute('aria-disabled','true');
+    route.setAttribute('aria-label',`${name} locked`);
+    route.onclick=event=>{event.preventDefault();event.stopPropagation();};
+  });
+
+  const chooseAndLaunch=openRoute.onclick;
+  openRoute.onclick=event=>{
+    chooseAndLaunch?.call(openRoute,event);
+    start.click();
+  };
+  document.addEventListener('keydown',event=>{
+    if(event.code==='Space'&&getComputedStyle(nav).display!=='none'){
+      event.preventDefault();event.stopImmediatePropagation();openRoute.click();
+    }
+  },true);
+});
+</script>
+<script id="flight-skip-language">
+window.addEventListener('DOMContentLoaded',()=>{
+  const skip=document.getElementById('skipFlight');
+  const language=document.getElementById('languageToggle');
+  if(!skip||!language)return;
+  const sync=()=>{
+    const malay=document.documentElement.lang==='ms';
+    skip.textContent=malay?'Langkau penerbangan':'Skip flight';
+    skip.setAttribute('aria-label',malay?'Langkau penerbangan dan mendarat di planet':'Skip flight and land on the planet');
+  };
+  language.addEventListener('click',()=>queueMicrotask(sync));
+  sync();
+});
+</script>
+<script id="controller-settings-bridge">
+/* This small bridge waits for the game UI, then gives the phone joystick an
+   exclusive, visible selection inside the settings dropdown. */
+window.addEventListener('DOMContentLoaded',()=>{
+  const setup=()=>{
+    if(window.moveOrbitSettingsSelection)return;
+    const panel=document.getElementById('focusPanel');
+    const trigger=document.getElementById('focusToggle');
+    if(!panel||!trigger){window.setTimeout(setup,50);return;}
+    let selectedIndex=0;
+    const controls=()=>[...panel.querySelectorAll('button:not([disabled])')];
+    const select=index=>{
+      const options=controls();
+      if(!options.length)return;
+      selectedIndex=(index+options.length)%options.length;
+      options.forEach((option,optionIndex)=>{
+        const active=optionIndex===selectedIndex;
+        option.classList.toggle('controller-selected',active);
+        option.setAttribute('aria-current',active?'true':'false');
+      });
+      const active=options[selectedIndex];
+      active.focus({preventScroll:true});
+      active.scrollIntoView({block:'nearest',behavior:'smooth'});
+    };
+    const close=()=>{
+      panel.classList.remove('visible');
+      panel.setAttribute('aria-hidden','true');
+      trigger.setAttribute('aria-expanded','false');
+      panel.querySelectorAll('.controller-selected').forEach(option=>option.classList.remove('controller-selected'));
+    };
+    window.isOrbitSettingsOpen=()=>panel.classList.contains('visible');
+    window.closeOrbitSettings=close;
+    window.moveOrbitSettingsSelection=direction=>select(selectedIndex+(direction<0?-1:1));
+    window.activateOrbitSettingsSelection=()=>controls()[selectedIndex]?.click();
+    document.getElementById('languageToggle')?.addEventListener('click',()=>queueMicrotask(()=>document.getElementById('mathsLab')?.contentWindow?.postMessage({type:'orbit-runner-language',language:document.documentElement.lang==='ms'?'ms':'en'},location.origin)));
+    trigger.addEventListener('click',()=>queueMicrotask(()=>{
+      if(panel.classList.contains('visible'))select(0);
+    }));
+  };
+  setup();
+});
+</script>
+<style id="home-confirmation-theme">
+#homeConfirm{display:none;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;padding:24px;background:rgba(2,10,19,.7);pointer-events:auto}
+#homeConfirm.visible{display:flex}
+#homeConfirm .home-confirm-card{width:min(390px,calc(100vw - 40px));padding:28px;border:1px solid rgba(150,239,244,.52);border-radius:14px;background:linear-gradient(145deg,rgba(11,43,59,.98),rgba(4,18,31,.99));box-shadow:0 24px 55px rgba(0,3,10,.48);color:#effcff;text-align:center}
+#homeConfirm h2{margin:0 0 11px;font-size:clamp(24px,3vw,31px);font-weight:700;letter-spacing:.035em;line-height:1.25}
+#homeConfirm p{margin:0;color:#c9e4e9;font-size:16px;line-height:1.65}
+#homeConfirm .home-confirm-actions{display:flex;justify-content:center;gap:12px;margin-top:24px}
+#homeConfirm button{min-width:124px;min-height:48px;padding:12px 16px;border:1px solid rgba(150,239,244,.58);border-radius:9px;background:linear-gradient(135deg,rgba(20,65,82,.98),rgba(6,28,42,.98));color:#effcff;font:700 14px/1.2 Lexend,"Atkinson Hyperlegible",Arial,sans-serif;letter-spacing:.05em}
+#homeConfirm #homeConfirmYes{color:#06202c;background:linear-gradient(135deg,#c4f8f3,#82dce6);border-color:#eaffff}
+</style>
+<script id="home-confirmation-behaviour">
+window.addEventListener('DOMContentLoaded',()=>{
+  const dialog=document.createElement('section');
+  dialog.id='homeConfirm';
+  dialog.setAttribute('role','dialog');
+  dialog.setAttribute('aria-modal','true');
+  dialog.setAttribute('aria-labelledby','homeConfirmTitle');
+  dialog.innerHTML='<div class="home-confirm-card"><h2 id="homeConfirmTitle">Go home?</h2><p>Leave the Maths Lab?</p><div class="home-confirm-actions"><button id="homeConfirmNo" type="button">BACK</button><button id="homeConfirmYes" type="button">HOME</button></div></div>';
+  document.body.append(dialog);
+  const close=()=>dialog.classList.remove('visible');
+  const confirm=()=>{close();document.dispatchEvent(new Event('orbit-home-confirmed'));};
+  window.isOrbitHomeConfirmationOpen=()=>dialog.classList.contains('visible');
+  window.closeOrbitHomeConfirmation=close;
+  window.confirmOrbitHome=confirm;
+  window.requestOrbitHome=()=>{
+    dialog.classList.add('visible');
+    dialog.querySelector('#homeConfirmNo')?.focus();
+  };
+  const syncLanguage=()=>{
+    const malay=document.documentElement.lang==='ms';
+    dialog.querySelector('#homeConfirmTitle').textContent=malay?'Ke laman utama?':'Go home?';
+    dialog.querySelector('.home-confirm-card p').textContent=malay?'Keluar dari Makmal Matematik?':'Leave the Maths Lab?';
+    dialog.querySelector('#homeConfirmNo').textContent=malay?'KEMBALI':'BACK';
+    dialog.querySelector('#homeConfirmYes').textContent=malay?'LAMAN UTAMA':'HOME';
+  };
+  document.getElementById('languageToggle')?.addEventListener('click',()=>queueMicrotask(syncLanguage));
+  syncLanguage();
+  dialog.querySelector('#homeConfirmNo')?.addEventListener('click',close);
+  dialog.querySelector('#homeConfirmYes')?.addEventListener('click',confirm);
+  document.getElementById('flightHome')?.addEventListener('click',event=>{
+    event.stopImmediatePropagation();
+    window.requestOrbitHome();
+  },true);
+});
+</script>
+<style id="open-dyslexic-global">
+@font-face{font-family:"OpenDyslexic";src:url("assets/fonts/OpenDyslexic-Regular.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"OpenDyslexic";src:url("assets/fonts/OpenDyslexic-Bold.woff2") format("woff2");font-style:normal;font-weight:700;font-display:swap}
+html,body,button,input,select,textarea,#ui,#ui *{font-family:"OpenDyslexic",Arial,sans-serif!important}
+</style>
+<style id="teacher-portal-style">
+/* One predictable utility row: Rewards · Home · Teacher · Settings. */
+:root{--utility-top:clamp(18px,3vh,32px);--utility-right:clamp(20px,3.2vw,54px);--utility-width:118px;--utility-height:54px;--utility-gap:10px}
+#focusToggle,#flightHome,#teacherPortal{position:absolute!important;top:var(--utility-top)!important;width:var(--utility-width)!important;min-width:var(--utility-width)!important;height:var(--utility-height)!important;min-height:var(--utility-height)!important;box-sizing:border-box;padding:0 10px!important;align-items:center;justify-content:center;border-radius:8px;font-family:"OpenDyslexic",Arial,sans-serif!important;font-size:10px!important;font-weight:700!important;letter-spacing:1px;line-height:1.15;white-space:nowrap}
+#focusToggle{right:var(--utility-right)!important}
+#teacherPortal{z-index:32;right:calc(var(--utility-right) + var(--utility-width) + var(--utility-gap))!important;pointer-events:auto;border:1px solid rgba(168,237,240,.67);background:linear-gradient(135deg,rgba(17,53,68,.94),rgba(8,25,39,.94));box-shadow:0 7px 18px rgba(0,5,14,.18);color:#efffff}
+#flightHome{right:calc(var(--utility-right) + (var(--utility-width) + var(--utility-gap))*2)!important;display:none}
+#flightPoints{top:var(--utility-top)!important;right:calc(var(--utility-right) + (var(--utility-width) + var(--utility-gap))*3)!important;z-index:32!important;height:var(--utility-height)!important;box-sizing:border-box}
+#teacherPortal:hover,#teacherPortal:focus-visible{border-color:#a8edf0;background:#164252}
+body.flight-active #flightHome,body.surface-mode #flightHome,body.maths-lab-active #flightHome{display:flex!important}
+body.flight-active #flightPoints,body.maths-lab-active #flightPoints{display:flex!important}
+body.maths-lab-active #focusToggle,body.maths-lab-active #flightHome,body.maths-lab-active #teacherPortal,body.maths-lab-active #flightPoints{z-index:32!important}
+@media(max-width:650px){:root{--utility-top:18px;--utility-right:14px;--utility-width:90px;--utility-height:48px;--utility-gap:7px}#focusToggle,#flightHome,#teacherPortal{font-size:8px!important;letter-spacing:.45px}}
+</style>
+<script id="teacher-portal-behaviour">
+window.addEventListener('DOMContentLoaded',()=>{
+  if(document.getElementById('teacherPortal'))return;
+  const teacher=document.createElement('button');
+  teacher.id='teacherPortal';
+  teacher.type='button';
+  teacher.textContent='TEACHER';
+  teacher.setAttribute('aria-label','Open teacher dashboard');
+  teacher.addEventListener('click',()=>window.location.assign('teacher-dashboard.html'));
+  document.getElementById('ui')?.append(teacher);
+});
+</script>
+<script id="open-dyslexic-canvas-text">
+/* Canvas labels are part of the 3D UI, so use the same typeface there too. */
+(() => {
+  try {
+    const prototype = CanvasRenderingContext2D.prototype;
+    const font = Object.getOwnPropertyDescriptor(prototype, 'font');
+    if (!font?.get || !font.set || !font.configurable) return;
+    Object.defineProperty(prototype, 'font', {
+      configurable: true,
+      enumerable: font.enumerable,
+      get: font.get,
+      set(value) {
+        font.set.call(this, String(value).replace(/\b(?:Arial|Helvetica|monospace)\b/gi, 'OpenDyslexic, Arial'));
+      }
+    });
+  } catch {}
+})();
+</script>
+<script id="reliable-read-screen">
+/* Speak the currently visible game view. This is independent from game-audio mute. */
+window.addEventListener('DOMContentLoaded', () => {
+  const read = document.getElementById('readScreen');
+  const speechToggle = document.getElementById('speechToggle');
+  const soundToggle = document.getElementById('soundToggle');
+  const synth = window.speechSynthesis;
+  if (!read || !speechToggle || !synth || !window.SpeechSynthesisUtterance) return;
+
+  const canRead = () => speechToggle.getAttribute('aria-pressed') !== 'false';
+  const isVisible = element => !!(element && getComputedStyle(element).display !== 'none' && element.getClientRects().length);
+  const currentText = () => {
+    const lab = document.getElementById('mathsLab');
+    if (isVisible(lab)) {
+      const labText = lab.contentDocument?.body?.innerText?.replace(/\s+/g, ' ').trim();
+      if (labText) return labText;
+    }
+    const view = ['lesson', 'surfaceHud', 'dialogue', 'nav']
+      .map(id => document.getElementById(id))
+      .find(isVisible);
+    return (view?.innerText || '').replace(/\s+/g, ' ').trim();
+  };
+  const syncAvailability = () => {
+    read.disabled = !canRead();
+    read.setAttribute('aria-disabled', String(read.disabled));
+  };
+  const stop = () => {
+    synth.cancel();
+    read.removeAttribute('data-reading');
+    syncAvailability();
+  };
+  const readCurrentScreen = () => {
+    if (!canRead()) return;
+    if (synth.speaking || synth.pending) {
+      stop();
+      return;
+    }
+    const text = currentText();
+    if (!text) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = document.documentElement.lang === 'ms' ? 'ms-MY' : 'en-US';
+    utterance.rate = .82;
+    utterance.onend = utterance.onerror = () => {
+      read.removeAttribute('data-reading');
+      syncAvailability();
+    };
+    read.dataset.reading = 'true';
+    synth.cancel();
+    synth.resume();
+    synth.speak(utterance);
+  };
+
+  read.onclick = readCurrentScreen;
+  speechToggle.addEventListener('click', () => queueMicrotask(syncAvailability));
+  soundToggle?.addEventListener('click', () => queueMicrotask(syncAvailability));
+  syncAvailability();
+});
+</script>
+<script id="landing-language-fix">
+/* Keep the active landing status in sync with the selected language. The main
+   language map is applied before dynamic landing text exists, so this small
+   bridge also covers text created during the flight sequence. */
+window.addEventListener('DOMContentLoaded', () => {
+  const landingPhrases = {
+    en: {
+      'Bumi dicapai.': 'Earth reached.',
+      'ORBIT BUMI DICAPAI': 'EARTH ORBIT REACHED'
+    },
+    ms: {
+      'Earth reached.': 'Bumi dicapai.',
+      'EARTH ORBIT REACHED': 'ORBIT BUMI DICAPAI'
+    }
+  };
+
+  function syncLandingLanguage() {
+    const phrases = landingPhrases[document.documentElement.lang === 'ms' ? 'ms' : 'en'];
+    ['surfaceMessage', 'notice'].forEach((id) => {
+      const element = document.getElementById(id);
+      const replacement = element && phrases[element.textContent.trim()];
+      if (replacement && element.textContent !== replacement) element.textContent = replacement;
+    });
+  }
+
+  ['surfaceMessage', 'notice'].forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) new MutationObserver(syncLandingLanguage).observe(element, {
+      childList: true, characterData: true, subtree: true
+    });
+  });
+
+  document.getElementById('languageToggle')?.addEventListener('click', () => {
+    queueMicrotask(syncLandingLanguage);
+  });
+  new MutationObserver(syncLandingLanguage).observe(document.documentElement, {
+    attributes: true, attributeFilter: ['lang']
+  });
+  syncLandingLanguage();
+});
+</script>
+<script type="module" src="jelasverse-data.js"></script>
+<style id="student-gate-style">#studentGate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 50% 24%,rgba(23,82,106,.98),rgba(4,15,27,.99) 64%)}.student-gate-card{display:grid;gap:13px;width:min(410px,100%);padding:35px;border:1px solid rgba(153,235,240,.8);border-radius:17px;background:linear-gradient(145deg,#0c3042,#061925);box-shadow:0 22px 55px rgba(0,0,0,.55);color:#f5ffff}.student-gate-card p{margin:0;color:#9eecef;font-size:11px;letter-spacing:.18em}.student-gate-card h1{margin:0;font-size:32px}.student-gate-card label{display:grid;gap:8px;font-size:16px}.student-gate-card input{padding:14px;border:1px solid #9beaf0;border-radius:9px;background:#061823;color:#fff;font:700 24px/1 "OpenDyslexic",Arial,sans-serif;letter-spacing:.18em;text-align:center}.student-gate-card button{min-height:50px;border:0;border-radius:9px;background:linear-gradient(135deg,#c4f8f3,#73d5e1);color:#06202b;font:700 16px "OpenDyslexic",Arial,sans-serif;cursor:pointer}.student-gate-card output{min-height:22px;color:#ffe3a3}</style>
+<script src="student-gate.js"></script>
+<script id="student-progress-bridge">
+/* A student code links flight stars and classroom completion to one dashboard row. */
+window.addEventListener('jelasverse-data-ready',()=>{
+  const sync=()=>{
+    const api=window.JelasVerseData;if(!api?.getStudentCode())return;
+    let classroom={events:[]};try{classroom=JSON.parse(localStorage.getItem('jelasverse-science-learning-progress-v1')||'{"events":[]}')}catch{}
+    const events=Array.isArray(classroom.events)?classroom.events:[];
+    api.saveStudentProgress({
+      stars:Number(localStorage.getItem('jelasverse-reward-stars')||0),
+      lessonComplete:events.some(event=>event?.type==='completed'&&event.activityId==='sense-tap-explorer'),
+      quizComplete:events.some(event=>event?.type==='completed'&&event.activityId==='quiz-find-organ')
+    });
+  };
+  sync();
+  window.addEventListener('jelasverse-rewards-changed',sync);
+  window.addEventListener('storage',event=>{if(['jelasverse-reward-stars','jelasverse-science-learning-progress-v1'].includes(event.key))sync();});
+  window.addEventListener('message',event=>{if(event.origin===location.origin&&event.data?.type==='jelasverse-quiz-complete')setTimeout(sync,0);});
+});
+</script>
+<script id="classroom-settings-bridge">
+/* Keep the classroom responsive to the single shared larger-text setting. */
+window.addEventListener('DOMContentLoaded', () => {
+  const lab = document.getElementById('mathsLab');
+  const send = () => lab?.contentWindow?.postMessage({
+    type: 'orbit-runner-settings',
+    largeText: document.body.classList.contains('large-text')
+  }, location.origin);
+  lab?.addEventListener('load', send);
+  document.getElementById('textToggle')?.addEventListener('click', () => queueMicrotask(send));
+  new MutationObserver(send).observe(document.body, {attributes:true, attributeFilter:['class']});
+  send();
+});
+</script></body></html>

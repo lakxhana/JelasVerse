@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b2b">
+  <title>JelasVerse · Teacher dashboard</title>
+  <link rel="stylesheet" href="teacher-dashboard.css">
+</head>
+<body>
+  <main class="teacher-app" aria-labelledby="dashboard-title" hidden>
+    <aside class="sidebar" aria-label="Teacher navigation">
+      <a class="brand" href="index.html" aria-label="Return to JelasVerse">
+        <span class="planet-mark" aria-hidden="true">◌</span>
+        <span>JelasVerse<small>TEACHER SPACE</small></span>
+      </a>
+      <nav class="navigation" aria-label="Dashboard sections">
+        <button class="nav-item active" type="button" data-view="overview" aria-current="page"><span aria-hidden="true">▦</span> Overview</button>
+        <button class="nav-item" type="button" data-view="students"><span aria-hidden="true">◌</span> Students</button>
+      </nav>
+      <div class="teacher-account" id="teacherAccount" hidden>
+        <span class="account-avatar" id="accountAvatar" aria-hidden="true">T</span>
+        <span><b id="accountName">Teacher</b><small>Teacher account</small></span>
+        <button id="signOutButton" class="icon-button" type="button" aria-label="Sign out">↪</button>
+      </div>
+    </aside>
+
+    <section class="dashboard-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">MATHS LAB · TEACHER VIEW</p>
+          <h1 id="dashboard-title">Class overview</h1>
+          <p class="subheading">A calm view of learner progress and support.</p>
+        </div>
+        <a class="return-game" href="index.html">← Game</a>
+      </header>
+
+      <section id="overviewView" class="dashboard-view" aria-labelledby="dashboard-title">
+        <div class="summary-grid" aria-label="Class summary">
+          <article class="summary-card"><span>Reward stars</span><strong id="classStars">0</strong><p>Class total.</p></article>
+          <article class="summary-card"><span>Lesson complete</span><strong id="classLessons">0 / 0</strong><p>Sense Tap Explorer.</p></article>
+          <article class="summary-card"><span>Quiz complete</span><strong id="classChallenges">0 / 0</strong><p>Independent challenge.</p></article>
+        </div>
+
+        <div class="two-column">
+          <section class="panel" aria-labelledby="follow-title">
+            <div class="panel-heading"><div><h2 id="follow-title">Student progress</h2><p>Updates from student codes appear here.</p></div></div>
+            <div class="empty-row"><span aria-hidden="true">•</span><p>Use the Students view for each learner.</p></div>
+          </section>
+          <section class="panel" aria-labelledby="support-title">
+            <div class="panel-heading"><div><h2 id="support-title">Learning supports</h2><p>Language, read aloud, sound, and focus stay learner-controlled.</p></div></div>
+            <p class="support-note">Support use is information, not a measure of ability.</p>
+          </section>
+        </div>
+
+        <section class="panel progress-panel" aria-labelledby="progress-title">
+          <div class="panel-heading"><div><h2 id="progress-title">Recent progress</h2><p>Live student-code activity.</p></div></div>
+          <div class="progress-table" role="table" aria-label="Learner progress">
+            <div class="progress-row progress-head" role="row"><span role="columnheader">Learner</span><span role="columnheader">Lesson</span><span role="columnheader">Quiz</span><span role="columnheader">Stars</span></div>
+            <div id="progressRows"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="studentsView" class="dashboard-view" hidden aria-labelledby="students-title">
+        <section class="panel student-panel">
+          <div class="panel-heading"><div><h2 id="students-title">Students</h2><p>Student-code learning activity.</p></div></div>
+          <div id="studentList" class="student-list" aria-label="Students"></div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <section id="authGate" class="auth-gate" aria-labelledby="sign-in-title">
+    <div class="auth-card">
+      <span class="planet-mark large" aria-hidden="true">◌</span>
+      <p class="eyebrow">JELASVERSE</p>
+      <h1 id="sign-in-title">Teacher space</h1>
+      <p>Sign in with the authorised teacher Google account.</p>
+      <button id="signInButton" class="sign-in" type="button">Continue with Google</button>
+      <p id="authStatus" class="auth-status" role="status" aria-live="polite">Teacher access only.</p>
+      <a href="index.html" class="quiet-link">Return to game</a>
+    </div>
+  </section>
+
+  <script type="module" src="teacher-dashboard.js"></script>
+</body>
+</html>

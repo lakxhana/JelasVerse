@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+
+# Large development snapshots
+snapshots/
+
+# Build/output folders
+dist/
+build/
+outputs/
+
+# Large 3D source assets
+*.fbx
+*.obj
+*.zip
+*.tif
+

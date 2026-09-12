@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071526" />
+    <title>JelasVerse</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <canvas id="game" aria-label="Orbit Runner 3D game"></canvas>
+
+    <header class="brand" aria-label="Orbit Runner">
+      <span class="emblem"></span>
+      <div>
+        <h1>JelasVerse</h1>
+        <small>DEEP SPACE EXPEDITION / 2086</small>
+      </div>
+    </header>
+    <div class="topright"><span class="live">ODYSSEY · COMMAND BRIDGE</span><br />09 : 41 : 08 &nbsp; / &nbsp; SATURN ORBIT</div>
+    <div class="scene-tag">TRANSMISSION 001<br /><strong>BEYOND THE RINGS</strong><br />9.58 AU FROM HOME</div>
+
+    <section id="flight-hud" class="flight-hud" aria-live="polite">
+      <div class="target-card">
+        <span class="eyebrow">APPROACH VECTOR</span>
+        <strong id="destination">EARTH</strong>
+        <small id="route-name">INNER SYSTEM / 01 OF 04</small>
+      </div>
+      <div class="integrity">
+        <span>HULL INTEGRITY</span>
+        <div class="meter"><i id="hull-meter"></i></div>
+      </div>
+      <div class="flight-bottom">
+        <div><span>GATES</span><b id="gate-count">0 / 5</b></div>
+        <div class="progress"><i id="progress-meter"></i></div>
+        <div><span>RANGE</span><b id="range">620 KM</b></div>
+      </div>
+      <p class="flight-help">A / D · STEER &nbsp; W / S · ALTITUDE &nbsp; SPACE · BOOST</p>
+    </section>
+
+    <section id="surface-hud" class="surface-hud" aria-live="polite">
+      <div>
+        <span id="surface-phase" class="eyebrow">DESCENT / LANDING SEQUENCE</span>
+        <h2 id="surface-title">Earth · Blue Horizon School</h2>
+        <p id="surface-objective">Approaching the campus landing pad.</p>
+      </div>
+      <div class="surface-message">
+        <p id="surface-message">MAYA: Landing zone confirmed. Bringing Orbit Runner down.</p>
+        <small id="surface-controls">AUTOMATED DESCENT</small>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" role="status"></div>
+
+    <section id="briefing" class="overlay visible" aria-label="Mission briefing">
+      <div class="briefing-scene">
+        <div class="window-planet"></div>
+        <div class="briefing-astronaut left"></div>
+        <div class="briefing-astronaut right"></div>
+      </div>
+      <div class="dialogue-card" id="dialogue-card" tabindex="0" role="button" aria-label="Continue dialogue">
+        <div class="dialogue-heading"><span id="speaker">MAYA</span><small id="role">FLIGHT COMMANDER</small><b id="dialogue-count">01 / 03</b></div>
+        <p id="dialogue-line">That signal again. Just beyond Saturn’s rings. Tell me you’re hearing it too.</p>
+        <footer><span>ODYSSEY / ENCRYPTED COMMS</span><span><kbd>SPACE</kbd> OR CLICK TO CONTINUE →</span></footer>
+      </div>
+    </section>
+
+    <section id="routes" class="overlay" aria-label="Route selection">
+      <div class="route-panel">
+        <span class="eyebrow">NAVIGATION CONSOLE / FLIGHT AUTHORIZATION</span>
+        <h2>Choose your horizon.</h2>
+        <p>Three routes. Nine worlds. One signal waiting to be found.</p>
+        <div id="route-options" class="route-options"></div>
+        <div class="route-footer">
+          <span>Manual flight has an automatic landing fail-safe.</span>
+          <button id="launch" class="primary">LAUNCH EXPEDITION ↗</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="result" class="overlay" aria-label="Mission result">
+      <div class="result-card">
+        <span id="result-eyebrow" class="eyebrow">MISSION COMPLETE</span>
+        <h2 id="result-title">Welcome to the academy.</h2>
+        <p id="result-copy"></p>
+        <button id="restart" class="primary">FLY AGAIN ↗</button>
+      </div>
+    </section>
+
+    <div class="touch-controls" aria-label="Touch controls">
+      <button data-action="left">←</button><button data-action="up">↑</button><button data-action="down">↓</button><button data-action="right">→</button><button data-action="boost">BOOST</button>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
