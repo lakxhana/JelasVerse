@@ -28,6 +28,25 @@ node phone-controller-server.js
 
 Keep the iPhone and laptop on the same Wi-Fi. The command prints an `iPhone:` address; open that address in Safari on the phone. The controller sends only live button presses to the local laptop and resets automatically if the phone disconnects.
 
+## Run with Docker
+
+```sh
+docker compose up
+```
+
+This starts two containers:
+
+- `web` — the game at `http://127.0.0.1:4173/`
+- `phone-controller` — the iPhone controller bridge at `http://127.0.0.1:4174/`
+
+The repo is bind-mounted into both containers, so edits on the host take effect on refresh with no rebuild. Run `docker compose up --build` after changing the `Dockerfile` itself.
+
+For the iPhone controller, connect the phone to `http://<your-computer's-LAN-IP>:4174/phone-controller.html` — the address the container prints on startup is its internal Docker network IP, not reachable from your phone. Find your Mac's LAN IP with:
+
+```sh
+ipconfig getifaddr en0
+```
+
 ## Project structure
 
 - `index.html` — semantic game UI and overlays

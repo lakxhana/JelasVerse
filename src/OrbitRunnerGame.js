@@ -13,7 +13,7 @@ const ROUTES = [
     planet: 0x2f729f,
   },
   {
-    name: 'GAS GIANTS',
+    name: 'HUMAN GROWTH',
     worlds: ['Jupiter', 'Saturn'],
     target: 'Jupiter',
     school: 'AURORA COMMONS',
@@ -24,7 +24,7 @@ const ROUTES = [
     planet: 0xc98654,
   },
   {
-    name: 'OUTER ORBIT',
+    name: 'HUMAN BODY',
     worlds: ['Uranus', 'Neptune', 'Pluto'],
     target: 'Neptune',
     school: 'FAR HORIZON SCHOOL',

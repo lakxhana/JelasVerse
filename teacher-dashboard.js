@@ -1,11 +1,22 @@
-import { browserLocalPersistence, GoogleAuthProvider, getAuth, getRedirectResult, onAuthStateChanged, setPersistence, signInWithRedirect, signOut } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
-import { app, seedMockStudents, subscribeStudents } from './jelasverse-data.js';
+import { seedMockStudents, subscribeStudents } from './jelasverse-data.js';
 
-// The first teacher is the Firebase project owner. Add future authorised
-// teacher accounts here only after their access is provisioned in Firebase.
-const authorisedTeacherEmails = new Set(['lakxhanaselvarajah@gmail.com']);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+// Google sign-in is mocked for local development: no real Firebase Auth call
+// is made. The button, status copy, and sign-out flow are the real UI/UX;
+// only the network round-trip is simulated. Swap `authenticateTeacher` and
+// `startTeacherSession` back to real Firebase Auth (GoogleAuthProvider /
+// signInWithRedirect / onAuthStateChanged) to re-enable real sign-in.
+const mockTeacherKey = 'jelasverse-teacher-mock-session';
+const mockTeacher = { displayName: 'Lakxhana Selvarajah', email: 'lakxhanaselvarajah@gmail.com' };
+
+function getMockSession() {
+  try { return localStorage.getItem(mockTeacherKey) === '1'; } catch { return false; }
+}
+function setMockSession(signedIn) {
+  try {
+    if (signedIn) localStorage.setItem(mockTeacherKey, '1');
+    else localStorage.removeItem(mockTeacherKey);
+  } catch {}
+}
 
 const gate = document.querySelector('#authGate');
 const status = document.querySelector('#authStatus');
@@ -17,23 +28,6 @@ const signOutButton = document.querySelector('#signOutButton');
 const dashboard = document.querySelector('.teacher-app');
 
 function setStatus(message) { status.textContent = message; }
-
-function friendlyAuthMessage(error) {
-  switch (error?.code) {
-    case 'auth/unauthorized-domain':
-      return 'This game address is not authorised for Google sign-in yet.';
-    case 'auth/operation-not-allowed':
-      return 'Google sign-in is not enabled for this project yet.';
-    case 'auth/network-request-failed':
-      return 'Check the internet connection, then try again.';
-    case 'auth/account-exists-with-different-credential':
-      return 'Use the Google account already linked to teacher access.';
-    case 'auth/redirect-cancelled-by-user':
-      return 'Sign-in was cancelled before it finished.';
-    default:
-      return 'Sign-in could not be completed. Please try again.';
-  }
-}
 
 function showDashboard(user) {
   dashboard.hidden = false;
@@ -54,54 +48,24 @@ function showGate(message = 'Teacher access only.') {
 async function authenticateTeacher() {
   signInButton.disabled = true;
   setStatus('Opening secure Google sign-in…');
-  try {
-    // Redirect avoids Safari and in-app browser pop-up cancellation.
-    await signInWithRedirect(auth, provider);
-  } catch (error) {
-    console.warn('Teacher sign-in failed.', error.code);
-    signInButton.disabled = false;
-    setStatus(friendlyAuthMessage(error));
-  }
+  // Simulated redirect round-trip, so the button still feels like the real flow.
+  await new Promise(resolve => setTimeout(resolve, 700));
+  setMockSession(true);
+  showDashboard(mockTeacher);
 }
 
-async function resolveTeacher(user) {
-  if (!user) return showGate();
-  const email = (user.email || '').toLowerCase();
-  if (!authorisedTeacherEmails.has(email)) {
-    await signOut(auth);
-    return showGate('This Google account is not authorised for teacher access.');
-  }
-  showDashboard(user);
+function startTeacherSession() {
+  if (getMockSession()) showDashboard(mockTeacher);
+  else showGate();
 }
 
-async function startTeacherSession() {
-  try {
-    // Set persistence before Firebase restores the active account. This keeps
-    // a valid teacher session visible after a dashboard refresh.
-    await setPersistence(auth, browserLocalPersistence);
-    const redirectResult = await getRedirectResult(auth);
-    if (redirectResult?.user) await resolveTeacher(redirectResult.user);
-    onAuthStateChanged(auth, resolveTeacher);
-  } catch (error) {
-    console.warn('Teacher session persistence could not be prepared.', error.code);
-    showGate('Teacher session could not be restored. Please sign in again.');
-  }
-}
-
-void startTeacherSession();
+startTeacherSession();
 
 signInButton.addEventListener('click', authenticateTeacher);
-signOutButton.addEventListener('click', () => signOut(auth));
+signOutButton.addEventListener('click', () => { setMockSession(false); showGate(); });
 
 document.querySelectorAll('a[href="index.html"]').forEach(link => {
-  link.addEventListener('click', async event => {
-    event.preventDefault();
-    try {
-      await signOut(auth);
-    } finally {
-      window.location.assign('index.html');
-    }
-  });
+  link.addEventListener('click', () => { setMockSession(false); });
 });
 
 const rewardStorageKey = 'jelasverse-reward-stars';
@@ -141,16 +105,16 @@ const classStars = document.querySelector('#classStars');
 const classLessons = document.querySelector('#classLessons');
 const classChallenges = document.querySelector('#classChallenges');
 
-function status(value, completeLabel='Complete'){
+function statusBadge(value, completeLabel='Complete'){
   return value ? `<span class="status complete">${completeLabel}</span>` : '<span class="status waiting">Not started</span>';
 }
 function renderStudents(students){
   const rows=students.length?students:[{code:'0000',name:'Aina Rahman',stars:0,lessonComplete:false,quizComplete:false}];
   const stars=rows.reduce((total,student)=>total+(Number(student.stars)||0),0);
   if(classStars)classStars.textContent=String(stars);
-  if(classLessons)classLessons.textContent=`${rows.filter(student=>student.lessonComplete).length} / ${rows.length}`;
-  if(classChallenges)classChallenges.textContent=`${rows.filter(student=>student.quizComplete).length} / ${rows.length}`;
-  if(progressRows)progressRows.innerHTML=rows.map(student=>`<div class="progress-row" role="row"><strong role="cell">${student.name||`Explorer ${student.code}`}</strong><span role="cell">${status(student.lessonComplete)}</span><span role="cell">${status(student.quizComplete)}</span><span role="cell" class="status active">★ ${Number(student.stars)||0}</span></div>`).join('');
+  if(classLessons)classLessons.innerHTML=`${rows.filter(student=>student.lessonComplete).length}<span class="ratio-divider">/</span>${rows.length}`;
+  if(classChallenges)classChallenges.innerHTML=`${rows.filter(student=>student.quizComplete).length}<span class="ratio-divider">/</span>${rows.length}`;
+  if(progressRows)progressRows.innerHTML=rows.map(student=>`<div class="progress-row" role="row"><strong role="cell">${student.name||`Explorer ${student.code}`}</strong><span role="cell">${statusBadge(student.lessonComplete)}</span><span role="cell">${statusBadge(student.quizComplete)}</span><span role="cell" class="status active">★ ${Number(student.stars)||0}</span></div>`).join('');
   if(studentList)studentList.innerHTML=rows.map(student=>`<article class="student-card"><span class="student-mark">${student.code}</span><div><h3>${student.name||`Explorer ${student.code}`}</h3><p>${student.lessonComplete?'Lesson complete':'Lesson ready'} · ${student.quizComplete?'Quiz complete':'Quiz ready'}</p></div><span class="status active">★ ${Number(student.stars)||0}</span></article>`).join('');
 }
 
