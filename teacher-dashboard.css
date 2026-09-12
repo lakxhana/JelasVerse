@@ -34,7 +34,8 @@ h3 { font-size: 18px; }
 .summary-card, .panel { border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(150deg, #12384bb8, #081d2df0); box-shadow: 0 16px 38px #00000024; }
 .summary-card { min-height: 176px; padding: 24px; }
 .summary-card span { color: var(--muted); font-size: 13px; }
-.summary-card strong { display: block; margin: 13px 0 6px; color: var(--ice); font-size: 38px; line-height: 1; }
+.summary-card strong { display: block; margin: 13px 0 16px; color: var(--ice); font-size: 38px; line-height: 1; }
+.summary-card strong .ratio-divider { display: inline-block; margin: 0 6px; font-size: 0.55em; vertical-align: 0.1em; color: var(--muted); }
 .summary-card p { font-size: 13px; }
 .welcome-panel { display: flex; gap: 18px; align-items: center; margin-bottom: 18px; padding: 27px; border-color: #a4f2f26b; background: linear-gradient(110deg, #17485b, #0a2435); }
 .welcome-panel h2 { margin-bottom: 7px; }

@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    command: python3 -m http.server 4173
+    ports:
+      - "4173:4173"
+    volumes:
+      - .:/app
+
+  phone-controller:
+    build: .
+    command: node phone-controller-server.js
+    ports:
+      - "4174:4174"
+    environment:
+      - PHONE_CONTROLLER_PORT=4174
+    volumes:
+      - .:/app
