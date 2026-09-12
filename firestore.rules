@@ -4,6 +4,8 @@ service cloud.firestore {
     // Demo-only data: contains no sensitive student information. Replace this
     // with authenticated roles before collecting real student records.
     match /students/{studentCode} { allow read, write: if true; }
+    match /learningEvents/{eventId} { allow read, write: if true; }
     match /controllers/{studentCode} { allow read, write: if true; }
+    match /demoConfig/{documentId} { allow read, write: if true; }
   }
 }
